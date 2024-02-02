@@ -3,6 +3,29 @@ syntax = "proto3";
 // generate directly into "java/proto"
 option java_package = "proto";
 
+message SuccessorRequest {
+  string requestorIp = 1;
+  int32 requestorPort = 2;
+}
+
+message SuccessorResponse {
+  string successorIp = 1;
+  int32 successorPort = 2;
+}
+
+message ClosestPrecedingFingerRequest {
+  string senderIp = 1;
+  int32 senderPort = 2;
+  int32 targetId = 3;
+}
+
+message ClosestPrecedingFingerResponse {
+  string requestorIp = 1;
+  int32 requestorPort = 2;
+  string closestPrecedingFingerIp = 3;
+  int32 closestPrecedingFingerPort = 4;
+}
+
 message FindSuccessorRequest {
   string senderIp = 1;
   int32 senderPort = 2;
@@ -50,6 +73,8 @@ message GetResponse {
 
 service ChordService {
   rpc FindSuccessor(FindSuccessorRequest) returns (FindSuccessorResponse) {}
+  rpc Successor(SuccessorRequest) returns (SuccessorResponse) {}
+  rpc ClosestPrecedingFinger(ClosestPrecedingFingerRequest) returns (ClosestPrecedingFingerResponse) {}
   rpc Join(JoinRequest) returns (JoinResponse) {}
   rpc Put(PutRequest) returns (PutResponse) {}
   rpc Get(GetRequest) returns (GetResponse) {}

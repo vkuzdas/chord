@@ -59,6 +59,70 @@ public final class ChordServiceGrpc {
      return getFindSuccessorMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<proto.Chord.SuccessorRequest,
+      proto.Chord.SuccessorResponse> getSuccessorMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "Successor",
+      requestType = proto.Chord.SuccessorRequest.class,
+      responseType = proto.Chord.SuccessorResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<proto.Chord.SuccessorRequest,
+      proto.Chord.SuccessorResponse> getSuccessorMethod() {
+    io.grpc.MethodDescriptor<proto.Chord.SuccessorRequest, proto.Chord.SuccessorResponse> getSuccessorMethod;
+    if ((getSuccessorMethod = ChordServiceGrpc.getSuccessorMethod) == null) {
+      synchronized (ChordServiceGrpc.class) {
+        if ((getSuccessorMethod = ChordServiceGrpc.getSuccessorMethod) == null) {
+          ChordServiceGrpc.getSuccessorMethod = getSuccessorMethod = 
+              io.grpc.MethodDescriptor.<proto.Chord.SuccessorRequest, proto.Chord.SuccessorResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "ChordService", "Successor"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.SuccessorRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.SuccessorResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new ChordServiceMethodDescriptorSupplier("Successor"))
+                  .build();
+          }
+        }
+     }
+     return getSuccessorMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<proto.Chord.ClosestPrecedingFingerRequest,
+      proto.Chord.ClosestPrecedingFingerResponse> getClosestPrecedingFingerMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "ClosestPrecedingFinger",
+      requestType = proto.Chord.ClosestPrecedingFingerRequest.class,
+      responseType = proto.Chord.ClosestPrecedingFingerResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<proto.Chord.ClosestPrecedingFingerRequest,
+      proto.Chord.ClosestPrecedingFingerResponse> getClosestPrecedingFingerMethod() {
+    io.grpc.MethodDescriptor<proto.Chord.ClosestPrecedingFingerRequest, proto.Chord.ClosestPrecedingFingerResponse> getClosestPrecedingFingerMethod;
+    if ((getClosestPrecedingFingerMethod = ChordServiceGrpc.getClosestPrecedingFingerMethod) == null) {
+      synchronized (ChordServiceGrpc.class) {
+        if ((getClosestPrecedingFingerMethod = ChordServiceGrpc.getClosestPrecedingFingerMethod) == null) {
+          ChordServiceGrpc.getClosestPrecedingFingerMethod = getClosestPrecedingFingerMethod = 
+              io.grpc.MethodDescriptor.<proto.Chord.ClosestPrecedingFingerRequest, proto.Chord.ClosestPrecedingFingerResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "ChordService", "ClosestPrecedingFinger"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.ClosestPrecedingFingerRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.ClosestPrecedingFingerResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new ChordServiceMethodDescriptorSupplier("ClosestPrecedingFinger"))
+                  .build();
+          }
+        }
+     }
+     return getClosestPrecedingFingerMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<proto.Chord.JoinRequest,
       proto.Chord.JoinResponse> getJoinMethod;
 
@@ -191,6 +255,20 @@ public final class ChordServiceGrpc {
 
     /**
      */
+    public void successor(proto.Chord.SuccessorRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.SuccessorResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getSuccessorMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void closestPrecedingFinger(proto.Chord.ClosestPrecedingFingerRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.ClosestPrecedingFingerResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getClosestPrecedingFingerMethod(), responseObserver);
+    }
+
+    /**
+     */
     public void join(proto.Chord.JoinRequest request,
         io.grpc.stub.StreamObserver<proto.Chord.JoinResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getJoinMethod(), responseObserver);
@@ -219,6 +297,20 @@ public final class ChordServiceGrpc {
                 proto.Chord.FindSuccessorRequest,
                 proto.Chord.FindSuccessorResponse>(
                   this, METHODID_FIND_SUCCESSOR)))
+          .addMethod(
+            getSuccessorMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                proto.Chord.SuccessorRequest,
+                proto.Chord.SuccessorResponse>(
+                  this, METHODID_SUCCESSOR)))
+          .addMethod(
+            getClosestPrecedingFingerMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                proto.Chord.ClosestPrecedingFingerRequest,
+                proto.Chord.ClosestPrecedingFingerResponse>(
+                  this, METHODID_CLOSEST_PRECEDING_FINGER)))
           .addMethod(
             getJoinMethod(),
             asyncUnaryCall(
@@ -268,6 +360,22 @@ public final class ChordServiceGrpc {
         io.grpc.stub.StreamObserver<proto.Chord.FindSuccessorResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getFindSuccessorMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void successor(proto.Chord.SuccessorRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.SuccessorResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getSuccessorMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void closestPrecedingFinger(proto.Chord.ClosestPrecedingFingerRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.ClosestPrecedingFingerResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getClosestPrecedingFingerMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -322,6 +430,20 @@ public final class ChordServiceGrpc {
 
     /**
      */
+    public proto.Chord.SuccessorResponse successor(proto.Chord.SuccessorRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getSuccessorMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public proto.Chord.ClosestPrecedingFingerResponse closestPrecedingFinger(proto.Chord.ClosestPrecedingFingerRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getClosestPrecedingFingerMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
     public proto.Chord.JoinResponse join(proto.Chord.JoinRequest request) {
       return blockingUnaryCall(
           getChannel(), getJoinMethod(), getCallOptions(), request);
@@ -370,6 +492,22 @@ public final class ChordServiceGrpc {
 
     /**
      */
+    public com.google.common.util.concurrent.ListenableFuture<proto.Chord.SuccessorResponse> successor(
+        proto.Chord.SuccessorRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getSuccessorMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<proto.Chord.ClosestPrecedingFingerResponse> closestPrecedingFinger(
+        proto.Chord.ClosestPrecedingFingerRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getClosestPrecedingFingerMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
     public com.google.common.util.concurrent.ListenableFuture<proto.Chord.JoinResponse> join(
         proto.Chord.JoinRequest request) {
       return futureUnaryCall(
@@ -394,9 +532,11 @@ public final class ChordServiceGrpc {
   }
 
   private static final int METHODID_FIND_SUCCESSOR = 0;
-  private static final int METHODID_JOIN = 1;
-  private static final int METHODID_PUT = 2;
-  private static final int METHODID_GET = 3;
+  private static final int METHODID_SUCCESSOR = 1;
+  private static final int METHODID_CLOSEST_PRECEDING_FINGER = 2;
+  private static final int METHODID_JOIN = 3;
+  private static final int METHODID_PUT = 4;
+  private static final int METHODID_GET = 5;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -418,6 +558,14 @@ public final class ChordServiceGrpc {
         case METHODID_FIND_SUCCESSOR:
           serviceImpl.findSuccessor((proto.Chord.FindSuccessorRequest) request,
               (io.grpc.stub.StreamObserver<proto.Chord.FindSuccessorResponse>) responseObserver);
+          break;
+        case METHODID_SUCCESSOR:
+          serviceImpl.successor((proto.Chord.SuccessorRequest) request,
+              (io.grpc.stub.StreamObserver<proto.Chord.SuccessorResponse>) responseObserver);
+          break;
+        case METHODID_CLOSEST_PRECEDING_FINGER:
+          serviceImpl.closestPrecedingFinger((proto.Chord.ClosestPrecedingFingerRequest) request,
+              (io.grpc.stub.StreamObserver<proto.Chord.ClosestPrecedingFingerResponse>) responseObserver);
           break;
         case METHODID_JOIN:
           serviceImpl.join((proto.Chord.JoinRequest) request,
@@ -493,6 +641,8 @@ public final class ChordServiceGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new ChordServiceFileDescriptorSupplier())
               .addMethod(getFindSuccessorMethod())
+              .addMethod(getSuccessorMethod())
+              .addMethod(getClosestPrecedingFingerMethod())
               .addMethod(getJoinMethod())
               .addMethod(getPutMethod())
               .addMethod(getGetMethod())
