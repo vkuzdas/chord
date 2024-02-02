@@ -10,7 +10,7 @@ import proto.ChordServiceGrpc;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
+import java.math.int;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -24,7 +24,7 @@ public class ChordNode {
     private NodeReference predecessor;
     private final NodeReference node;
     private NodeReference successor;
-    private final HashMap<BigInteger, String> localData = new HashMap<>();
+    private final HashMap<int, String> localData = new HashMap<>();
     private final ArrayList<NodeReference> fingerTable;
 
 //    private static final int m = 160; // number of bits in id as well as max size of fingerTable
@@ -74,19 +74,20 @@ public class ChordNode {
 
 
 
-    public static BigInteger calculateSHA1(String input) {
+    public static int calculateSHA1(String input) {
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-1");
         } catch (NoSuchAlgorithmException e) {
             warning("Failed to calculate SHA-1 for input %s:%d", input);
             e.printStackTrace(System.err);
-            return BigInteger.ZERO;
+            return 0;
         }
 
         return new BigInteger(1,
-                md.digest(input.getBytes(StandardCharsets.UTF_8))
-        ).mod(BigInteger.valueOf(7L)); // TODO: delete
+                md.digest(input.getBytes(StandardCharsets.UTF_8)))
+                .mod(BigInteger.valueOf(7L))// TODO: delete
+                .intValue();
     }
 
     private void info(String msg, Object... params) {
@@ -110,8 +111,8 @@ public class ChordNode {
     public static class NodeReference {
         public final String ip;
         public final int port;
-        public BigInteger id;
-        public BigInteger end;
+        public int id;
+        public int end;
 
         public NodeReference(String ip, int port) {
             this.ip = ip;
@@ -134,7 +135,7 @@ public class ChordNode {
 
     private void initFingerTable(NodeReference bootstrapNode) {
         // kdyz X joinuje, pta se bootstrapNode aby nasel jeho primej successor
-        BigInteger myId = node.id;
+        int myId = node.id;
         NodeReference immediateSuccessor = findSuccessor(myId);
         fingerTable.set(0, immediateSuccessor);
         this.predecessor = immediateSuccessor;
@@ -155,13 +156,13 @@ public class ChordNode {
         return new NodeReference(response.getSuccessorIp(), response.getSuccessorPort());
     }
 
-    public NodeReference findSuccessor(BigInteger id) {
+    public NodeReference findSuccessor(int id) {
         NodeReference n_ = findPredecessor(id);
         // TODO return successor_of(n_);
         return null;
     }
 
-    public NodeReference findPredecessor(BigInteger id) {
+    public NodeReference findPredecessor(int id) {
         // contacts series of nodes moving forward around the Chord towards id
         NodeReference n_ = this.node;
         while (!isOnArch(id, n_.id, n_.end)) {
@@ -172,23 +173,21 @@ public class ChordNode {
     }
 
     // GRPC call
-    public NodeReference closestPrecedingFingerOf(NodeReference n_, BigInteger id) {
+    public NodeReference closestPrecedingFingerOf(NodeReference n_, int id) {
         // TODO: continue here
 
     }
 
-    // id ?∈ [start, end)
-    public static boolean isOnArch(BigInteger id, BigInteger start, BigInteger end) {
-        // wrap around arch; id ?∈ [start, 2^m) || id ?∈ [0, end)
-        if (start.compareTo(end) > 0) { // wrap around
-            if(id.compareTo(start) >= 0)
+    public static boolean isOnArch(int id, int start, int end) {
+        // Wrap around arch; id ∈ [start, 2^m) || id ∈ [0, end)
+        if (start > end) { // Wrap around
+            if (id >= start)
                 return true;
-
-            if(id.compareTo(BigInteger.ZERO) >= 0 && id.compareTo(end) < 0)
+            if (id >= 0 && id < end)
                 return true;
             return false;
         }
-        return id.compareTo(start) >= 0 && id.compareTo(end) < 0;
+        return id >= start && id < end;
     }
 
 
@@ -199,7 +198,7 @@ public class ChordNode {
 //        @Override
 //        public void findSuccessor(Chord.FindSuccessorRequest request, StreamObserver<Chord.FindSuccessorResponse> responseObserver) {
 //            NodeReference currSuccessor;
-//            BigInteger queriedId;
+//            int queriedId;
 //            try {
 //                queriedId = calculateSHA1(request.getPrecedingId());
 //            } catch (NoSuchAlgorithmException e) {
@@ -227,7 +226,7 @@ public class ChordNode {
         public void closestPrecedingFinger(String id) {
             calculateSHA1(id)
             for (int i = m-1; i >= 0; i--) {
-                BigInteger currId = fingerTable.get(i).id;
+                int currId = fingerTable.get(i).id;
                 if (isOnArch(currId, node.id, id))
             }
         }
@@ -237,7 +236,7 @@ public class ChordNode {
         public void join(Chord.JoinRequest requestFromNodeX, StreamObserver<Chord.JoinResponse> responseObserver) {
             NodeReference newNode = new NodeReference(requestFromNodeX.getSenderIp(), requestFromNodeX.getSenderPort());
 
-            BigInteger id = calculateSHA1(newNode.ip + ":" + newNode.port);
+            int id = calculateSHA1(newNode.ip + ":" + newNode.port);
 
             Chord.JoinResponse response = Chord.JoinResponse.newBuilder()
                     .setSenderIp(node.ip)
