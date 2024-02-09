@@ -19,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.lang.Math.pow;
+
 public class ChordNode {
     private static final Logger logger = Logger.getLogger(ChordNode.class.getName());
     private NodeReference predecessor;
@@ -26,9 +28,10 @@ public class ChordNode {
     private NodeReference successor;
     private final HashMap<Integer, String> localData = new HashMap<>();
     private final ArrayList<NodeReference> fingerTable;
+    private boolean isNodeAloneInChord;
 
 //    private static final int m = 160; // number of bits in id as well as max size of fingerTable
-    private static final int m = 3; // 0-255 ids
+    private static final int m = 8; // 0-255 ids
 
     private final Server server;
     private ChordServiceGrpc.ChordServiceBlockingStub blockingStub;
@@ -38,6 +41,7 @@ public class ChordNode {
         this.node = new NodeReference(ip, port);
         this.predecessor = node;
         this.successor = node;
+        this.isNodeAloneInChord = true;
         fingerTable = new ArrayList<>(Collections.nCopies(m, node));
 
         server = ServerBuilder.forPort(port)
@@ -86,7 +90,7 @@ public class ChordNode {
 
         return new BigInteger(1,
                 md.digest(input.getBytes(StandardCharsets.UTF_8)))
-                .mod(BigInteger.valueOf(7L))// TODO: delete
+                .mod(BigInteger.valueOf(255L))// TODO: delete
                 .intValue();
     }
 
@@ -127,28 +131,78 @@ public class ChordNode {
     }
 
     // Called on X from client
-    public void join(NodeReference nodeA) {
-        // Initializing fingers and predecessor
-        initFingerTable(nodeA);
-        // TODO: update_others()
+    public void join(NodeReference n_) {
+        initFingerTable(n_);
+        updateOthers();
+        moveKeys_RPC(); //from the range (predecessor,n] from successor
     }
 
-    private void initFingerTable(NodeReference bootstrapNode) {
-        // kdyz X joinuje, pta se bootstrapNode aby nasel jeho primej successor
-        int myId = node.id;
-        NodeReference immediateSuccessor = findSuccessor(myId);
-        fingerTable.set(0, immediateSuccessor);
-        this.predecessor = immediateSuccessor;
-        // TODO
+    private void moveKeys_RPC() {
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.toString()).usePlaintext().build();
+        blockingStub = ChordServiceGrpc.newBlockingStub(channel);
+        Chord.MoveKeysRequest request = Chord.MoveKeysRequest.newBuilder()
+                .setSenderIp(node.ip)
+                .setSenderPort(node.port)
+                .setPredecessorIp(predecessor.ip)
+                .setPredecessorPort(predecessor.port)
+                .build();
+        Chord.MoveKeysResponse response = blockingStub.moveKeys(request);
     }
 
-    // bootstrap join
-    public NodeReference findSuccessor(NodeReference askedNode, String precedingId) {
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(askedNode.ip + ":" + askedNode.port).usePlaintext().build();
+    private void updateOthers() {
+        for (int i = 1; i < m+1; i++) {
+            NodeReference p = findPredecessor(node.id - (int)pow(2, i-1));
+            updateFingerTableOf_RPC(p, node, i);
+        }
+    }
+
+    private void updateFingerTableOf_RPC(NodeReference p, NodeReference s, int index) {
+        Chord.UpdateFingerTableRequest req = Chord.UpdateFingerTableRequest.newBuilder()
+                .setSenderIp(node.ip)
+                .setSenderPort(node.port)
+                .setIndex(index)
+                .setNodeIp(s.ip)
+                .setNodePort(s.port)
+                .build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(p.toString()).usePlaintext().build();
+        blockingStub = ChordServiceGrpc.newBlockingStub(channel);
+        Chord.UpdateFingerTableResponse response = blockingStub.updateFingerTable(req);
+    }
+
+    private void initFingerTable(NodeReference n_) {
+        int targetId = fingerTable.get(0).id;
+        this.successor = findSuccessor_RPC(n_, targetId);
+        fingerTable.set(0, this.successor);
+        this.predecessor = getPredecessor_RPC(this.successor);
+        for (int i = 0; i < m-1; i++) {
+            NodeReference curr = fingerTable.get(i);
+            NodeReference next = fingerTable.get(i+1);
+            if (isBetween(next.id, node.id, curr.id)) {
+                fingerTable.set(i+1, curr);
+            } else {
+                fingerTable.set(i+1, findSuccessor_RPC(n_, next.id));
+            }
+        }
+    }
+
+    public NodeReference getPredecessor_RPC(NodeReference targetNode) {
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(targetNode.toString()).usePlaintext().build();
+        Chord.GetPredecessorRequest request = Chord.GetPredecessorRequest.newBuilder()
+                .setRequestorIp(this.node.ip)
+                .setRequestorPort(this.node.port)
+                .build();
+        blockingStub = ChordServiceGrpc.newBlockingStub(channel);
+
+        Chord.GetPredecessorResponse response = blockingStub.getPredecessor(request);
+        return new NodeReference(response.getPredecessorIp(), response.getPredecessorPort());
+    }
+
+    public NodeReference findSuccessor_RPC(NodeReference n_, int targetId) {
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
         Chord.FindSuccessorRequest request = Chord.FindSuccessorRequest.newBuilder()
                 .setSenderIp(this.node.ip)
                 .setSenderPort(this.node.port)
-                .setPrecedingId(precedingId)
+                .setTargetId(targetId)
                 .build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
 
@@ -158,26 +212,25 @@ public class ChordNode {
 
     public NodeReference findSuccessor(int id) {
         NodeReference n_ = findPredecessor(id);
-        return successor(n_);
+        return getSuccessor_RPC(n_);
     }
 
-    // grpc call for the successor
-    public NodeReference successor(NodeReference n_) {
-        Chord.SuccessorRequest req = Chord.SuccessorRequest
+    public NodeReference getSuccessor_RPC(NodeReference n_) {
+        Chord.GetSuccessorRequest req = Chord.GetSuccessorRequest
                 .newBuilder()
                 .setRequestorIp(this.node.ip)
                 .setRequestorPort(this.node.port)
                 .build();
         ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
-        Chord.SuccessorResponse response = blockingStub.successor(req);
+        Chord.GetSuccessorResponse response = blockingStub.getSuccessor(req);
         return new NodeReference(response.getSuccessorIp(), response.getSuccessorPort());
     }
 
     public NodeReference findPredecessor(int id) {
         // contacts series of nodes moving forward around the Chord towards id
         NodeReference n_ = this.node;
-        while (!isOnArch(id, n_.id, n_.end)) {
+        while (!isBetween(id, n_.id, n_.end)) {
             // n asks n_ for the node n_ knows about that most closely precedes id => grpc
             n_ = closestPrecedingFingerOf(n_, id);
         }
@@ -199,7 +252,7 @@ public class ChordNode {
         return new NodeReference(response.getClosestPrecedingFingerIp(), response.getClosestPrecedingFingerPort());
     }
 
-    public static boolean isOnArch(int id, int start, int end) {
+    public static boolean isBetween(int id, int start, int end) {
         // Wrap around arch; id ∈ [start, 2^m) || id ∈ [0, end)
         if (start > end) { // Wrap around
             if (id >= start)
@@ -216,40 +269,55 @@ public class ChordNode {
     /** Procedures served to other nodes */
     private class ChordServiceImpl extends ChordServiceGrpc.ChordServiceImplBase {
 
-//        @Override
-//        public void findSuccessor(Chord.FindSuccessorRequest request, StreamObserver<Chord.FindSuccessorResponse> responseObserver) {
-//            NodeReference currSuccessor;
-//            int queriedId;
-//            try {
-//                queriedId = calculateSHA1(request.getPrecedingId());
-//            } catch (NoSuchAlgorithmException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//            currSuccessor = node;
-//            int i = m-1;
-//            while (!isOnArch(queriedId, node.id, node.end)) {
-//                currSuccessor = fingerTable.get(i);
-//                i--;
-//            }
-//
-//            Chord.FindSuccessorResponse response = Chord.FindSuccessorResponse.newBuilder()
-//                    .setRequestorIp(request.getSenderIp())
-//                    .setRequestorPort(request.getSenderPort())
-//                    .setSuccessorIp(currSuccessor.ip)
-//                    .setSuccessorPort(currSuccessor.port)
-//                    .build();
-//
-//            responseObserver.onNext(response);
-//            responseObserver.onCompleted();
-//        }
-
+        // invokes findSuccessor procedure
         @Override
-        public void successor(Chord.SuccessorRequest request, StreamObserver<Chord.SuccessorResponse> responseObserver) {
-            Chord.SuccessorResponse response = Chord.SuccessorResponse.newBuilder()
+        public void findSuccessor(Chord.FindSuccessorRequest request, StreamObserver<Chord.FindSuccessorResponse> responseObserver) {
+            int targetId = request.getTargetId();
+            NodeReference n = ChordNode.this.findSuccessor(targetId);
+
+            Chord.FindSuccessorResponse r = Chord.FindSuccessorResponse.newBuilder()
+                    .setSuccessorIp(n.ip)
+                    .setSuccessorPort(n.port)
+                    .build();
+            responseObserver.onNext(r);
+            responseObserver.onCompleted();
+        }
+
+        // return this.successor
+        @Override
+        public void getSuccessor(Chord.GetSuccessorRequest request, StreamObserver<Chord.GetSuccessorResponse> responseObserver) {
+            Chord.GetSuccessorResponse response = Chord.GetSuccessorResponse.newBuilder()
                     .setSuccessorIp(successor.ip)
                     .setSuccessorPort(successor.port)
                     .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+
+        // return this.predecessor
+        @Override
+        public void getPredecessor(Chord.GetPredecessorRequest request, StreamObserver<Chord.GetPredecessorResponse> responseObserver) {
+            Chord.GetPredecessorResponse response = Chord.GetPredecessorResponse.newBuilder()
+                    .setPredecessorIp(predecessor.ip)
+                    .setPredecessorPort(successor.port)
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+
+        @Override
+        public void updateFingerTable(Chord.UpdateFingerTableRequest request, StreamObserver<Chord.UpdateFingerTableResponse> responseObserver) {
+            int index = request.getIndex();
+            NodeReference s = new NodeReference(request.getNodeIp(), request.getNodePort());
+            NodeReference i = fingerTable.get(index);
+            if (isBetween(s.id, node.id, i.id)) {
+                fingerTable.set(index, s);
+                updateFingerTableOf_RPC(predecessor, s, index);
+            }
+            Chord.UpdateFingerTableResponse response = Chord.UpdateFingerTableResponse.newBuilder()
+                    .setStatus("OK")
+                    .build();
+            // todo: consider adding status logic
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }
@@ -259,7 +327,7 @@ public class ChordNode {
             int id = request.getTargetId();
             for (int i = m-1; i >= 0; i--) {
                 NodeReference curr = fingerTable.get(i);
-                if (isOnArch(curr.id, node.id, id)) {
+                if (isBetween(curr.id, node.id, id)) {
                     Chord.ClosestPrecedingFingerResponse r = Chord.ClosestPrecedingFingerResponse.newBuilder()
                             .setClosestPrecedingFingerIp(curr.ip)
                             .setClosestPrecedingFingerPort(curr.port)

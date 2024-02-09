@@ -14,8 +14,3380 @@ public final class Chord {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface SuccessorRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:SuccessorRequest)
+  public interface MoveKeysRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:MoveKeysRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    java.lang.String getSenderIp();
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getSenderIpBytes();
+
+    /**
+     * <code>int32 senderPort = 2;</code>
+     */
+    int getSenderPort();
+
+    /**
+     * <code>string receiverIp = 3;</code>
+     */
+    java.lang.String getReceiverIp();
+    /**
+     * <code>string receiverIp = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getReceiverIpBytes();
+
+    /**
+     * <code>int32 receiverPort = 4;</code>
+     */
+    int getReceiverPort();
+
+    /**
+     * <code>int32 start = 5;</code>
+     */
+    int getStart();
+
+    /**
+     * <code>int32 end = 6;</code>
+     */
+    int getEnd();
+  }
+  /**
+   * Protobuf type {@code MoveKeysRequest}
+   */
+  public  static final class MoveKeysRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:MoveKeysRequest)
+      MoveKeysRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use MoveKeysRequest.newBuilder() to construct.
+    private MoveKeysRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private MoveKeysRequest() {
+      senderIp_ = "";
+      senderPort_ = 0;
+      receiverIp_ = "";
+      receiverPort_ = 0;
+      start_ = 0;
+      end_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private MoveKeysRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              senderIp_ = s;
+              break;
+            }
+            case 16: {
+
+              senderPort_ = input.readInt32();
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              receiverIp_ = s;
+              break;
+            }
+            case 32: {
+
+              receiverPort_ = input.readInt32();
+              break;
+            }
+            case 40: {
+
+              start_ = input.readInt32();
+              break;
+            }
+            case 48: {
+
+              end_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return proto.Chord.internal_static_MoveKeysRequest_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return proto.Chord.internal_static_MoveKeysRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              proto.Chord.MoveKeysRequest.class, proto.Chord.MoveKeysRequest.Builder.class);
+    }
+
+    public static final int SENDERIP_FIELD_NUMBER = 1;
+    private volatile java.lang.Object senderIp_;
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    public java.lang.String getSenderIp() {
+      java.lang.Object ref = senderIp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        senderIp_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSenderIpBytes() {
+      java.lang.Object ref = senderIp_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        senderIp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SENDERPORT_FIELD_NUMBER = 2;
+    private int senderPort_;
+    /**
+     * <code>int32 senderPort = 2;</code>
+     */
+    public int getSenderPort() {
+      return senderPort_;
+    }
+
+    public static final int RECEIVERIP_FIELD_NUMBER = 3;
+    private volatile java.lang.Object receiverIp_;
+    /**
+     * <code>string receiverIp = 3;</code>
+     */
+    public java.lang.String getReceiverIp() {
+      java.lang.Object ref = receiverIp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        receiverIp_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string receiverIp = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getReceiverIpBytes() {
+      java.lang.Object ref = receiverIp_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        receiverIp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int RECEIVERPORT_FIELD_NUMBER = 4;
+    private int receiverPort_;
+    /**
+     * <code>int32 receiverPort = 4;</code>
+     */
+    public int getReceiverPort() {
+      return receiverPort_;
+    }
+
+    public static final int START_FIELD_NUMBER = 5;
+    private int start_;
+    /**
+     * <code>int32 start = 5;</code>
+     */
+    public int getStart() {
+      return start_;
+    }
+
+    public static final int END_FIELD_NUMBER = 6;
+    private int end_;
+    /**
+     * <code>int32 end = 6;</code>
+     */
+    public int getEnd() {
+      return end_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getSenderIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, senderIp_);
+      }
+      if (senderPort_ != 0) {
+        output.writeInt32(2, senderPort_);
+      }
+      if (!getReceiverIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, receiverIp_);
+      }
+      if (receiverPort_ != 0) {
+        output.writeInt32(4, receiverPort_);
+      }
+      if (start_ != 0) {
+        output.writeInt32(5, start_);
+      }
+      if (end_ != 0) {
+        output.writeInt32(6, end_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getSenderIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, senderIp_);
+      }
+      if (senderPort_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, senderPort_);
+      }
+      if (!getReceiverIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, receiverIp_);
+      }
+      if (receiverPort_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, receiverPort_);
+      }
+      if (start_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, start_);
+      }
+      if (end_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, end_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof proto.Chord.MoveKeysRequest)) {
+        return super.equals(obj);
+      }
+      proto.Chord.MoveKeysRequest other = (proto.Chord.MoveKeysRequest) obj;
+
+      boolean result = true;
+      result = result && getSenderIp()
+          .equals(other.getSenderIp());
+      result = result && (getSenderPort()
+          == other.getSenderPort());
+      result = result && getReceiverIp()
+          .equals(other.getReceiverIp());
+      result = result && (getReceiverPort()
+          == other.getReceiverPort());
+      result = result && (getStart()
+          == other.getStart());
+      result = result && (getEnd()
+          == other.getEnd());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SENDERIP_FIELD_NUMBER;
+      hash = (53 * hash) + getSenderIp().hashCode();
+      hash = (37 * hash) + SENDERPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getSenderPort();
+      hash = (37 * hash) + RECEIVERIP_FIELD_NUMBER;
+      hash = (53 * hash) + getReceiverIp().hashCode();
+      hash = (37 * hash) + RECEIVERPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getReceiverPort();
+      hash = (37 * hash) + START_FIELD_NUMBER;
+      hash = (53 * hash) + getStart();
+      hash = (37 * hash) + END_FIELD_NUMBER;
+      hash = (53 * hash) + getEnd();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static proto.Chord.MoveKeysRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.MoveKeysRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.MoveKeysRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.MoveKeysRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.MoveKeysRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.MoveKeysRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.MoveKeysRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.MoveKeysRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.MoveKeysRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static proto.Chord.MoveKeysRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.MoveKeysRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.MoveKeysRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(proto.Chord.MoveKeysRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code MoveKeysRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:MoveKeysRequest)
+        proto.Chord.MoveKeysRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.Chord.internal_static_MoveKeysRequest_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.Chord.internal_static_MoveKeysRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.Chord.MoveKeysRequest.class, proto.Chord.MoveKeysRequest.Builder.class);
+      }
+
+      // Construct using proto.Chord.MoveKeysRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        senderIp_ = "";
+
+        senderPort_ = 0;
+
+        receiverIp_ = "";
+
+        receiverPort_ = 0;
+
+        start_ = 0;
+
+        end_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return proto.Chord.internal_static_MoveKeysRequest_descriptor;
+      }
+
+      @java.lang.Override
+      public proto.Chord.MoveKeysRequest getDefaultInstanceForType() {
+        return proto.Chord.MoveKeysRequest.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public proto.Chord.MoveKeysRequest build() {
+        proto.Chord.MoveKeysRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public proto.Chord.MoveKeysRequest buildPartial() {
+        proto.Chord.MoveKeysRequest result = new proto.Chord.MoveKeysRequest(this);
+        result.senderIp_ = senderIp_;
+        result.senderPort_ = senderPort_;
+        result.receiverIp_ = receiverIp_;
+        result.receiverPort_ = receiverPort_;
+        result.start_ = start_;
+        result.end_ = end_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof proto.Chord.MoveKeysRequest) {
+          return mergeFrom((proto.Chord.MoveKeysRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(proto.Chord.MoveKeysRequest other) {
+        if (other == proto.Chord.MoveKeysRequest.getDefaultInstance()) return this;
+        if (!other.getSenderIp().isEmpty()) {
+          senderIp_ = other.senderIp_;
+          onChanged();
+        }
+        if (other.getSenderPort() != 0) {
+          setSenderPort(other.getSenderPort());
+        }
+        if (!other.getReceiverIp().isEmpty()) {
+          receiverIp_ = other.receiverIp_;
+          onChanged();
+        }
+        if (other.getReceiverPort() != 0) {
+          setReceiverPort(other.getReceiverPort());
+        }
+        if (other.getStart() != 0) {
+          setStart(other.getStart());
+        }
+        if (other.getEnd() != 0) {
+          setEnd(other.getEnd());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        proto.Chord.MoveKeysRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (proto.Chord.MoveKeysRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object senderIp_ = "";
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public java.lang.String getSenderIp() {
+        java.lang.Object ref = senderIp_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          senderIp_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSenderIpBytes() {
+        java.lang.Object ref = senderIp_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          senderIp_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public Builder setSenderIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        senderIp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public Builder clearSenderIp() {
+        
+        senderIp_ = getDefaultInstance().getSenderIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public Builder setSenderIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        senderIp_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int senderPort_ ;
+      /**
+       * <code>int32 senderPort = 2;</code>
+       */
+      public int getSenderPort() {
+        return senderPort_;
+      }
+      /**
+       * <code>int32 senderPort = 2;</code>
+       */
+      public Builder setSenderPort(int value) {
+        
+        senderPort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 senderPort = 2;</code>
+       */
+      public Builder clearSenderPort() {
+        
+        senderPort_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object receiverIp_ = "";
+      /**
+       * <code>string receiverIp = 3;</code>
+       */
+      public java.lang.String getReceiverIp() {
+        java.lang.Object ref = receiverIp_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          receiverIp_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string receiverIp = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getReceiverIpBytes() {
+        java.lang.Object ref = receiverIp_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          receiverIp_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string receiverIp = 3;</code>
+       */
+      public Builder setReceiverIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        receiverIp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string receiverIp = 3;</code>
+       */
+      public Builder clearReceiverIp() {
+        
+        receiverIp_ = getDefaultInstance().getReceiverIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string receiverIp = 3;</code>
+       */
+      public Builder setReceiverIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        receiverIp_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int receiverPort_ ;
+      /**
+       * <code>int32 receiverPort = 4;</code>
+       */
+      public int getReceiverPort() {
+        return receiverPort_;
+      }
+      /**
+       * <code>int32 receiverPort = 4;</code>
+       */
+      public Builder setReceiverPort(int value) {
+        
+        receiverPort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 receiverPort = 4;</code>
+       */
+      public Builder clearReceiverPort() {
+        
+        receiverPort_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int start_ ;
+      /**
+       * <code>int32 start = 5;</code>
+       */
+      public int getStart() {
+        return start_;
+      }
+      /**
+       * <code>int32 start = 5;</code>
+       */
+      public Builder setStart(int value) {
+        
+        start_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 start = 5;</code>
+       */
+      public Builder clearStart() {
+        
+        start_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int end_ ;
+      /**
+       * <code>int32 end = 6;</code>
+       */
+      public int getEnd() {
+        return end_;
+      }
+      /**
+       * <code>int32 end = 6;</code>
+       */
+      public Builder setEnd(int value) {
+        
+        end_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 end = 6;</code>
+       */
+      public Builder clearEnd() {
+        
+        end_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:MoveKeysRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:MoveKeysRequest)
+    private static final proto.Chord.MoveKeysRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new proto.Chord.MoveKeysRequest();
+    }
+
+    public static proto.Chord.MoveKeysRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<MoveKeysRequest>
+        PARSER = new com.google.protobuf.AbstractParser<MoveKeysRequest>() {
+      @java.lang.Override
+      public MoveKeysRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new MoveKeysRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<MoveKeysRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<MoveKeysRequest> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public proto.Chord.MoveKeysRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface MoveKeysResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:MoveKeysResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    java.lang.String getSenderIp();
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getSenderIpBytes();
+
+    /**
+     * <code>int32 senderPort = 2;</code>
+     */
+    int getSenderPort();
+
+    /**
+     * <code>repeated string values = 3;</code>
+     */
+    java.util.List<java.lang.String>
+        getValuesList();
+    /**
+     * <code>repeated string values = 3;</code>
+     */
+    int getValuesCount();
+    /**
+     * <code>repeated string values = 3;</code>
+     */
+    java.lang.String getValues(int index);
+    /**
+     * <code>repeated string values = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getValuesBytes(int index);
+  }
+  /**
+   * Protobuf type {@code MoveKeysResponse}
+   */
+  public  static final class MoveKeysResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:MoveKeysResponse)
+      MoveKeysResponseOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use MoveKeysResponse.newBuilder() to construct.
+    private MoveKeysResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private MoveKeysResponse() {
+      senderIp_ = "";
+      senderPort_ = 0;
+      values_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private MoveKeysResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              senderIp_ = s;
+              break;
+            }
+            case 16: {
+
+              senderPort_ = input.readInt32();
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                values_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              values_.add(s);
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          values_ = values_.getUnmodifiableView();
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return proto.Chord.internal_static_MoveKeysResponse_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return proto.Chord.internal_static_MoveKeysResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              proto.Chord.MoveKeysResponse.class, proto.Chord.MoveKeysResponse.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int SENDERIP_FIELD_NUMBER = 1;
+    private volatile java.lang.Object senderIp_;
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    public java.lang.String getSenderIp() {
+      java.lang.Object ref = senderIp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        senderIp_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSenderIpBytes() {
+      java.lang.Object ref = senderIp_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        senderIp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SENDERPORT_FIELD_NUMBER = 2;
+    private int senderPort_;
+    /**
+     * <code>int32 senderPort = 2;</code>
+     */
+    public int getSenderPort() {
+      return senderPort_;
+    }
+
+    public static final int VALUES_FIELD_NUMBER = 3;
+    private com.google.protobuf.LazyStringList values_;
+    /**
+     * <code>repeated string values = 3;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getValuesList() {
+      return values_;
+    }
+    /**
+     * <code>repeated string values = 3;</code>
+     */
+    public int getValuesCount() {
+      return values_.size();
+    }
+    /**
+     * <code>repeated string values = 3;</code>
+     */
+    public java.lang.String getValues(int index) {
+      return values_.get(index);
+    }
+    /**
+     * <code>repeated string values = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getValuesBytes(int index) {
+      return values_.getByteString(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getSenderIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, senderIp_);
+      }
+      if (senderPort_ != 0) {
+        output.writeInt32(2, senderPort_);
+      }
+      for (int i = 0; i < values_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, values_.getRaw(i));
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getSenderIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, senderIp_);
+      }
+      if (senderPort_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, senderPort_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < values_.size(); i++) {
+          dataSize += computeStringSizeNoTag(values_.getRaw(i));
+        }
+        size += dataSize;
+        size += 1 * getValuesList().size();
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof proto.Chord.MoveKeysResponse)) {
+        return super.equals(obj);
+      }
+      proto.Chord.MoveKeysResponse other = (proto.Chord.MoveKeysResponse) obj;
+
+      boolean result = true;
+      result = result && getSenderIp()
+          .equals(other.getSenderIp());
+      result = result && (getSenderPort()
+          == other.getSenderPort());
+      result = result && getValuesList()
+          .equals(other.getValuesList());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SENDERIP_FIELD_NUMBER;
+      hash = (53 * hash) + getSenderIp().hashCode();
+      hash = (37 * hash) + SENDERPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getSenderPort();
+      if (getValuesCount() > 0) {
+        hash = (37 * hash) + VALUES_FIELD_NUMBER;
+        hash = (53 * hash) + getValuesList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static proto.Chord.MoveKeysResponse parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.MoveKeysResponse parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.MoveKeysResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.MoveKeysResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.MoveKeysResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.MoveKeysResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.MoveKeysResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.MoveKeysResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.MoveKeysResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static proto.Chord.MoveKeysResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.MoveKeysResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.MoveKeysResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(proto.Chord.MoveKeysResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code MoveKeysResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:MoveKeysResponse)
+        proto.Chord.MoveKeysResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.Chord.internal_static_MoveKeysResponse_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.Chord.internal_static_MoveKeysResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.Chord.MoveKeysResponse.class, proto.Chord.MoveKeysResponse.Builder.class);
+      }
+
+      // Construct using proto.Chord.MoveKeysResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        senderIp_ = "";
+
+        senderPort_ = 0;
+
+        values_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return proto.Chord.internal_static_MoveKeysResponse_descriptor;
+      }
+
+      @java.lang.Override
+      public proto.Chord.MoveKeysResponse getDefaultInstanceForType() {
+        return proto.Chord.MoveKeysResponse.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public proto.Chord.MoveKeysResponse build() {
+        proto.Chord.MoveKeysResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public proto.Chord.MoveKeysResponse buildPartial() {
+        proto.Chord.MoveKeysResponse result = new proto.Chord.MoveKeysResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        result.senderIp_ = senderIp_;
+        result.senderPort_ = senderPort_;
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          values_ = values_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000004);
+        }
+        result.values_ = values_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof proto.Chord.MoveKeysResponse) {
+          return mergeFrom((proto.Chord.MoveKeysResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(proto.Chord.MoveKeysResponse other) {
+        if (other == proto.Chord.MoveKeysResponse.getDefaultInstance()) return this;
+        if (!other.getSenderIp().isEmpty()) {
+          senderIp_ = other.senderIp_;
+          onChanged();
+        }
+        if (other.getSenderPort() != 0) {
+          setSenderPort(other.getSenderPort());
+        }
+        if (!other.values_.isEmpty()) {
+          if (values_.isEmpty()) {
+            values_ = other.values_;
+            bitField0_ = (bitField0_ & ~0x00000004);
+          } else {
+            ensureValuesIsMutable();
+            values_.addAll(other.values_);
+          }
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        proto.Chord.MoveKeysResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (proto.Chord.MoveKeysResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.lang.Object senderIp_ = "";
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public java.lang.String getSenderIp() {
+        java.lang.Object ref = senderIp_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          senderIp_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSenderIpBytes() {
+        java.lang.Object ref = senderIp_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          senderIp_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public Builder setSenderIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        senderIp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public Builder clearSenderIp() {
+        
+        senderIp_ = getDefaultInstance().getSenderIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public Builder setSenderIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        senderIp_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int senderPort_ ;
+      /**
+       * <code>int32 senderPort = 2;</code>
+       */
+      public int getSenderPort() {
+        return senderPort_;
+      }
+      /**
+       * <code>int32 senderPort = 2;</code>
+       */
+      public Builder setSenderPort(int value) {
+        
+        senderPort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 senderPort = 2;</code>
+       */
+      public Builder clearSenderPort() {
+        
+        senderPort_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.LazyStringList values_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureValuesIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          values_ = new com.google.protobuf.LazyStringArrayList(values_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+      /**
+       * <code>repeated string values = 3;</code>
+       */
+      public com.google.protobuf.ProtocolStringList
+          getValuesList() {
+        return values_.getUnmodifiableView();
+      }
+      /**
+       * <code>repeated string values = 3;</code>
+       */
+      public int getValuesCount() {
+        return values_.size();
+      }
+      /**
+       * <code>repeated string values = 3;</code>
+       */
+      public java.lang.String getValues(int index) {
+        return values_.get(index);
+      }
+      /**
+       * <code>repeated string values = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getValuesBytes(int index) {
+        return values_.getByteString(index);
+      }
+      /**
+       * <code>repeated string values = 3;</code>
+       */
+      public Builder setValues(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureValuesIsMutable();
+        values_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string values = 3;</code>
+       */
+      public Builder addValues(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureValuesIsMutable();
+        values_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string values = 3;</code>
+       */
+      public Builder addAllValues(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureValuesIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, values_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string values = 3;</code>
+       */
+      public Builder clearValues() {
+        values_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string values = 3;</code>
+       */
+      public Builder addValuesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        ensureValuesIsMutable();
+        values_.add(value);
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:MoveKeysResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:MoveKeysResponse)
+    private static final proto.Chord.MoveKeysResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new proto.Chord.MoveKeysResponse();
+    }
+
+    public static proto.Chord.MoveKeysResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<MoveKeysResponse>
+        PARSER = new com.google.protobuf.AbstractParser<MoveKeysResponse>() {
+      @java.lang.Override
+      public MoveKeysResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new MoveKeysResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<MoveKeysResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<MoveKeysResponse> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public proto.Chord.MoveKeysResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface UpdateFingerTableRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:UpdateFingerTableRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    java.lang.String getSenderIp();
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getSenderIpBytes();
+
+    /**
+     * <code>int32 senderPort = 2;</code>
+     */
+    int getSenderPort();
+
+    /**
+     * <code>int32 index = 3;</code>
+     */
+    int getIndex();
+
+    /**
+     * <code>string nodeIp = 4;</code>
+     */
+    java.lang.String getNodeIp();
+    /**
+     * <code>string nodeIp = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getNodeIpBytes();
+
+    /**
+     * <code>int32 nodePort = 5;</code>
+     */
+    int getNodePort();
+  }
+  /**
+   * Protobuf type {@code UpdateFingerTableRequest}
+   */
+  public  static final class UpdateFingerTableRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:UpdateFingerTableRequest)
+      UpdateFingerTableRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use UpdateFingerTableRequest.newBuilder() to construct.
+    private UpdateFingerTableRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private UpdateFingerTableRequest() {
+      senderIp_ = "";
+      senderPort_ = 0;
+      index_ = 0;
+      nodeIp_ = "";
+      nodePort_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private UpdateFingerTableRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              senderIp_ = s;
+              break;
+            }
+            case 16: {
+
+              senderPort_ = input.readInt32();
+              break;
+            }
+            case 24: {
+
+              index_ = input.readInt32();
+              break;
+            }
+            case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              nodeIp_ = s;
+              break;
+            }
+            case 40: {
+
+              nodePort_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return proto.Chord.internal_static_UpdateFingerTableRequest_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return proto.Chord.internal_static_UpdateFingerTableRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              proto.Chord.UpdateFingerTableRequest.class, proto.Chord.UpdateFingerTableRequest.Builder.class);
+    }
+
+    public static final int SENDERIP_FIELD_NUMBER = 1;
+    private volatile java.lang.Object senderIp_;
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    public java.lang.String getSenderIp() {
+      java.lang.Object ref = senderIp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        senderIp_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string senderIp = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSenderIpBytes() {
+      java.lang.Object ref = senderIp_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        senderIp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SENDERPORT_FIELD_NUMBER = 2;
+    private int senderPort_;
+    /**
+     * <code>int32 senderPort = 2;</code>
+     */
+    public int getSenderPort() {
+      return senderPort_;
+    }
+
+    public static final int INDEX_FIELD_NUMBER = 3;
+    private int index_;
+    /**
+     * <code>int32 index = 3;</code>
+     */
+    public int getIndex() {
+      return index_;
+    }
+
+    public static final int NODEIP_FIELD_NUMBER = 4;
+    private volatile java.lang.Object nodeIp_;
+    /**
+     * <code>string nodeIp = 4;</code>
+     */
+    public java.lang.String getNodeIp() {
+      java.lang.Object ref = nodeIp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        nodeIp_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string nodeIp = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNodeIpBytes() {
+      java.lang.Object ref = nodeIp_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        nodeIp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int NODEPORT_FIELD_NUMBER = 5;
+    private int nodePort_;
+    /**
+     * <code>int32 nodePort = 5;</code>
+     */
+    public int getNodePort() {
+      return nodePort_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getSenderIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, senderIp_);
+      }
+      if (senderPort_ != 0) {
+        output.writeInt32(2, senderPort_);
+      }
+      if (index_ != 0) {
+        output.writeInt32(3, index_);
+      }
+      if (!getNodeIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, nodeIp_);
+      }
+      if (nodePort_ != 0) {
+        output.writeInt32(5, nodePort_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getSenderIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, senderIp_);
+      }
+      if (senderPort_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, senderPort_);
+      }
+      if (index_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, index_);
+      }
+      if (!getNodeIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, nodeIp_);
+      }
+      if (nodePort_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, nodePort_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof proto.Chord.UpdateFingerTableRequest)) {
+        return super.equals(obj);
+      }
+      proto.Chord.UpdateFingerTableRequest other = (proto.Chord.UpdateFingerTableRequest) obj;
+
+      boolean result = true;
+      result = result && getSenderIp()
+          .equals(other.getSenderIp());
+      result = result && (getSenderPort()
+          == other.getSenderPort());
+      result = result && (getIndex()
+          == other.getIndex());
+      result = result && getNodeIp()
+          .equals(other.getNodeIp());
+      result = result && (getNodePort()
+          == other.getNodePort());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SENDERIP_FIELD_NUMBER;
+      hash = (53 * hash) + getSenderIp().hashCode();
+      hash = (37 * hash) + SENDERPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getSenderPort();
+      hash = (37 * hash) + INDEX_FIELD_NUMBER;
+      hash = (53 * hash) + getIndex();
+      hash = (37 * hash) + NODEIP_FIELD_NUMBER;
+      hash = (53 * hash) + getNodeIp().hashCode();
+      hash = (37 * hash) + NODEPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getNodePort();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static proto.Chord.UpdateFingerTableRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.UpdateFingerTableRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(proto.Chord.UpdateFingerTableRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code UpdateFingerTableRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:UpdateFingerTableRequest)
+        proto.Chord.UpdateFingerTableRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.Chord.internal_static_UpdateFingerTableRequest_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.Chord.internal_static_UpdateFingerTableRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.Chord.UpdateFingerTableRequest.class, proto.Chord.UpdateFingerTableRequest.Builder.class);
+      }
+
+      // Construct using proto.Chord.UpdateFingerTableRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        senderIp_ = "";
+
+        senderPort_ = 0;
+
+        index_ = 0;
+
+        nodeIp_ = "";
+
+        nodePort_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return proto.Chord.internal_static_UpdateFingerTableRequest_descriptor;
+      }
+
+      @java.lang.Override
+      public proto.Chord.UpdateFingerTableRequest getDefaultInstanceForType() {
+        return proto.Chord.UpdateFingerTableRequest.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public proto.Chord.UpdateFingerTableRequest build() {
+        proto.Chord.UpdateFingerTableRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public proto.Chord.UpdateFingerTableRequest buildPartial() {
+        proto.Chord.UpdateFingerTableRequest result = new proto.Chord.UpdateFingerTableRequest(this);
+        result.senderIp_ = senderIp_;
+        result.senderPort_ = senderPort_;
+        result.index_ = index_;
+        result.nodeIp_ = nodeIp_;
+        result.nodePort_ = nodePort_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof proto.Chord.UpdateFingerTableRequest) {
+          return mergeFrom((proto.Chord.UpdateFingerTableRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(proto.Chord.UpdateFingerTableRequest other) {
+        if (other == proto.Chord.UpdateFingerTableRequest.getDefaultInstance()) return this;
+        if (!other.getSenderIp().isEmpty()) {
+          senderIp_ = other.senderIp_;
+          onChanged();
+        }
+        if (other.getSenderPort() != 0) {
+          setSenderPort(other.getSenderPort());
+        }
+        if (other.getIndex() != 0) {
+          setIndex(other.getIndex());
+        }
+        if (!other.getNodeIp().isEmpty()) {
+          nodeIp_ = other.nodeIp_;
+          onChanged();
+        }
+        if (other.getNodePort() != 0) {
+          setNodePort(other.getNodePort());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        proto.Chord.UpdateFingerTableRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (proto.Chord.UpdateFingerTableRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object senderIp_ = "";
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public java.lang.String getSenderIp() {
+        java.lang.Object ref = senderIp_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          senderIp_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSenderIpBytes() {
+        java.lang.Object ref = senderIp_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          senderIp_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public Builder setSenderIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        senderIp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public Builder clearSenderIp() {
+        
+        senderIp_ = getDefaultInstance().getSenderIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string senderIp = 1;</code>
+       */
+      public Builder setSenderIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        senderIp_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int senderPort_ ;
+      /**
+       * <code>int32 senderPort = 2;</code>
+       */
+      public int getSenderPort() {
+        return senderPort_;
+      }
+      /**
+       * <code>int32 senderPort = 2;</code>
+       */
+      public Builder setSenderPort(int value) {
+        
+        senderPort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 senderPort = 2;</code>
+       */
+      public Builder clearSenderPort() {
+        
+        senderPort_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int index_ ;
+      /**
+       * <code>int32 index = 3;</code>
+       */
+      public int getIndex() {
+        return index_;
+      }
+      /**
+       * <code>int32 index = 3;</code>
+       */
+      public Builder setIndex(int value) {
+        
+        index_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 index = 3;</code>
+       */
+      public Builder clearIndex() {
+        
+        index_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object nodeIp_ = "";
+      /**
+       * <code>string nodeIp = 4;</code>
+       */
+      public java.lang.String getNodeIp() {
+        java.lang.Object ref = nodeIp_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          nodeIp_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string nodeIp = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNodeIpBytes() {
+        java.lang.Object ref = nodeIp_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          nodeIp_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string nodeIp = 4;</code>
+       */
+      public Builder setNodeIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        nodeIp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string nodeIp = 4;</code>
+       */
+      public Builder clearNodeIp() {
+        
+        nodeIp_ = getDefaultInstance().getNodeIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string nodeIp = 4;</code>
+       */
+      public Builder setNodeIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        nodeIp_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int nodePort_ ;
+      /**
+       * <code>int32 nodePort = 5;</code>
+       */
+      public int getNodePort() {
+        return nodePort_;
+      }
+      /**
+       * <code>int32 nodePort = 5;</code>
+       */
+      public Builder setNodePort(int value) {
+        
+        nodePort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 nodePort = 5;</code>
+       */
+      public Builder clearNodePort() {
+        
+        nodePort_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:UpdateFingerTableRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:UpdateFingerTableRequest)
+    private static final proto.Chord.UpdateFingerTableRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new proto.Chord.UpdateFingerTableRequest();
+    }
+
+    public static proto.Chord.UpdateFingerTableRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<UpdateFingerTableRequest>
+        PARSER = new com.google.protobuf.AbstractParser<UpdateFingerTableRequest>() {
+      @java.lang.Override
+      public UpdateFingerTableRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new UpdateFingerTableRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<UpdateFingerTableRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<UpdateFingerTableRequest> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public proto.Chord.UpdateFingerTableRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface UpdateFingerTableResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:UpdateFingerTableResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string requestorIp = 1;</code>
+     */
+    java.lang.String getRequestorIp();
+    /**
+     * <code>string requestorIp = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getRequestorIpBytes();
+
+    /**
+     * <code>int32 requestorPort = 2;</code>
+     */
+    int getRequestorPort();
+
+    /**
+     * <code>string status = 3;</code>
+     */
+    java.lang.String getStatus();
+    /**
+     * <code>string status = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getStatusBytes();
+  }
+  /**
+   * Protobuf type {@code UpdateFingerTableResponse}
+   */
+  public  static final class UpdateFingerTableResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:UpdateFingerTableResponse)
+      UpdateFingerTableResponseOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use UpdateFingerTableResponse.newBuilder() to construct.
+    private UpdateFingerTableResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private UpdateFingerTableResponse() {
+      requestorIp_ = "";
+      requestorPort_ = 0;
+      status_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private UpdateFingerTableResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              requestorIp_ = s;
+              break;
+            }
+            case 16: {
+
+              requestorPort_ = input.readInt32();
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              status_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return proto.Chord.internal_static_UpdateFingerTableResponse_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return proto.Chord.internal_static_UpdateFingerTableResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              proto.Chord.UpdateFingerTableResponse.class, proto.Chord.UpdateFingerTableResponse.Builder.class);
+    }
+
+    public static final int REQUESTORIP_FIELD_NUMBER = 1;
+    private volatile java.lang.Object requestorIp_;
+    /**
+     * <code>string requestorIp = 1;</code>
+     */
+    public java.lang.String getRequestorIp() {
+      java.lang.Object ref = requestorIp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        requestorIp_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string requestorIp = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getRequestorIpBytes() {
+      java.lang.Object ref = requestorIp_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        requestorIp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int REQUESTORPORT_FIELD_NUMBER = 2;
+    private int requestorPort_;
+    /**
+     * <code>int32 requestorPort = 2;</code>
+     */
+    public int getRequestorPort() {
+      return requestorPort_;
+    }
+
+    public static final int STATUS_FIELD_NUMBER = 3;
+    private volatile java.lang.Object status_;
+    /**
+     * <code>string status = 3;</code>
+     */
+    public java.lang.String getStatus() {
+      java.lang.Object ref = status_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        status_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string status = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getStatusBytes() {
+      java.lang.Object ref = status_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        status_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getRequestorIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, requestorIp_);
+      }
+      if (requestorPort_ != 0) {
+        output.writeInt32(2, requestorPort_);
+      }
+      if (!getStatusBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, status_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getRequestorIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, requestorIp_);
+      }
+      if (requestorPort_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, requestorPort_);
+      }
+      if (!getStatusBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, status_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof proto.Chord.UpdateFingerTableResponse)) {
+        return super.equals(obj);
+      }
+      proto.Chord.UpdateFingerTableResponse other = (proto.Chord.UpdateFingerTableResponse) obj;
+
+      boolean result = true;
+      result = result && getRequestorIp()
+          .equals(other.getRequestorIp());
+      result = result && (getRequestorPort()
+          == other.getRequestorPort());
+      result = result && getStatus()
+          .equals(other.getStatus());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + REQUESTORIP_FIELD_NUMBER;
+      hash = (53 * hash) + getRequestorIp().hashCode();
+      hash = (37 * hash) + REQUESTORPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getRequestorPort();
+      hash = (37 * hash) + STATUS_FIELD_NUMBER;
+      hash = (53 * hash) + getStatus().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static proto.Chord.UpdateFingerTableResponse parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.UpdateFingerTableResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(proto.Chord.UpdateFingerTableResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code UpdateFingerTableResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:UpdateFingerTableResponse)
+        proto.Chord.UpdateFingerTableResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.Chord.internal_static_UpdateFingerTableResponse_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.Chord.internal_static_UpdateFingerTableResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.Chord.UpdateFingerTableResponse.class, proto.Chord.UpdateFingerTableResponse.Builder.class);
+      }
+
+      // Construct using proto.Chord.UpdateFingerTableResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        requestorIp_ = "";
+
+        requestorPort_ = 0;
+
+        status_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return proto.Chord.internal_static_UpdateFingerTableResponse_descriptor;
+      }
+
+      @java.lang.Override
+      public proto.Chord.UpdateFingerTableResponse getDefaultInstanceForType() {
+        return proto.Chord.UpdateFingerTableResponse.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public proto.Chord.UpdateFingerTableResponse build() {
+        proto.Chord.UpdateFingerTableResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public proto.Chord.UpdateFingerTableResponse buildPartial() {
+        proto.Chord.UpdateFingerTableResponse result = new proto.Chord.UpdateFingerTableResponse(this);
+        result.requestorIp_ = requestorIp_;
+        result.requestorPort_ = requestorPort_;
+        result.status_ = status_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof proto.Chord.UpdateFingerTableResponse) {
+          return mergeFrom((proto.Chord.UpdateFingerTableResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(proto.Chord.UpdateFingerTableResponse other) {
+        if (other == proto.Chord.UpdateFingerTableResponse.getDefaultInstance()) return this;
+        if (!other.getRequestorIp().isEmpty()) {
+          requestorIp_ = other.requestorIp_;
+          onChanged();
+        }
+        if (other.getRequestorPort() != 0) {
+          setRequestorPort(other.getRequestorPort());
+        }
+        if (!other.getStatus().isEmpty()) {
+          status_ = other.status_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        proto.Chord.UpdateFingerTableResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (proto.Chord.UpdateFingerTableResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object requestorIp_ = "";
+      /**
+       * <code>string requestorIp = 1;</code>
+       */
+      public java.lang.String getRequestorIp() {
+        java.lang.Object ref = requestorIp_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          requestorIp_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string requestorIp = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getRequestorIpBytes() {
+        java.lang.Object ref = requestorIp_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          requestorIp_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string requestorIp = 1;</code>
+       */
+      public Builder setRequestorIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        requestorIp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string requestorIp = 1;</code>
+       */
+      public Builder clearRequestorIp() {
+        
+        requestorIp_ = getDefaultInstance().getRequestorIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string requestorIp = 1;</code>
+       */
+      public Builder setRequestorIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        requestorIp_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int requestorPort_ ;
+      /**
+       * <code>int32 requestorPort = 2;</code>
+       */
+      public int getRequestorPort() {
+        return requestorPort_;
+      }
+      /**
+       * <code>int32 requestorPort = 2;</code>
+       */
+      public Builder setRequestorPort(int value) {
+        
+        requestorPort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 requestorPort = 2;</code>
+       */
+      public Builder clearRequestorPort() {
+        
+        requestorPort_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object status_ = "";
+      /**
+       * <code>string status = 3;</code>
+       */
+      public java.lang.String getStatus() {
+        java.lang.Object ref = status_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          status_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string status = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getStatusBytes() {
+        java.lang.Object ref = status_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          status_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string status = 3;</code>
+       */
+      public Builder setStatus(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        status_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string status = 3;</code>
+       */
+      public Builder clearStatus() {
+        
+        status_ = getDefaultInstance().getStatus();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string status = 3;</code>
+       */
+      public Builder setStatusBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        status_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:UpdateFingerTableResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:UpdateFingerTableResponse)
+    private static final proto.Chord.UpdateFingerTableResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new proto.Chord.UpdateFingerTableResponse();
+    }
+
+    public static proto.Chord.UpdateFingerTableResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<UpdateFingerTableResponse>
+        PARSER = new com.google.protobuf.AbstractParser<UpdateFingerTableResponse>() {
+      @java.lang.Override
+      public UpdateFingerTableResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new UpdateFingerTableResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<UpdateFingerTableResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<UpdateFingerTableResponse> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public proto.Chord.UpdateFingerTableResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetSuccessorRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:GetSuccessorRequest)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -34,18 +3406,18 @@ public final class Chord {
     int getRequestorPort();
   }
   /**
-   * Protobuf type {@code SuccessorRequest}
+   * Protobuf type {@code GetSuccessorRequest}
    */
-  public  static final class SuccessorRequest extends
+  public  static final class GetSuccessorRequest extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:SuccessorRequest)
-      SuccessorRequestOrBuilder {
+      // @@protoc_insertion_point(message_implements:GetSuccessorRequest)
+      GetSuccessorRequestOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use SuccessorRequest.newBuilder() to construct.
-    private SuccessorRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use GetSuccessorRequest.newBuilder() to construct.
+    private GetSuccessorRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private SuccessorRequest() {
+    private GetSuccessorRequest() {
       requestorIp_ = "";
       requestorPort_ = 0;
     }
@@ -55,7 +3427,7 @@ public final class Chord {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private SuccessorRequest(
+    private GetSuccessorRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -106,15 +3478,15 @@ public final class Chord {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return proto.Chord.internal_static_SuccessorRequest_descriptor;
+      return proto.Chord.internal_static_GetSuccessorRequest_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return proto.Chord.internal_static_SuccessorRequest_fieldAccessorTable
+      return proto.Chord.internal_static_GetSuccessorRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              proto.Chord.SuccessorRequest.class, proto.Chord.SuccessorRequest.Builder.class);
+              proto.Chord.GetSuccessorRequest.class, proto.Chord.GetSuccessorRequest.Builder.class);
     }
 
     public static final int REQUESTORIP_FIELD_NUMBER = 1;
@@ -206,10 +3578,10 @@ public final class Chord {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof proto.Chord.SuccessorRequest)) {
+      if (!(obj instanceof proto.Chord.GetSuccessorRequest)) {
         return super.equals(obj);
       }
-      proto.Chord.SuccessorRequest other = (proto.Chord.SuccessorRequest) obj;
+      proto.Chord.GetSuccessorRequest other = (proto.Chord.GetSuccessorRequest) obj;
 
       boolean result = true;
       result = result && getRequestorIp()
@@ -236,69 +3608,69 @@ public final class Chord {
       return hash;
     }
 
-    public static proto.Chord.SuccessorRequest parseFrom(
+    public static proto.Chord.GetSuccessorRequest parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static proto.Chord.SuccessorRequest parseFrom(
+    public static proto.Chord.GetSuccessorRequest parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static proto.Chord.SuccessorRequest parseFrom(
+    public static proto.Chord.GetSuccessorRequest parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static proto.Chord.SuccessorRequest parseFrom(
+    public static proto.Chord.GetSuccessorRequest parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static proto.Chord.SuccessorRequest parseFrom(byte[] data)
+    public static proto.Chord.GetSuccessorRequest parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static proto.Chord.SuccessorRequest parseFrom(
+    public static proto.Chord.GetSuccessorRequest parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static proto.Chord.SuccessorRequest parseFrom(java.io.InputStream input)
+    public static proto.Chord.GetSuccessorRequest parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static proto.Chord.SuccessorRequest parseFrom(
+    public static proto.Chord.GetSuccessorRequest parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static proto.Chord.SuccessorRequest parseDelimitedFrom(java.io.InputStream input)
+    public static proto.Chord.GetSuccessorRequest parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static proto.Chord.SuccessorRequest parseDelimitedFrom(
+    public static proto.Chord.GetSuccessorRequest parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static proto.Chord.SuccessorRequest parseFrom(
+    public static proto.Chord.GetSuccessorRequest parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static proto.Chord.SuccessorRequest parseFrom(
+    public static proto.Chord.GetSuccessorRequest parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -311,7 +3683,7 @@ public final class Chord {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(proto.Chord.SuccessorRequest prototype) {
+    public static Builder newBuilder(proto.Chord.GetSuccessorRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -327,26 +3699,26 @@ public final class Chord {
       return builder;
     }
     /**
-     * Protobuf type {@code SuccessorRequest}
+     * Protobuf type {@code GetSuccessorRequest}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:SuccessorRequest)
-        proto.Chord.SuccessorRequestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:GetSuccessorRequest)
+        proto.Chord.GetSuccessorRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return proto.Chord.internal_static_SuccessorRequest_descriptor;
+        return proto.Chord.internal_static_GetSuccessorRequest_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return proto.Chord.internal_static_SuccessorRequest_fieldAccessorTable
+        return proto.Chord.internal_static_GetSuccessorRequest_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                proto.Chord.SuccessorRequest.class, proto.Chord.SuccessorRequest.Builder.class);
+                proto.Chord.GetSuccessorRequest.class, proto.Chord.GetSuccessorRequest.Builder.class);
       }
 
-      // Construct using proto.Chord.SuccessorRequest.newBuilder()
+      // Construct using proto.Chord.GetSuccessorRequest.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -374,17 +3746,17 @@ public final class Chord {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return proto.Chord.internal_static_SuccessorRequest_descriptor;
+        return proto.Chord.internal_static_GetSuccessorRequest_descriptor;
       }
 
       @java.lang.Override
-      public proto.Chord.SuccessorRequest getDefaultInstanceForType() {
-        return proto.Chord.SuccessorRequest.getDefaultInstance();
+      public proto.Chord.GetSuccessorRequest getDefaultInstanceForType() {
+        return proto.Chord.GetSuccessorRequest.getDefaultInstance();
       }
 
       @java.lang.Override
-      public proto.Chord.SuccessorRequest build() {
-        proto.Chord.SuccessorRequest result = buildPartial();
+      public proto.Chord.GetSuccessorRequest build() {
+        proto.Chord.GetSuccessorRequest result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -392,8 +3764,8 @@ public final class Chord {
       }
 
       @java.lang.Override
-      public proto.Chord.SuccessorRequest buildPartial() {
-        proto.Chord.SuccessorRequest result = new proto.Chord.SuccessorRequest(this);
+      public proto.Chord.GetSuccessorRequest buildPartial() {
+        proto.Chord.GetSuccessorRequest result = new proto.Chord.GetSuccessorRequest(this);
         result.requestorIp_ = requestorIp_;
         result.requestorPort_ = requestorPort_;
         onBuilt();
@@ -434,16 +3806,16 @@ public final class Chord {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof proto.Chord.SuccessorRequest) {
-          return mergeFrom((proto.Chord.SuccessorRequest)other);
+        if (other instanceof proto.Chord.GetSuccessorRequest) {
+          return mergeFrom((proto.Chord.GetSuccessorRequest)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(proto.Chord.SuccessorRequest other) {
-        if (other == proto.Chord.SuccessorRequest.getDefaultInstance()) return this;
+      public Builder mergeFrom(proto.Chord.GetSuccessorRequest other) {
+        if (other == proto.Chord.GetSuccessorRequest.getDefaultInstance()) return this;
         if (!other.getRequestorIp().isEmpty()) {
           requestorIp_ = other.requestorIp_;
           onChanged();
@@ -466,11 +3838,11 @@ public final class Chord {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        proto.Chord.SuccessorRequest parsedMessage = null;
+        proto.Chord.GetSuccessorRequest parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (proto.Chord.SuccessorRequest) e.getUnfinishedMessage();
+          parsedMessage = (proto.Chord.GetSuccessorRequest) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -587,48 +3959,48 @@ public final class Chord {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:SuccessorRequest)
+      // @@protoc_insertion_point(builder_scope:GetSuccessorRequest)
     }
 
-    // @@protoc_insertion_point(class_scope:SuccessorRequest)
-    private static final proto.Chord.SuccessorRequest DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:GetSuccessorRequest)
+    private static final proto.Chord.GetSuccessorRequest DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new proto.Chord.SuccessorRequest();
+      DEFAULT_INSTANCE = new proto.Chord.GetSuccessorRequest();
     }
 
-    public static proto.Chord.SuccessorRequest getDefaultInstance() {
+    public static proto.Chord.GetSuccessorRequest getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<SuccessorRequest>
-        PARSER = new com.google.protobuf.AbstractParser<SuccessorRequest>() {
+    private static final com.google.protobuf.Parser<GetSuccessorRequest>
+        PARSER = new com.google.protobuf.AbstractParser<GetSuccessorRequest>() {
       @java.lang.Override
-      public SuccessorRequest parsePartialFrom(
+      public GetSuccessorRequest parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new SuccessorRequest(input, extensionRegistry);
+        return new GetSuccessorRequest(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<SuccessorRequest> parser() {
+    public static com.google.protobuf.Parser<GetSuccessorRequest> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<SuccessorRequest> getParserForType() {
+    public com.google.protobuf.Parser<GetSuccessorRequest> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public proto.Chord.SuccessorRequest getDefaultInstanceForType() {
+    public proto.Chord.GetSuccessorRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  public interface SuccessorResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:SuccessorResponse)
+  public interface GetSuccessorResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:GetSuccessorResponse)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -647,18 +4019,18 @@ public final class Chord {
     int getSuccessorPort();
   }
   /**
-   * Protobuf type {@code SuccessorResponse}
+   * Protobuf type {@code GetSuccessorResponse}
    */
-  public  static final class SuccessorResponse extends
+  public  static final class GetSuccessorResponse extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:SuccessorResponse)
-      SuccessorResponseOrBuilder {
+      // @@protoc_insertion_point(message_implements:GetSuccessorResponse)
+      GetSuccessorResponseOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use SuccessorResponse.newBuilder() to construct.
-    private SuccessorResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use GetSuccessorResponse.newBuilder() to construct.
+    private GetSuccessorResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private SuccessorResponse() {
+    private GetSuccessorResponse() {
       successorIp_ = "";
       successorPort_ = 0;
     }
@@ -668,7 +4040,7 @@ public final class Chord {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private SuccessorResponse(
+    private GetSuccessorResponse(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -719,15 +4091,15 @@ public final class Chord {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return proto.Chord.internal_static_SuccessorResponse_descriptor;
+      return proto.Chord.internal_static_GetSuccessorResponse_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return proto.Chord.internal_static_SuccessorResponse_fieldAccessorTable
+      return proto.Chord.internal_static_GetSuccessorResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              proto.Chord.SuccessorResponse.class, proto.Chord.SuccessorResponse.Builder.class);
+              proto.Chord.GetSuccessorResponse.class, proto.Chord.GetSuccessorResponse.Builder.class);
     }
 
     public static final int SUCCESSORIP_FIELD_NUMBER = 1;
@@ -819,10 +4191,10 @@ public final class Chord {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof proto.Chord.SuccessorResponse)) {
+      if (!(obj instanceof proto.Chord.GetSuccessorResponse)) {
         return super.equals(obj);
       }
-      proto.Chord.SuccessorResponse other = (proto.Chord.SuccessorResponse) obj;
+      proto.Chord.GetSuccessorResponse other = (proto.Chord.GetSuccessorResponse) obj;
 
       boolean result = true;
       result = result && getSuccessorIp()
@@ -849,69 +4221,69 @@ public final class Chord {
       return hash;
     }
 
-    public static proto.Chord.SuccessorResponse parseFrom(
+    public static proto.Chord.GetSuccessorResponse parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static proto.Chord.SuccessorResponse parseFrom(
+    public static proto.Chord.GetSuccessorResponse parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static proto.Chord.SuccessorResponse parseFrom(
+    public static proto.Chord.GetSuccessorResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static proto.Chord.SuccessorResponse parseFrom(
+    public static proto.Chord.GetSuccessorResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static proto.Chord.SuccessorResponse parseFrom(byte[] data)
+    public static proto.Chord.GetSuccessorResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static proto.Chord.SuccessorResponse parseFrom(
+    public static proto.Chord.GetSuccessorResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static proto.Chord.SuccessorResponse parseFrom(java.io.InputStream input)
+    public static proto.Chord.GetSuccessorResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static proto.Chord.SuccessorResponse parseFrom(
+    public static proto.Chord.GetSuccessorResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static proto.Chord.SuccessorResponse parseDelimitedFrom(java.io.InputStream input)
+    public static proto.Chord.GetSuccessorResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static proto.Chord.SuccessorResponse parseDelimitedFrom(
+    public static proto.Chord.GetSuccessorResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static proto.Chord.SuccessorResponse parseFrom(
+    public static proto.Chord.GetSuccessorResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static proto.Chord.SuccessorResponse parseFrom(
+    public static proto.Chord.GetSuccessorResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -924,7 +4296,7 @@ public final class Chord {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(proto.Chord.SuccessorResponse prototype) {
+    public static Builder newBuilder(proto.Chord.GetSuccessorResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -940,26 +4312,26 @@ public final class Chord {
       return builder;
     }
     /**
-     * Protobuf type {@code SuccessorResponse}
+     * Protobuf type {@code GetSuccessorResponse}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:SuccessorResponse)
-        proto.Chord.SuccessorResponseOrBuilder {
+        // @@protoc_insertion_point(builder_implements:GetSuccessorResponse)
+        proto.Chord.GetSuccessorResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return proto.Chord.internal_static_SuccessorResponse_descriptor;
+        return proto.Chord.internal_static_GetSuccessorResponse_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return proto.Chord.internal_static_SuccessorResponse_fieldAccessorTable
+        return proto.Chord.internal_static_GetSuccessorResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                proto.Chord.SuccessorResponse.class, proto.Chord.SuccessorResponse.Builder.class);
+                proto.Chord.GetSuccessorResponse.class, proto.Chord.GetSuccessorResponse.Builder.class);
       }
 
-      // Construct using proto.Chord.SuccessorResponse.newBuilder()
+      // Construct using proto.Chord.GetSuccessorResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -987,17 +4359,17 @@ public final class Chord {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return proto.Chord.internal_static_SuccessorResponse_descriptor;
+        return proto.Chord.internal_static_GetSuccessorResponse_descriptor;
       }
 
       @java.lang.Override
-      public proto.Chord.SuccessorResponse getDefaultInstanceForType() {
-        return proto.Chord.SuccessorResponse.getDefaultInstance();
+      public proto.Chord.GetSuccessorResponse getDefaultInstanceForType() {
+        return proto.Chord.GetSuccessorResponse.getDefaultInstance();
       }
 
       @java.lang.Override
-      public proto.Chord.SuccessorResponse build() {
-        proto.Chord.SuccessorResponse result = buildPartial();
+      public proto.Chord.GetSuccessorResponse build() {
+        proto.Chord.GetSuccessorResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -1005,8 +4377,8 @@ public final class Chord {
       }
 
       @java.lang.Override
-      public proto.Chord.SuccessorResponse buildPartial() {
-        proto.Chord.SuccessorResponse result = new proto.Chord.SuccessorResponse(this);
+      public proto.Chord.GetSuccessorResponse buildPartial() {
+        proto.Chord.GetSuccessorResponse result = new proto.Chord.GetSuccessorResponse(this);
         result.successorIp_ = successorIp_;
         result.successorPort_ = successorPort_;
         onBuilt();
@@ -1047,16 +4419,16 @@ public final class Chord {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof proto.Chord.SuccessorResponse) {
-          return mergeFrom((proto.Chord.SuccessorResponse)other);
+        if (other instanceof proto.Chord.GetSuccessorResponse) {
+          return mergeFrom((proto.Chord.GetSuccessorResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(proto.Chord.SuccessorResponse other) {
-        if (other == proto.Chord.SuccessorResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(proto.Chord.GetSuccessorResponse other) {
+        if (other == proto.Chord.GetSuccessorResponse.getDefaultInstance()) return this;
         if (!other.getSuccessorIp().isEmpty()) {
           successorIp_ = other.successorIp_;
           onChanged();
@@ -1079,11 +4451,11 @@ public final class Chord {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        proto.Chord.SuccessorResponse parsedMessage = null;
+        proto.Chord.GetSuccessorResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (proto.Chord.SuccessorResponse) e.getUnfinishedMessage();
+          parsedMessage = (proto.Chord.GetSuccessorResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1200,41 +4572,1267 @@ public final class Chord {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:SuccessorResponse)
+      // @@protoc_insertion_point(builder_scope:GetSuccessorResponse)
     }
 
-    // @@protoc_insertion_point(class_scope:SuccessorResponse)
-    private static final proto.Chord.SuccessorResponse DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:GetSuccessorResponse)
+    private static final proto.Chord.GetSuccessorResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new proto.Chord.SuccessorResponse();
+      DEFAULT_INSTANCE = new proto.Chord.GetSuccessorResponse();
     }
 
-    public static proto.Chord.SuccessorResponse getDefaultInstance() {
+    public static proto.Chord.GetSuccessorResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<SuccessorResponse>
-        PARSER = new com.google.protobuf.AbstractParser<SuccessorResponse>() {
+    private static final com.google.protobuf.Parser<GetSuccessorResponse>
+        PARSER = new com.google.protobuf.AbstractParser<GetSuccessorResponse>() {
       @java.lang.Override
-      public SuccessorResponse parsePartialFrom(
+      public GetSuccessorResponse parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new SuccessorResponse(input, extensionRegistry);
+        return new GetSuccessorResponse(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<SuccessorResponse> parser() {
+    public static com.google.protobuf.Parser<GetSuccessorResponse> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<SuccessorResponse> getParserForType() {
+    public com.google.protobuf.Parser<GetSuccessorResponse> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public proto.Chord.SuccessorResponse getDefaultInstanceForType() {
+    public proto.Chord.GetSuccessorResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetPredecessorRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:GetPredecessorRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string requestorIp = 1;</code>
+     */
+    java.lang.String getRequestorIp();
+    /**
+     * <code>string requestorIp = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getRequestorIpBytes();
+
+    /**
+     * <code>int32 requestorPort = 2;</code>
+     */
+    int getRequestorPort();
+  }
+  /**
+   * Protobuf type {@code GetPredecessorRequest}
+   */
+  public  static final class GetPredecessorRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:GetPredecessorRequest)
+      GetPredecessorRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetPredecessorRequest.newBuilder() to construct.
+    private GetPredecessorRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetPredecessorRequest() {
+      requestorIp_ = "";
+      requestorPort_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetPredecessorRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              requestorIp_ = s;
+              break;
+            }
+            case 16: {
+
+              requestorPort_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return proto.Chord.internal_static_GetPredecessorRequest_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return proto.Chord.internal_static_GetPredecessorRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              proto.Chord.GetPredecessorRequest.class, proto.Chord.GetPredecessorRequest.Builder.class);
+    }
+
+    public static final int REQUESTORIP_FIELD_NUMBER = 1;
+    private volatile java.lang.Object requestorIp_;
+    /**
+     * <code>string requestorIp = 1;</code>
+     */
+    public java.lang.String getRequestorIp() {
+      java.lang.Object ref = requestorIp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        requestorIp_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string requestorIp = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getRequestorIpBytes() {
+      java.lang.Object ref = requestorIp_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        requestorIp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int REQUESTORPORT_FIELD_NUMBER = 2;
+    private int requestorPort_;
+    /**
+     * <code>int32 requestorPort = 2;</code>
+     */
+    public int getRequestorPort() {
+      return requestorPort_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getRequestorIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, requestorIp_);
+      }
+      if (requestorPort_ != 0) {
+        output.writeInt32(2, requestorPort_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getRequestorIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, requestorIp_);
+      }
+      if (requestorPort_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, requestorPort_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof proto.Chord.GetPredecessorRequest)) {
+        return super.equals(obj);
+      }
+      proto.Chord.GetPredecessorRequest other = (proto.Chord.GetPredecessorRequest) obj;
+
+      boolean result = true;
+      result = result && getRequestorIp()
+          .equals(other.getRequestorIp());
+      result = result && (getRequestorPort()
+          == other.getRequestorPort());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + REQUESTORIP_FIELD_NUMBER;
+      hash = (53 * hash) + getRequestorIp().hashCode();
+      hash = (37 * hash) + REQUESTORPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getRequestorPort();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static proto.Chord.GetPredecessorRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.GetPredecessorRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.GetPredecessorRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.GetPredecessorRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.GetPredecessorRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.GetPredecessorRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.GetPredecessorRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.GetPredecessorRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.GetPredecessorRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static proto.Chord.GetPredecessorRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.GetPredecessorRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.GetPredecessorRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(proto.Chord.GetPredecessorRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code GetPredecessorRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:GetPredecessorRequest)
+        proto.Chord.GetPredecessorRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.Chord.internal_static_GetPredecessorRequest_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.Chord.internal_static_GetPredecessorRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.Chord.GetPredecessorRequest.class, proto.Chord.GetPredecessorRequest.Builder.class);
+      }
+
+      // Construct using proto.Chord.GetPredecessorRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        requestorIp_ = "";
+
+        requestorPort_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return proto.Chord.internal_static_GetPredecessorRequest_descriptor;
+      }
+
+      @java.lang.Override
+      public proto.Chord.GetPredecessorRequest getDefaultInstanceForType() {
+        return proto.Chord.GetPredecessorRequest.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public proto.Chord.GetPredecessorRequest build() {
+        proto.Chord.GetPredecessorRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public proto.Chord.GetPredecessorRequest buildPartial() {
+        proto.Chord.GetPredecessorRequest result = new proto.Chord.GetPredecessorRequest(this);
+        result.requestorIp_ = requestorIp_;
+        result.requestorPort_ = requestorPort_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof proto.Chord.GetPredecessorRequest) {
+          return mergeFrom((proto.Chord.GetPredecessorRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(proto.Chord.GetPredecessorRequest other) {
+        if (other == proto.Chord.GetPredecessorRequest.getDefaultInstance()) return this;
+        if (!other.getRequestorIp().isEmpty()) {
+          requestorIp_ = other.requestorIp_;
+          onChanged();
+        }
+        if (other.getRequestorPort() != 0) {
+          setRequestorPort(other.getRequestorPort());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        proto.Chord.GetPredecessorRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (proto.Chord.GetPredecessorRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object requestorIp_ = "";
+      /**
+       * <code>string requestorIp = 1;</code>
+       */
+      public java.lang.String getRequestorIp() {
+        java.lang.Object ref = requestorIp_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          requestorIp_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string requestorIp = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getRequestorIpBytes() {
+        java.lang.Object ref = requestorIp_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          requestorIp_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string requestorIp = 1;</code>
+       */
+      public Builder setRequestorIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        requestorIp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string requestorIp = 1;</code>
+       */
+      public Builder clearRequestorIp() {
+        
+        requestorIp_ = getDefaultInstance().getRequestorIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string requestorIp = 1;</code>
+       */
+      public Builder setRequestorIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        requestorIp_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int requestorPort_ ;
+      /**
+       * <code>int32 requestorPort = 2;</code>
+       */
+      public int getRequestorPort() {
+        return requestorPort_;
+      }
+      /**
+       * <code>int32 requestorPort = 2;</code>
+       */
+      public Builder setRequestorPort(int value) {
+        
+        requestorPort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 requestorPort = 2;</code>
+       */
+      public Builder clearRequestorPort() {
+        
+        requestorPort_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:GetPredecessorRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:GetPredecessorRequest)
+    private static final proto.Chord.GetPredecessorRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new proto.Chord.GetPredecessorRequest();
+    }
+
+    public static proto.Chord.GetPredecessorRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetPredecessorRequest>
+        PARSER = new com.google.protobuf.AbstractParser<GetPredecessorRequest>() {
+      @java.lang.Override
+      public GetPredecessorRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetPredecessorRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetPredecessorRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetPredecessorRequest> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public proto.Chord.GetPredecessorRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetPredecessorResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:GetPredecessorResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string predecessorIp = 1;</code>
+     */
+    java.lang.String getPredecessorIp();
+    /**
+     * <code>string predecessorIp = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getPredecessorIpBytes();
+
+    /**
+     * <code>int32 predecessorPort = 2;</code>
+     */
+    int getPredecessorPort();
+  }
+  /**
+   * Protobuf type {@code GetPredecessorResponse}
+   */
+  public  static final class GetPredecessorResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:GetPredecessorResponse)
+      GetPredecessorResponseOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetPredecessorResponse.newBuilder() to construct.
+    private GetPredecessorResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetPredecessorResponse() {
+      predecessorIp_ = "";
+      predecessorPort_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetPredecessorResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              predecessorIp_ = s;
+              break;
+            }
+            case 16: {
+
+              predecessorPort_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return proto.Chord.internal_static_GetPredecessorResponse_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return proto.Chord.internal_static_GetPredecessorResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              proto.Chord.GetPredecessorResponse.class, proto.Chord.GetPredecessorResponse.Builder.class);
+    }
+
+    public static final int PREDECESSORIP_FIELD_NUMBER = 1;
+    private volatile java.lang.Object predecessorIp_;
+    /**
+     * <code>string predecessorIp = 1;</code>
+     */
+    public java.lang.String getPredecessorIp() {
+      java.lang.Object ref = predecessorIp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        predecessorIp_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string predecessorIp = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getPredecessorIpBytes() {
+      java.lang.Object ref = predecessorIp_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        predecessorIp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int PREDECESSORPORT_FIELD_NUMBER = 2;
+    private int predecessorPort_;
+    /**
+     * <code>int32 predecessorPort = 2;</code>
+     */
+    public int getPredecessorPort() {
+      return predecessorPort_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getPredecessorIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, predecessorIp_);
+      }
+      if (predecessorPort_ != 0) {
+        output.writeInt32(2, predecessorPort_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getPredecessorIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, predecessorIp_);
+      }
+      if (predecessorPort_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, predecessorPort_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof proto.Chord.GetPredecessorResponse)) {
+        return super.equals(obj);
+      }
+      proto.Chord.GetPredecessorResponse other = (proto.Chord.GetPredecessorResponse) obj;
+
+      boolean result = true;
+      result = result && getPredecessorIp()
+          .equals(other.getPredecessorIp());
+      result = result && (getPredecessorPort()
+          == other.getPredecessorPort());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + PREDECESSORIP_FIELD_NUMBER;
+      hash = (53 * hash) + getPredecessorIp().hashCode();
+      hash = (37 * hash) + PREDECESSORPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getPredecessorPort();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static proto.Chord.GetPredecessorResponse parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.GetPredecessorResponse parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.GetPredecessorResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.GetPredecessorResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.GetPredecessorResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Chord.GetPredecessorResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Chord.GetPredecessorResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.GetPredecessorResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.GetPredecessorResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static proto.Chord.GetPredecessorResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Chord.GetPredecessorResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Chord.GetPredecessorResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(proto.Chord.GetPredecessorResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code GetPredecessorResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:GetPredecessorResponse)
+        proto.Chord.GetPredecessorResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.Chord.internal_static_GetPredecessorResponse_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.Chord.internal_static_GetPredecessorResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.Chord.GetPredecessorResponse.class, proto.Chord.GetPredecessorResponse.Builder.class);
+      }
+
+      // Construct using proto.Chord.GetPredecessorResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        predecessorIp_ = "";
+
+        predecessorPort_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return proto.Chord.internal_static_GetPredecessorResponse_descriptor;
+      }
+
+      @java.lang.Override
+      public proto.Chord.GetPredecessorResponse getDefaultInstanceForType() {
+        return proto.Chord.GetPredecessorResponse.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public proto.Chord.GetPredecessorResponse build() {
+        proto.Chord.GetPredecessorResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public proto.Chord.GetPredecessorResponse buildPartial() {
+        proto.Chord.GetPredecessorResponse result = new proto.Chord.GetPredecessorResponse(this);
+        result.predecessorIp_ = predecessorIp_;
+        result.predecessorPort_ = predecessorPort_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof proto.Chord.GetPredecessorResponse) {
+          return mergeFrom((proto.Chord.GetPredecessorResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(proto.Chord.GetPredecessorResponse other) {
+        if (other == proto.Chord.GetPredecessorResponse.getDefaultInstance()) return this;
+        if (!other.getPredecessorIp().isEmpty()) {
+          predecessorIp_ = other.predecessorIp_;
+          onChanged();
+        }
+        if (other.getPredecessorPort() != 0) {
+          setPredecessorPort(other.getPredecessorPort());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        proto.Chord.GetPredecessorResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (proto.Chord.GetPredecessorResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object predecessorIp_ = "";
+      /**
+       * <code>string predecessorIp = 1;</code>
+       */
+      public java.lang.String getPredecessorIp() {
+        java.lang.Object ref = predecessorIp_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          predecessorIp_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string predecessorIp = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getPredecessorIpBytes() {
+        java.lang.Object ref = predecessorIp_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          predecessorIp_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string predecessorIp = 1;</code>
+       */
+      public Builder setPredecessorIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        predecessorIp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string predecessorIp = 1;</code>
+       */
+      public Builder clearPredecessorIp() {
+        
+        predecessorIp_ = getDefaultInstance().getPredecessorIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string predecessorIp = 1;</code>
+       */
+      public Builder setPredecessorIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        predecessorIp_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int predecessorPort_ ;
+      /**
+       * <code>int32 predecessorPort = 2;</code>
+       */
+      public int getPredecessorPort() {
+        return predecessorPort_;
+      }
+      /**
+       * <code>int32 predecessorPort = 2;</code>
+       */
+      public Builder setPredecessorPort(int value) {
+        
+        predecessorPort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 predecessorPort = 2;</code>
+       */
+      public Builder clearPredecessorPort() {
+        
+        predecessorPort_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:GetPredecessorResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:GetPredecessorResponse)
+    private static final proto.Chord.GetPredecessorResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new proto.Chord.GetPredecessorResponse();
+    }
+
+    public static proto.Chord.GetPredecessorResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetPredecessorResponse>
+        PARSER = new com.google.protobuf.AbstractParser<GetPredecessorResponse>() {
+      @java.lang.Override
+      public GetPredecessorResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetPredecessorResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetPredecessorResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetPredecessorResponse> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public proto.Chord.GetPredecessorResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2749,14 +7347,9 @@ public final class Chord {
     int getSenderPort();
 
     /**
-     * <code>string precedingId = 3;</code>
+     * <code>int32 targetId = 3;</code>
      */
-    java.lang.String getPrecedingId();
-    /**
-     * <code>string precedingId = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getPrecedingIdBytes();
+    int getTargetId();
   }
   /**
    * Protobuf type {@code FindSuccessorRequest}
@@ -2773,7 +7366,7 @@ public final class Chord {
     private FindSuccessorRequest() {
       senderIp_ = "";
       senderPort_ = 0;
-      precedingId_ = "";
+      targetId_ = 0;
     }
 
     @java.lang.Override
@@ -2811,10 +7404,9 @@ public final class Chord {
               senderPort_ = input.readInt32();
               break;
             }
-            case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 24: {
 
-              precedingId_ = s;
+              targetId_ = input.readInt32();
               break;
             }
             default: {
@@ -2892,38 +7484,13 @@ public final class Chord {
       return senderPort_;
     }
 
-    public static final int PRECEDINGID_FIELD_NUMBER = 3;
-    private volatile java.lang.Object precedingId_;
+    public static final int TARGETID_FIELD_NUMBER = 3;
+    private int targetId_;
     /**
-     * <code>string precedingId = 3;</code>
+     * <code>int32 targetId = 3;</code>
      */
-    public java.lang.String getPrecedingId() {
-      java.lang.Object ref = precedingId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        precedingId_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string precedingId = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getPrecedingIdBytes() {
-      java.lang.Object ref = precedingId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        precedingId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getTargetId() {
+      return targetId_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -2946,8 +7513,8 @@ public final class Chord {
       if (senderPort_ != 0) {
         output.writeInt32(2, senderPort_);
       }
-      if (!getPrecedingIdBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, precedingId_);
+      if (targetId_ != 0) {
+        output.writeInt32(3, targetId_);
       }
       unknownFields.writeTo(output);
     }
@@ -2965,8 +7532,9 @@ public final class Chord {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, senderPort_);
       }
-      if (!getPrecedingIdBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, precedingId_);
+      if (targetId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, targetId_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2988,8 +7556,8 @@ public final class Chord {
           .equals(other.getSenderIp());
       result = result && (getSenderPort()
           == other.getSenderPort());
-      result = result && getPrecedingId()
-          .equals(other.getPrecedingId());
+      result = result && (getTargetId()
+          == other.getTargetId());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -3005,8 +7573,8 @@ public final class Chord {
       hash = (53 * hash) + getSenderIp().hashCode();
       hash = (37 * hash) + SENDERPORT_FIELD_NUMBER;
       hash = (53 * hash) + getSenderPort();
-      hash = (37 * hash) + PRECEDINGID_FIELD_NUMBER;
-      hash = (53 * hash) + getPrecedingId().hashCode();
+      hash = (37 * hash) + TARGETID_FIELD_NUMBER;
+      hash = (53 * hash) + getTargetId();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -3144,7 +7712,7 @@ public final class Chord {
 
         senderPort_ = 0;
 
-        precedingId_ = "";
+        targetId_ = 0;
 
         return this;
       }
@@ -3174,7 +7742,7 @@ public final class Chord {
         proto.Chord.FindSuccessorRequest result = new proto.Chord.FindSuccessorRequest(this);
         result.senderIp_ = senderIp_;
         result.senderPort_ = senderPort_;
-        result.precedingId_ = precedingId_;
+        result.targetId_ = targetId_;
         onBuilt();
         return result;
       }
@@ -3230,9 +7798,8 @@ public final class Chord {
         if (other.getSenderPort() != 0) {
           setSenderPort(other.getSenderPort());
         }
-        if (!other.getPrecedingId().isEmpty()) {
-          precedingId_ = other.precedingId_;
-          onChanged();
+        if (other.getTargetId() != 0) {
+          setTargetId(other.getTargetId());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -3358,71 +7925,28 @@ public final class Chord {
         return this;
       }
 
-      private java.lang.Object precedingId_ = "";
+      private int targetId_ ;
       /**
-       * <code>string precedingId = 3;</code>
+       * <code>int32 targetId = 3;</code>
        */
-      public java.lang.String getPrecedingId() {
-        java.lang.Object ref = precedingId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          precedingId_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public int getTargetId() {
+        return targetId_;
       }
       /**
-       * <code>string precedingId = 3;</code>
+       * <code>int32 targetId = 3;</code>
        */
-      public com.google.protobuf.ByteString
-          getPrecedingIdBytes() {
-        java.lang.Object ref = precedingId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          precedingId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string precedingId = 3;</code>
-       */
-      public Builder setPrecedingId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        precedingId_ = value;
+      public Builder setTargetId(int value) {
+        
+        targetId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string precedingId = 3;</code>
+       * <code>int32 targetId = 3;</code>
        */
-      public Builder clearPrecedingId() {
+      public Builder clearTargetId() {
         
-        precedingId_ = getDefaultInstance().getPrecedingId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string precedingId = 3;</code>
-       */
-      public Builder setPrecedingIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        precedingId_ = value;
+        targetId_ = 0;
         onChanged();
         return this;
       }
@@ -8694,15 +13218,45 @@ public final class Chord {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_SuccessorRequest_descriptor;
+    internal_static_MoveKeysRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_SuccessorRequest_fieldAccessorTable;
+      internal_static_MoveKeysRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_SuccessorResponse_descriptor;
+    internal_static_MoveKeysResponse_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_SuccessorResponse_fieldAccessorTable;
+      internal_static_MoveKeysResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_UpdateFingerTableRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_UpdateFingerTableRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_UpdateFingerTableResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_UpdateFingerTableResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_GetSuccessorRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_GetSuccessorRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_GetSuccessorResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_GetSuccessorResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_GetPredecessorRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_GetPredecessorRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_GetPredecessorResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_GetPredecessorResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ClosestPrecedingFingerRequest_descriptor;
   private static final 
@@ -8762,38 +13316,57 @@ public final class Chord {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013chord.proto\">\n\020SuccessorRequest\022\023\n\013req" +
-      "uestorIp\030\001 \001(\t\022\025\n\rrequestorPort\030\002 \001(\005\"?\n" +
-      "\021SuccessorResponse\022\023\n\013successorIp\030\001 \001(\t\022" +
-      "\025\n\rsuccessorPort\030\002 \001(\005\"W\n\035ClosestPrecedi" +
-      "ngFingerRequest\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsen" +
-      "derPort\030\002 \001(\005\022\020\n\010targetId\030\003 \001(\005\"\222\001\n\036Clos" +
-      "estPrecedingFingerResponse\022\023\n\013requestorI" +
-      "p\030\001 \001(\t\022\025\n\rrequestorPort\030\002 \001(\005\022 \n\030closes" +
-      "tPrecedingFingerIp\030\003 \001(\t\022\"\n\032closestPrece" +
-      "dingFingerPort\030\004 \001(\005\"Q\n\024FindSuccessorReq" +
-      "uest\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001" +
-      "(\005\022\023\n\013precedingId\030\003 \001(\t\"o\n\025FindSuccessor" +
-      "Response\022\023\n\013requestorIp\030\001 \001(\t\022\025\n\rrequest" +
-      "orPort\030\002 \001(\005\022\023\n\013successorIp\030\003 \001(\t\022\025\n\rsuc" +
-      "cessorPort\030\004 \001(\005\"3\n\013JoinRequest\022\020\n\010sende" +
-      "rIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\"D\n\014JoinRes" +
-      "ponse\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 " +
-      "\001(\005\022\016\n\006status\030\003 \001(\t\"(\n\nPutRequest\022\013\n\003key" +
-      "\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\"9\n\013PutResponse\022\013\n\003" +
-      "key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\022\016\n\006status\030\003 \001(\t" +
-      "\"(\n\nGetRequest\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001" +
-      "(\t\"9\n\013GetResponse\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030" +
-      "\002 \001(\t\022\016\n\006status\030\003 \001(\t2\322\002\n\014ChordService\022@" +
-      "\n\rFindSuccessor\022\025.FindSuccessorRequest\032\026" +
-      ".FindSuccessorResponse\"\000\0224\n\tSuccessor\022\021." +
-      "SuccessorRequest\032\022.SuccessorResponse\"\000\022[" +
-      "\n\026ClosestPrecedingFinger\022\036.ClosestPreced" +
-      "ingFingerRequest\032\037.ClosestPrecedingFinge" +
-      "rResponse\"\000\022%\n\004Join\022\014.JoinRequest\032\r.Join" +
-      "Response\"\000\022\"\n\003Put\022\013.PutRequest\032\014.PutResp" +
-      "onse\"\000\022\"\n\003Get\022\013.GetRequest\032\014.GetResponse" +
-      "\"\000B\007\n\005protob\006proto3"
+      "\n\013chord.proto\"}\n\017MoveKeysRequest\022\020\n\010send" +
+      "erIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\022\n\nreceiv" +
+      "erIp\030\003 \001(\t\022\024\n\014receiverPort\030\004 \001(\005\022\r\n\005star" +
+      "t\030\005 \001(\005\022\013\n\003end\030\006 \001(\005\"H\n\020MoveKeysResponse" +
+      "\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\016" +
+      "\n\006values\030\003 \003(\t\"q\n\030UpdateFingerTableReque" +
+      "st\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005" +
+      "\022\r\n\005index\030\003 \001(\005\022\016\n\006nodeIp\030\004 \001(\t\022\020\n\010nodeP" +
+      "ort\030\005 \001(\005\"W\n\031UpdateFingerTableResponse\022\023" +
+      "\n\013requestorIp\030\001 \001(\t\022\025\n\rrequestorPort\030\002 \001" +
+      "(\005\022\016\n\006status\030\003 \001(\t\"A\n\023GetSuccessorReques" +
+      "t\022\023\n\013requestorIp\030\001 \001(\t\022\025\n\rrequestorPort\030" +
+      "\002 \001(\005\"B\n\024GetSuccessorResponse\022\023\n\013success" +
+      "orIp\030\001 \001(\t\022\025\n\rsuccessorPort\030\002 \001(\005\"C\n\025Get" +
+      "PredecessorRequest\022\023\n\013requestorIp\030\001 \001(\t\022" +
+      "\025\n\rrequestorPort\030\002 \001(\005\"H\n\026GetPredecessor" +
+      "Response\022\025\n\rpredecessorIp\030\001 \001(\t\022\027\n\017prede" +
+      "cessorPort\030\002 \001(\005\"W\n\035ClosestPrecedingFing" +
+      "erRequest\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPor" +
+      "t\030\002 \001(\005\022\020\n\010targetId\030\003 \001(\005\"\222\001\n\036ClosestPre" +
+      "cedingFingerResponse\022\023\n\013requestorIp\030\001 \001(" +
+      "\t\022\025\n\rrequestorPort\030\002 \001(\005\022 \n\030closestPrece" +
+      "dingFingerIp\030\003 \001(\t\022\"\n\032closestPrecedingFi" +
+      "ngerPort\030\004 \001(\005\"N\n\024FindSuccessorRequest\022\020" +
+      "\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\020\n\010" +
+      "targetId\030\003 \001(\005\"o\n\025FindSuccessorResponse\022" +
+      "\023\n\013requestorIp\030\001 \001(\t\022\025\n\rrequestorPort\030\002 " +
+      "\001(\005\022\023\n\013successorIp\030\003 \001(\t\022\025\n\rsuccessorPor" +
+      "t\030\004 \001(\005\"3\n\013JoinRequest\022\020\n\010senderIp\030\001 \001(\t" +
+      "\022\022\n\nsenderPort\030\002 \001(\005\"D\n\014JoinResponse\022\020\n\010" +
+      "senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\016\n\006st" +
+      "atus\030\003 \001(\t\"(\n\nPutRequest\022\013\n\003key\030\001 \001(\t\022\r\n" +
+      "\005value\030\002 \001(\t\"9\n\013PutResponse\022\013\n\003key\030\001 \001(\t" +
+      "\022\r\n\005value\030\002 \001(\t\022\016\n\006status\030\003 \001(\t\"(\n\nGetRe" +
+      "quest\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\"9\n\013Get" +
+      "Response\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\022\016\n\006" +
+      "status\030\003 \001(\t2\241\004\n\014ChordService\022@\n\rFindSuc" +
+      "cessor\022\025.FindSuccessorRequest\032\026.FindSucc" +
+      "essorResponse\"\000\022=\n\014GetSuccessor\022\024.GetSuc" +
+      "cessorRequest\032\025.GetSuccessorResponse\"\000\022C" +
+      "\n\016GetPredecessor\022\026.GetPredecessorRequest" +
+      "\032\027.GetPredecessorResponse\"\000\022L\n\021UpdateFin" +
+      "gerTable\022\031.UpdateFingerTableRequest\032\032.Up" +
+      "dateFingerTableResponse\"\000\022[\n\026ClosestPrec" +
+      "edingFinger\022\036.ClosestPrecedingFingerRequ" +
+      "est\032\037.ClosestPrecedingFingerResponse\"\000\022%" +
+      "\n\004Join\022\014.JoinRequest\032\r.JoinResponse\"\000\0221\n" +
+      "\010MoveKeys\022\020.MoveKeysRequest\032\021.MoveKeysRe" +
+      "sponse\"\000\022\"\n\003Put\022\013.PutRequest\032\014.PutRespon" +
+      "se\"\000\022\"\n\003Get\022\013.GetRequest\032\014.GetResponse\"\000" +
+      "B\007\n\005protob\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -8807,74 +13380,110 @@ public final class Chord {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_SuccessorRequest_descriptor =
+    internal_static_MoveKeysRequest_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_SuccessorRequest_fieldAccessorTable = new
+    internal_static_MoveKeysRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_SuccessorRequest_descriptor,
-        new java.lang.String[] { "RequestorIp", "RequestorPort", });
-    internal_static_SuccessorResponse_descriptor =
+        internal_static_MoveKeysRequest_descriptor,
+        new java.lang.String[] { "SenderIp", "SenderPort", "ReceiverIp", "ReceiverPort", "Start", "End", });
+    internal_static_MoveKeysResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_SuccessorResponse_fieldAccessorTable = new
+    internal_static_MoveKeysResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_SuccessorResponse_descriptor,
-        new java.lang.String[] { "SuccessorIp", "SuccessorPort", });
-    internal_static_ClosestPrecedingFingerRequest_descriptor =
+        internal_static_MoveKeysResponse_descriptor,
+        new java.lang.String[] { "SenderIp", "SenderPort", "Values", });
+    internal_static_UpdateFingerTableRequest_descriptor =
       getDescriptor().getMessageTypes().get(2);
+    internal_static_UpdateFingerTableRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_UpdateFingerTableRequest_descriptor,
+        new java.lang.String[] { "SenderIp", "SenderPort", "Index", "NodeIp", "NodePort", });
+    internal_static_UpdateFingerTableResponse_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_UpdateFingerTableResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_UpdateFingerTableResponse_descriptor,
+        new java.lang.String[] { "RequestorIp", "RequestorPort", "Status", });
+    internal_static_GetSuccessorRequest_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_GetSuccessorRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_GetSuccessorRequest_descriptor,
+        new java.lang.String[] { "RequestorIp", "RequestorPort", });
+    internal_static_GetSuccessorResponse_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_GetSuccessorResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_GetSuccessorResponse_descriptor,
+        new java.lang.String[] { "SuccessorIp", "SuccessorPort", });
+    internal_static_GetPredecessorRequest_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_GetPredecessorRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_GetPredecessorRequest_descriptor,
+        new java.lang.String[] { "RequestorIp", "RequestorPort", });
+    internal_static_GetPredecessorResponse_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_GetPredecessorResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_GetPredecessorResponse_descriptor,
+        new java.lang.String[] { "PredecessorIp", "PredecessorPort", });
+    internal_static_ClosestPrecedingFingerRequest_descriptor =
+      getDescriptor().getMessageTypes().get(8);
     internal_static_ClosestPrecedingFingerRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ClosestPrecedingFingerRequest_descriptor,
         new java.lang.String[] { "SenderIp", "SenderPort", "TargetId", });
     internal_static_ClosestPrecedingFingerResponse_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_ClosestPrecedingFingerResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ClosestPrecedingFingerResponse_descriptor,
         new java.lang.String[] { "RequestorIp", "RequestorPort", "ClosestPrecedingFingerIp", "ClosestPrecedingFingerPort", });
     internal_static_FindSuccessorRequest_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_FindSuccessorRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_FindSuccessorRequest_descriptor,
-        new java.lang.String[] { "SenderIp", "SenderPort", "PrecedingId", });
+        new java.lang.String[] { "SenderIp", "SenderPort", "TargetId", });
     internal_static_FindSuccessorResponse_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_FindSuccessorResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_FindSuccessorResponse_descriptor,
         new java.lang.String[] { "RequestorIp", "RequestorPort", "SuccessorIp", "SuccessorPort", });
     internal_static_JoinRequest_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_JoinRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_JoinRequest_descriptor,
         new java.lang.String[] { "SenderIp", "SenderPort", });
     internal_static_JoinResponse_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(13);
     internal_static_JoinResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_JoinResponse_descriptor,
         new java.lang.String[] { "SenderIp", "SenderPort", "Status", });
     internal_static_PutRequest_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(14);
     internal_static_PutRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_PutRequest_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_PutResponse_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(15);
     internal_static_PutResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_PutResponse_descriptor,
         new java.lang.String[] { "Key", "Value", "Status", });
     internal_static_GetRequest_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(16);
     internal_static_GetRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_GetRequest_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_GetResponse_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(17);
     internal_static_GetResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_GetResponse_descriptor,

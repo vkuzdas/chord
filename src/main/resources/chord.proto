@@ -3,14 +3,50 @@ syntax = "proto3";
 // generate directly into "java/proto"
 option java_package = "proto";
 
-message SuccessorRequest {
+message MoveKeysRequest {
+  string senderIp = 1;
+  int32 senderPort = 2;
+  string receiverIp = 3;
+  int32 receiverPort = 4;
+  int32 start = 5;
+  int32 end = 6;
+}
+
+message MoveKeysResponse {
+  string senderIp = 1;
+  int32 senderPort = 2;
+  repeated string values = 3;
+}
+
+message UpdateFingerTableRequest {
+  string senderIp = 1;
+  int32 senderPort = 2;
+  int32 index = 3;
+  string nodeIp = 4;
+  int32 nodePort = 5;
+}
+message UpdateFingerTableResponse {
+  string requestorIp = 1;
+  int32 requestorPort = 2;
+  string status = 3;
+}
+
+message GetSuccessorRequest {
   string requestorIp = 1;
   int32 requestorPort = 2;
 }
-
-message SuccessorResponse {
+message GetSuccessorResponse {
   string successorIp = 1;
   int32 successorPort = 2;
+}
+
+message GetPredecessorRequest {
+  string requestorIp = 1;
+  int32 requestorPort = 2;
+}
+message GetPredecessorResponse {
+  string predecessorIp = 1;
+  int32 predecessorPort = 2;
 }
 
 message ClosestPrecedingFingerRequest {
@@ -18,7 +54,6 @@ message ClosestPrecedingFingerRequest {
   int32 senderPort = 2;
   int32 targetId = 3;
 }
-
 message ClosestPrecedingFingerResponse {
   string requestorIp = 1;
   int32 requestorPort = 2;
@@ -29,9 +64,8 @@ message ClosestPrecedingFingerResponse {
 message FindSuccessorRequest {
   string senderIp = 1;
   int32 senderPort = 2;
-  string precedingId = 3;
+  int32 targetId = 3;
 }
-
 message FindSuccessorResponse {
   string requestorIp = 1;
   int32 requestorPort = 2;
@@ -44,7 +78,6 @@ message JoinRequest {
   string senderIp = 1;
   int32 senderPort = 2;
 }
-
 // BootStrap node responds with status
 message JoinResponse {
   string senderIp = 1;
@@ -61,6 +94,7 @@ message PutResponse {
   string value = 2;
   string status = 3;
 }
+
 message GetRequest {
   string key = 1;
   string value = 2;
@@ -72,10 +106,16 @@ message GetResponse {
 }
 
 service ChordService {
+  // invoke findSuccessor procedure on targetNode
   rpc FindSuccessor(FindSuccessorRequest) returns (FindSuccessorResponse) {}
-  rpc Successor(SuccessorRequest) returns (SuccessorResponse) {}
+  // return targetNode.successor
+  rpc GetSuccessor(GetSuccessorRequest) returns (GetSuccessorResponse) {}
+  // return targetNode.predecessor
+  rpc GetPredecessor(GetPredecessorRequest) returns (GetPredecessorResponse) {}
+  rpc UpdateFingerTable(UpdateFingerTableRequest) returns (UpdateFingerTableResponse) {}
   rpc ClosestPrecedingFinger(ClosestPrecedingFingerRequest) returns (ClosestPrecedingFingerResponse) {}
   rpc Join(JoinRequest) returns (JoinResponse) {}
+  rpc MoveKeys(MoveKeysRequest) returns (MoveKeysResponse) {}
   rpc Put(PutRequest) returns (PutResponse) {}
   rpc Get(GetRequest) returns (GetResponse) {}
 }
