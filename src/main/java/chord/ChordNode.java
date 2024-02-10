@@ -26,9 +26,8 @@ public class ChordNode {
     private NodeReference predecessor;
     private final NodeReference node;
     private NodeReference successor;
-    private final HashMap<Integer, String> localData = new HashMap<>();
+    private final NavigableMap<Integer, String> localData = new TreeMap<>();
     private final ArrayList<NodeReference> fingerTable;
-    private boolean isNodeAloneInChord;
 
 //    private static final int m = 160; // number of bits in id as well as max size of fingerTable
     private static final int m = 8; // 0-255 ids
@@ -41,7 +40,6 @@ public class ChordNode {
         this.node = new NodeReference(ip, port);
         this.predecessor = node;
         this.successor = node;
-        this.isNodeAloneInChord = true;
         fingerTable = new ArrayList<>(Collections.nCopies(m, node));
 
         server = ServerBuilder.forPort(port)
@@ -143,10 +141,17 @@ public class ChordNode {
         Chord.MoveKeysRequest request = Chord.MoveKeysRequest.newBuilder()
                 .setSenderIp(node.ip)
                 .setSenderPort(node.port)
-                .setPredecessorIp(predecessor.ip)
-                .setPredecessorPort(predecessor.port)
+                .setRangeStart(predecessor.id)
+                .setRangeEnd(node.id)
                 .build();
         Chord.MoveKeysResponse response = blockingStub.moveKeys(request);
+        int cnt = response.getValueCount();
+        for (int i = 0; i < cnt; i++) {
+            String value = response.getValue(i);
+            int key = response.getKey(i);
+            localData.put(key, value);
+        }
+        channel.shutdown();
     }
 
     private void updateOthers() {
@@ -167,6 +172,7 @@ public class ChordNode {
         ManagedChannel channel = ManagedChannelBuilder.forTarget(p.toString()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.UpdateFingerTableResponse response = blockingStub.updateFingerTable(req);
+        channel.shutdown();
     }
 
     private void initFingerTable(NodeReference n_) {
@@ -194,6 +200,7 @@ public class ChordNode {
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
 
         Chord.GetPredecessorResponse response = blockingStub.getPredecessor(request);
+        channel.shutdown();
         return new NodeReference(response.getPredecessorIp(), response.getPredecessorPort());
     }
 
@@ -207,6 +214,7 @@ public class ChordNode {
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
 
         Chord.FindSuccessorResponse response = blockingStub.findSuccessor(request);
+        channel.shutdown();
         return new NodeReference(response.getSuccessorIp(), response.getSuccessorPort());
     }
 
@@ -224,6 +232,7 @@ public class ChordNode {
         ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.GetSuccessorResponse response = blockingStub.getSuccessor(req);
+        channel.shutdown();
         return new NodeReference(response.getSuccessorIp(), response.getSuccessorPort());
     }
 
@@ -342,6 +351,21 @@ public class ChordNode {
                     .setClosestPrecedingFingerPort(node.port)
                     .build();
             responseObserver.onNext(r);
+            responseObserver.onCompleted();
+        }
+
+        @Override
+        public void moveKeys(Chord.MoveKeysRequest request, StreamObserver<Chord.MoveKeysResponse> responseObserver) {
+            Chord.MoveKeysResponse.Builder response = Chord.MoveKeysResponse.newBuilder();
+            int start = request.getRangeStart();
+            int end = request.getRangeEnd();
+            // range = (start, end]
+            localData.subMap(start+1, end+1).forEach((k, v) -> {
+                response.addKey(k);
+                response.addValue(v);
+                localData.remove(k);
+            });
+            responseObserver.onNext(response.build());
             responseObserver.onCompleted();
         }
 

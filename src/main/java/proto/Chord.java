@@ -34,29 +34,14 @@ public final class Chord {
     int getSenderPort();
 
     /**
-     * <code>string receiverIp = 3;</code>
+     * <code>int32 rangeStart = 3;</code>
      */
-    java.lang.String getReceiverIp();
-    /**
-     * <code>string receiverIp = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getReceiverIpBytes();
+    int getRangeStart();
 
     /**
-     * <code>int32 receiverPort = 4;</code>
+     * <code>int32 rangeEnd = 4;</code>
      */
-    int getReceiverPort();
-
-    /**
-     * <code>int32 start = 5;</code>
-     */
-    int getStart();
-
-    /**
-     * <code>int32 end = 6;</code>
-     */
-    int getEnd();
+    int getRangeEnd();
   }
   /**
    * Protobuf type {@code MoveKeysRequest}
@@ -73,10 +58,8 @@ public final class Chord {
     private MoveKeysRequest() {
       senderIp_ = "";
       senderPort_ = 0;
-      receiverIp_ = "";
-      receiverPort_ = 0;
-      start_ = 0;
-      end_ = 0;
+      rangeStart_ = 0;
+      rangeEnd_ = 0;
     }
 
     @java.lang.Override
@@ -114,25 +97,14 @@ public final class Chord {
               senderPort_ = input.readInt32();
               break;
             }
-            case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 24: {
 
-              receiverIp_ = s;
+              rangeStart_ = input.readInt32();
               break;
             }
             case 32: {
 
-              receiverPort_ = input.readInt32();
-              break;
-            }
-            case 40: {
-
-              start_ = input.readInt32();
-              break;
-            }
-            case 48: {
-
-              end_ = input.readInt32();
+              rangeEnd_ = input.readInt32();
               break;
             }
             default: {
@@ -210,65 +182,22 @@ public final class Chord {
       return senderPort_;
     }
 
-    public static final int RECEIVERIP_FIELD_NUMBER = 3;
-    private volatile java.lang.Object receiverIp_;
+    public static final int RANGESTART_FIELD_NUMBER = 3;
+    private int rangeStart_;
     /**
-     * <code>string receiverIp = 3;</code>
+     * <code>int32 rangeStart = 3;</code>
      */
-    public java.lang.String getReceiverIp() {
-      java.lang.Object ref = receiverIp_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        receiverIp_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string receiverIp = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getReceiverIpBytes() {
-      java.lang.Object ref = receiverIp_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        receiverIp_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getRangeStart() {
+      return rangeStart_;
     }
 
-    public static final int RECEIVERPORT_FIELD_NUMBER = 4;
-    private int receiverPort_;
+    public static final int RANGEEND_FIELD_NUMBER = 4;
+    private int rangeEnd_;
     /**
-     * <code>int32 receiverPort = 4;</code>
+     * <code>int32 rangeEnd = 4;</code>
      */
-    public int getReceiverPort() {
-      return receiverPort_;
-    }
-
-    public static final int START_FIELD_NUMBER = 5;
-    private int start_;
-    /**
-     * <code>int32 start = 5;</code>
-     */
-    public int getStart() {
-      return start_;
-    }
-
-    public static final int END_FIELD_NUMBER = 6;
-    private int end_;
-    /**
-     * <code>int32 end = 6;</code>
-     */
-    public int getEnd() {
-      return end_;
+    public int getRangeEnd() {
+      return rangeEnd_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -291,17 +220,11 @@ public final class Chord {
       if (senderPort_ != 0) {
         output.writeInt32(2, senderPort_);
       }
-      if (!getReceiverIpBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, receiverIp_);
+      if (rangeStart_ != 0) {
+        output.writeInt32(3, rangeStart_);
       }
-      if (receiverPort_ != 0) {
-        output.writeInt32(4, receiverPort_);
-      }
-      if (start_ != 0) {
-        output.writeInt32(5, start_);
-      }
-      if (end_ != 0) {
-        output.writeInt32(6, end_);
+      if (rangeEnd_ != 0) {
+        output.writeInt32(4, rangeEnd_);
       }
       unknownFields.writeTo(output);
     }
@@ -319,20 +242,13 @@ public final class Chord {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, senderPort_);
       }
-      if (!getReceiverIpBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, receiverIp_);
-      }
-      if (receiverPort_ != 0) {
+      if (rangeStart_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, receiverPort_);
+          .computeInt32Size(3, rangeStart_);
       }
-      if (start_ != 0) {
+      if (rangeEnd_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, start_);
-      }
-      if (end_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, end_);
+          .computeInt32Size(4, rangeEnd_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -354,14 +270,10 @@ public final class Chord {
           .equals(other.getSenderIp());
       result = result && (getSenderPort()
           == other.getSenderPort());
-      result = result && getReceiverIp()
-          .equals(other.getReceiverIp());
-      result = result && (getReceiverPort()
-          == other.getReceiverPort());
-      result = result && (getStart()
-          == other.getStart());
-      result = result && (getEnd()
-          == other.getEnd());
+      result = result && (getRangeStart()
+          == other.getRangeStart());
+      result = result && (getRangeEnd()
+          == other.getRangeEnd());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -377,14 +289,10 @@ public final class Chord {
       hash = (53 * hash) + getSenderIp().hashCode();
       hash = (37 * hash) + SENDERPORT_FIELD_NUMBER;
       hash = (53 * hash) + getSenderPort();
-      hash = (37 * hash) + RECEIVERIP_FIELD_NUMBER;
-      hash = (53 * hash) + getReceiverIp().hashCode();
-      hash = (37 * hash) + RECEIVERPORT_FIELD_NUMBER;
-      hash = (53 * hash) + getReceiverPort();
-      hash = (37 * hash) + START_FIELD_NUMBER;
-      hash = (53 * hash) + getStart();
-      hash = (37 * hash) + END_FIELD_NUMBER;
-      hash = (53 * hash) + getEnd();
+      hash = (37 * hash) + RANGESTART_FIELD_NUMBER;
+      hash = (53 * hash) + getRangeStart();
+      hash = (37 * hash) + RANGEEND_FIELD_NUMBER;
+      hash = (53 * hash) + getRangeEnd();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -522,13 +430,9 @@ public final class Chord {
 
         senderPort_ = 0;
 
-        receiverIp_ = "";
+        rangeStart_ = 0;
 
-        receiverPort_ = 0;
-
-        start_ = 0;
-
-        end_ = 0;
+        rangeEnd_ = 0;
 
         return this;
       }
@@ -558,10 +462,8 @@ public final class Chord {
         proto.Chord.MoveKeysRequest result = new proto.Chord.MoveKeysRequest(this);
         result.senderIp_ = senderIp_;
         result.senderPort_ = senderPort_;
-        result.receiverIp_ = receiverIp_;
-        result.receiverPort_ = receiverPort_;
-        result.start_ = start_;
-        result.end_ = end_;
+        result.rangeStart_ = rangeStart_;
+        result.rangeEnd_ = rangeEnd_;
         onBuilt();
         return result;
       }
@@ -617,18 +519,11 @@ public final class Chord {
         if (other.getSenderPort() != 0) {
           setSenderPort(other.getSenderPort());
         }
-        if (!other.getReceiverIp().isEmpty()) {
-          receiverIp_ = other.receiverIp_;
-          onChanged();
+        if (other.getRangeStart() != 0) {
+          setRangeStart(other.getRangeStart());
         }
-        if (other.getReceiverPort() != 0) {
-          setReceiverPort(other.getReceiverPort());
-        }
-        if (other.getStart() != 0) {
-          setStart(other.getStart());
-        }
-        if (other.getEnd() != 0) {
-          setEnd(other.getEnd());
+        if (other.getRangeEnd() != 0) {
+          setRangeEnd(other.getRangeEnd());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -754,149 +649,54 @@ public final class Chord {
         return this;
       }
 
-      private java.lang.Object receiverIp_ = "";
+      private int rangeStart_ ;
       /**
-       * <code>string receiverIp = 3;</code>
+       * <code>int32 rangeStart = 3;</code>
        */
-      public java.lang.String getReceiverIp() {
-        java.lang.Object ref = receiverIp_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          receiverIp_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public int getRangeStart() {
+        return rangeStart_;
       }
       /**
-       * <code>string receiverIp = 3;</code>
+       * <code>int32 rangeStart = 3;</code>
        */
-      public com.google.protobuf.ByteString
-          getReceiverIpBytes() {
-        java.lang.Object ref = receiverIp_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          receiverIp_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string receiverIp = 3;</code>
-       */
-      public Builder setReceiverIp(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        receiverIp_ = value;
+      public Builder setRangeStart(int value) {
+        
+        rangeStart_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string receiverIp = 3;</code>
+       * <code>int32 rangeStart = 3;</code>
        */
-      public Builder clearReceiverIp() {
+      public Builder clearRangeStart() {
         
-        receiverIp_ = getDefaultInstance().getReceiverIp();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string receiverIp = 3;</code>
-       */
-      public Builder setReceiverIpBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        receiverIp_ = value;
+        rangeStart_ = 0;
         onChanged();
         return this;
       }
 
-      private int receiverPort_ ;
+      private int rangeEnd_ ;
       /**
-       * <code>int32 receiverPort = 4;</code>
+       * <code>int32 rangeEnd = 4;</code>
        */
-      public int getReceiverPort() {
-        return receiverPort_;
+      public int getRangeEnd() {
+        return rangeEnd_;
       }
       /**
-       * <code>int32 receiverPort = 4;</code>
+       * <code>int32 rangeEnd = 4;</code>
        */
-      public Builder setReceiverPort(int value) {
+      public Builder setRangeEnd(int value) {
         
-        receiverPort_ = value;
+        rangeEnd_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 receiverPort = 4;</code>
+       * <code>int32 rangeEnd = 4;</code>
        */
-      public Builder clearReceiverPort() {
+      public Builder clearRangeEnd() {
         
-        receiverPort_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private int start_ ;
-      /**
-       * <code>int32 start = 5;</code>
-       */
-      public int getStart() {
-        return start_;
-      }
-      /**
-       * <code>int32 start = 5;</code>
-       */
-      public Builder setStart(int value) {
-        
-        start_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 start = 5;</code>
-       */
-      public Builder clearStart() {
-        
-        start_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private int end_ ;
-      /**
-       * <code>int32 end = 6;</code>
-       */
-      public int getEnd() {
-        return end_;
-      }
-      /**
-       * <code>int32 end = 6;</code>
-       */
-      public Builder setEnd(int value) {
-        
-        end_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 end = 6;</code>
-       */
-      public Builder clearEnd() {
-        
-        end_ = 0;
+        rangeEnd_ = 0;
         onChanged();
         return this;
       }
@@ -958,38 +758,46 @@ public final class Chord {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>string senderIp = 1;</code>
-     */
-    java.lang.String getSenderIp();
-    /**
-     * <code>string senderIp = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getSenderIpBytes();
-
-    /**
-     * <code>int32 senderPort = 2;</code>
-     */
-    int getSenderPort();
-
-    /**
-     * <code>repeated string values = 3;</code>
+     * <code>repeated string value = 1;</code>
      */
     java.util.List<java.lang.String>
-        getValuesList();
+        getValueList();
     /**
-     * <code>repeated string values = 3;</code>
+     * <code>repeated string value = 1;</code>
      */
-    int getValuesCount();
+    int getValueCount();
     /**
-     * <code>repeated string values = 3;</code>
+     * <code>repeated string value = 1;</code>
      */
-    java.lang.String getValues(int index);
+    java.lang.String getValue(int index);
     /**
-     * <code>repeated string values = 3;</code>
+     * <code>repeated string value = 1;</code>
      */
     com.google.protobuf.ByteString
-        getValuesBytes(int index);
+        getValueBytes(int index);
+
+    /**
+     * <code>repeated int32 key = 2;</code>
+     */
+    java.util.List<java.lang.Integer> getKeyList();
+    /**
+     * <code>repeated int32 key = 2;</code>
+     */
+    int getKeyCount();
+    /**
+     * <code>repeated int32 key = 2;</code>
+     */
+    int getKey(int index);
+
+    /**
+     * <code>string status = 3;</code>
+     */
+    java.lang.String getStatus();
+    /**
+     * <code>string status = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getStatusBytes();
   }
   /**
    * Protobuf type {@code MoveKeysResponse}
@@ -1004,9 +812,9 @@ public final class Chord {
       super(builder);
     }
     private MoveKeysResponse() {
-      senderIp_ = "";
-      senderPort_ = 0;
-      values_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      key_ = java.util.Collections.emptyList();
+      status_ = "";
     }
 
     @java.lang.Override
@@ -1035,22 +843,38 @@ public final class Chord {
               break;
             case 10: {
               java.lang.String s = input.readStringRequireUtf8();
-
-              senderIp_ = s;
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                value_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              value_.add(s);
               break;
             }
             case 16: {
-
-              senderPort_ = input.readInt32();
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                key_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              key_.add(input.readInt32());
+              break;
+            }
+            case 18: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002) && input.getBytesUntilLimit() > 0) {
+                key_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                key_.add(input.readInt32());
+              }
+              input.popLimit(limit);
               break;
             }
             case 26: {
               java.lang.String s = input.readStringRequireUtf8();
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                values_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000004;
-              }
-              values_.add(s);
+
+              status_ = s;
               break;
             }
             default: {
@@ -1068,8 +892,11 @@ public final class Chord {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-          values_ = values_.getUnmodifiableView();
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          value_ = value_.getUnmodifiableView();
+        }
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          key_ = java.util.Collections.unmodifiableList(key_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -1089,76 +916,90 @@ public final class Chord {
     }
 
     private int bitField0_;
-    public static final int SENDERIP_FIELD_NUMBER = 1;
-    private volatile java.lang.Object senderIp_;
+    public static final int VALUE_FIELD_NUMBER = 1;
+    private com.google.protobuf.LazyStringList value_;
     /**
-     * <code>string senderIp = 1;</code>
+     * <code>repeated string value = 1;</code>
      */
-    public java.lang.String getSenderIp() {
-      java.lang.Object ref = senderIp_;
+    public com.google.protobuf.ProtocolStringList
+        getValueList() {
+      return value_;
+    }
+    /**
+     * <code>repeated string value = 1;</code>
+     */
+    public int getValueCount() {
+      return value_.size();
+    }
+    /**
+     * <code>repeated string value = 1;</code>
+     */
+    public java.lang.String getValue(int index) {
+      return value_.get(index);
+    }
+    /**
+     * <code>repeated string value = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getValueBytes(int index) {
+      return value_.getByteString(index);
+    }
+
+    public static final int KEY_FIELD_NUMBER = 2;
+    private java.util.List<java.lang.Integer> key_;
+    /**
+     * <code>repeated int32 key = 2;</code>
+     */
+    public java.util.List<java.lang.Integer>
+        getKeyList() {
+      return key_;
+    }
+    /**
+     * <code>repeated int32 key = 2;</code>
+     */
+    public int getKeyCount() {
+      return key_.size();
+    }
+    /**
+     * <code>repeated int32 key = 2;</code>
+     */
+    public int getKey(int index) {
+      return key_.get(index);
+    }
+    private int keyMemoizedSerializedSize = -1;
+
+    public static final int STATUS_FIELD_NUMBER = 3;
+    private volatile java.lang.Object status_;
+    /**
+     * <code>string status = 3;</code>
+     */
+    public java.lang.String getStatus() {
+      java.lang.Object ref = status_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        senderIp_ = s;
+        status_ = s;
         return s;
       }
     }
     /**
-     * <code>string senderIp = 1;</code>
+     * <code>string status = 3;</code>
      */
     public com.google.protobuf.ByteString
-        getSenderIpBytes() {
-      java.lang.Object ref = senderIp_;
+        getStatusBytes() {
+      java.lang.Object ref = status_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        senderIp_ = b;
+        status_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
-    }
-
-    public static final int SENDERPORT_FIELD_NUMBER = 2;
-    private int senderPort_;
-    /**
-     * <code>int32 senderPort = 2;</code>
-     */
-    public int getSenderPort() {
-      return senderPort_;
-    }
-
-    public static final int VALUES_FIELD_NUMBER = 3;
-    private com.google.protobuf.LazyStringList values_;
-    /**
-     * <code>repeated string values = 3;</code>
-     */
-    public com.google.protobuf.ProtocolStringList
-        getValuesList() {
-      return values_;
-    }
-    /**
-     * <code>repeated string values = 3;</code>
-     */
-    public int getValuesCount() {
-      return values_.size();
-    }
-    /**
-     * <code>repeated string values = 3;</code>
-     */
-    public java.lang.String getValues(int index) {
-      return values_.get(index);
-    }
-    /**
-     * <code>repeated string values = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getValuesBytes(int index) {
-      return values_.getByteString(index);
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1175,14 +1016,19 @@ public final class Chord {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getSenderIpBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, senderIp_);
+      getSerializedSize();
+      for (int i = 0; i < value_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, value_.getRaw(i));
       }
-      if (senderPort_ != 0) {
-        output.writeInt32(2, senderPort_);
+      if (getKeyList().size() > 0) {
+        output.writeUInt32NoTag(18);
+        output.writeUInt32NoTag(keyMemoizedSerializedSize);
       }
-      for (int i = 0; i < values_.size(); i++) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, values_.getRaw(i));
+      for (int i = 0; i < key_.size(); i++) {
+        output.writeInt32NoTag(key_.get(i));
+      }
+      if (!getStatusBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, status_);
       }
       unknownFields.writeTo(output);
     }
@@ -1193,20 +1039,30 @@ public final class Chord {
       if (size != -1) return size;
 
       size = 0;
-      if (!getSenderIpBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, senderIp_);
-      }
-      if (senderPort_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, senderPort_);
+      {
+        int dataSize = 0;
+        for (int i = 0; i < value_.size(); i++) {
+          dataSize += computeStringSizeNoTag(value_.getRaw(i));
+        }
+        size += dataSize;
+        size += 1 * getValueList().size();
       }
       {
         int dataSize = 0;
-        for (int i = 0; i < values_.size(); i++) {
-          dataSize += computeStringSizeNoTag(values_.getRaw(i));
+        for (int i = 0; i < key_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(key_.get(i));
         }
         size += dataSize;
-        size += 1 * getValuesList().size();
+        if (!getKeyList().isEmpty()) {
+          size += 1;
+          size += com.google.protobuf.CodedOutputStream
+              .computeInt32SizeNoTag(dataSize);
+        }
+        keyMemoizedSerializedSize = dataSize;
+      }
+      if (!getStatusBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, status_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1224,12 +1080,12 @@ public final class Chord {
       proto.Chord.MoveKeysResponse other = (proto.Chord.MoveKeysResponse) obj;
 
       boolean result = true;
-      result = result && getSenderIp()
-          .equals(other.getSenderIp());
-      result = result && (getSenderPort()
-          == other.getSenderPort());
-      result = result && getValuesList()
-          .equals(other.getValuesList());
+      result = result && getValueList()
+          .equals(other.getValueList());
+      result = result && getKeyList()
+          .equals(other.getKeyList());
+      result = result && getStatus()
+          .equals(other.getStatus());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1241,14 +1097,16 @@ public final class Chord {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + SENDERIP_FIELD_NUMBER;
-      hash = (53 * hash) + getSenderIp().hashCode();
-      hash = (37 * hash) + SENDERPORT_FIELD_NUMBER;
-      hash = (53 * hash) + getSenderPort();
-      if (getValuesCount() > 0) {
-        hash = (37 * hash) + VALUES_FIELD_NUMBER;
-        hash = (53 * hash) + getValuesList().hashCode();
+      if (getValueCount() > 0) {
+        hash = (37 * hash) + VALUE_FIELD_NUMBER;
+        hash = (53 * hash) + getValueList().hashCode();
       }
+      if (getKeyCount() > 0) {
+        hash = (37 * hash) + KEY_FIELD_NUMBER;
+        hash = (53 * hash) + getKeyList().hashCode();
+      }
+      hash = (37 * hash) + STATUS_FIELD_NUMBER;
+      hash = (53 * hash) + getStatus().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1382,12 +1240,12 @@ public final class Chord {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        senderIp_ = "";
+        value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        key_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        status_ = "";
 
-        senderPort_ = 0;
-
-        values_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -1416,13 +1274,17 @@ public final class Chord {
         proto.Chord.MoveKeysResponse result = new proto.Chord.MoveKeysResponse(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
-        result.senderIp_ = senderIp_;
-        result.senderPort_ = senderPort_;
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          values_ = values_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000004);
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          value_ = value_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000001);
         }
-        result.values_ = values_;
+        result.value_ = value_;
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          key_ = java.util.Collections.unmodifiableList(key_);
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.key_ = key_;
+        result.status_ = status_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1472,21 +1334,28 @@ public final class Chord {
 
       public Builder mergeFrom(proto.Chord.MoveKeysResponse other) {
         if (other == proto.Chord.MoveKeysResponse.getDefaultInstance()) return this;
-        if (!other.getSenderIp().isEmpty()) {
-          senderIp_ = other.senderIp_;
+        if (!other.value_.isEmpty()) {
+          if (value_.isEmpty()) {
+            value_ = other.value_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureValueIsMutable();
+            value_.addAll(other.value_);
+          }
           onChanged();
         }
-        if (other.getSenderPort() != 0) {
-          setSenderPort(other.getSenderPort());
-        }
-        if (!other.values_.isEmpty()) {
-          if (values_.isEmpty()) {
-            values_ = other.values_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+        if (!other.key_.isEmpty()) {
+          if (key_.isEmpty()) {
+            key_ = other.key_;
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
-            ensureValuesIsMutable();
-            values_.addAll(other.values_);
+            ensureKeyIsMutable();
+            key_.addAll(other.key_);
           }
+          onChanged();
+        }
+        if (!other.getStatus().isEmpty()) {
+          status_ = other.status_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -1519,191 +1388,231 @@ public final class Chord {
       }
       private int bitField0_;
 
-      private java.lang.Object senderIp_ = "";
+      private com.google.protobuf.LazyStringList value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureValueIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          value_ = new com.google.protobuf.LazyStringArrayList(value_);
+          bitField0_ |= 0x00000001;
+         }
+      }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>repeated string value = 1;</code>
        */
-      public java.lang.String getSenderIp() {
-        java.lang.Object ref = senderIp_;
+      public com.google.protobuf.ProtocolStringList
+          getValueList() {
+        return value_.getUnmodifiableView();
+      }
+      /**
+       * <code>repeated string value = 1;</code>
+       */
+      public int getValueCount() {
+        return value_.size();
+      }
+      /**
+       * <code>repeated string value = 1;</code>
+       */
+      public java.lang.String getValue(int index) {
+        return value_.get(index);
+      }
+      /**
+       * <code>repeated string value = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getValueBytes(int index) {
+        return value_.getByteString(index);
+      }
+      /**
+       * <code>repeated string value = 1;</code>
+       */
+      public Builder setValue(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureValueIsMutable();
+        value_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string value = 1;</code>
+       */
+      public Builder addValue(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureValueIsMutable();
+        value_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string value = 1;</code>
+       */
+      public Builder addAllValue(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureValueIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, value_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string value = 1;</code>
+       */
+      public Builder clearValue() {
+        value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string value = 1;</code>
+       */
+      public Builder addValueBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        ensureValueIsMutable();
+        value_.add(value);
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<java.lang.Integer> key_ = java.util.Collections.emptyList();
+      private void ensureKeyIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          key_ = new java.util.ArrayList<java.lang.Integer>(key_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+      /**
+       * <code>repeated int32 key = 2;</code>
+       */
+      public java.util.List<java.lang.Integer>
+          getKeyList() {
+        return java.util.Collections.unmodifiableList(key_);
+      }
+      /**
+       * <code>repeated int32 key = 2;</code>
+       */
+      public int getKeyCount() {
+        return key_.size();
+      }
+      /**
+       * <code>repeated int32 key = 2;</code>
+       */
+      public int getKey(int index) {
+        return key_.get(index);
+      }
+      /**
+       * <code>repeated int32 key = 2;</code>
+       */
+      public Builder setKey(
+          int index, int value) {
+        ensureKeyIsMutable();
+        key_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 key = 2;</code>
+       */
+      public Builder addKey(int value) {
+        ensureKeyIsMutable();
+        key_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 key = 2;</code>
+       */
+      public Builder addAllKey(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensureKeyIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, key_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 key = 2;</code>
+       */
+      public Builder clearKey() {
+        key_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object status_ = "";
+      /**
+       * <code>string status = 3;</code>
+       */
+      public java.lang.String getStatus() {
+        java.lang.Object ref = status_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          senderIp_ = s;
+          status_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string status = 3;</code>
        */
       public com.google.protobuf.ByteString
-          getSenderIpBytes() {
-        java.lang.Object ref = senderIp_;
+          getStatusBytes() {
+        java.lang.Object ref = status_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          senderIp_ = b;
+          status_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string status = 3;</code>
        */
-      public Builder setSenderIp(
+      public Builder setStatus(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        senderIp_ = value;
+        status_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string status = 3;</code>
        */
-      public Builder clearSenderIp() {
+      public Builder clearStatus() {
         
-        senderIp_ = getDefaultInstance().getSenderIp();
+        status_ = getDefaultInstance().getStatus();
         onChanged();
         return this;
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string status = 3;</code>
        */
-      public Builder setSenderIpBytes(
+      public Builder setStatusBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        senderIp_ = value;
-        onChanged();
-        return this;
-      }
-
-      private int senderPort_ ;
-      /**
-       * <code>int32 senderPort = 2;</code>
-       */
-      public int getSenderPort() {
-        return senderPort_;
-      }
-      /**
-       * <code>int32 senderPort = 2;</code>
-       */
-      public Builder setSenderPort(int value) {
-        
-        senderPort_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 senderPort = 2;</code>
-       */
-      public Builder clearSenderPort() {
-        
-        senderPort_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private com.google.protobuf.LazyStringList values_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureValuesIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          values_ = new com.google.protobuf.LazyStringArrayList(values_);
-          bitField0_ |= 0x00000004;
-         }
-      }
-      /**
-       * <code>repeated string values = 3;</code>
-       */
-      public com.google.protobuf.ProtocolStringList
-          getValuesList() {
-        return values_.getUnmodifiableView();
-      }
-      /**
-       * <code>repeated string values = 3;</code>
-       */
-      public int getValuesCount() {
-        return values_.size();
-      }
-      /**
-       * <code>repeated string values = 3;</code>
-       */
-      public java.lang.String getValues(int index) {
-        return values_.get(index);
-      }
-      /**
-       * <code>repeated string values = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getValuesBytes(int index) {
-        return values_.getByteString(index);
-      }
-      /**
-       * <code>repeated string values = 3;</code>
-       */
-      public Builder setValues(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureValuesIsMutable();
-        values_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string values = 3;</code>
-       */
-      public Builder addValues(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureValuesIsMutable();
-        values_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string values = 3;</code>
-       */
-      public Builder addAllValues(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureValuesIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, values_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string values = 3;</code>
-       */
-      public Builder clearValues() {
-        values_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string values = 3;</code>
-       */
-      public Builder addValuesBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        ensureValuesIsMutable();
-        values_.add(value);
+        status_ = value;
         onChanged();
         return this;
       }
@@ -13316,57 +13225,56 @@ public final class Chord {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013chord.proto\"}\n\017MoveKeysRequest\022\020\n\010send" +
-      "erIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\022\n\nreceiv" +
-      "erIp\030\003 \001(\t\022\024\n\014receiverPort\030\004 \001(\005\022\r\n\005star" +
-      "t\030\005 \001(\005\022\013\n\003end\030\006 \001(\005\"H\n\020MoveKeysResponse" +
-      "\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\016" +
-      "\n\006values\030\003 \003(\t\"q\n\030UpdateFingerTableReque" +
-      "st\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005" +
-      "\022\r\n\005index\030\003 \001(\005\022\016\n\006nodeIp\030\004 \001(\t\022\020\n\010nodeP" +
-      "ort\030\005 \001(\005\"W\n\031UpdateFingerTableResponse\022\023" +
-      "\n\013requestorIp\030\001 \001(\t\022\025\n\rrequestorPort\030\002 \001" +
-      "(\005\022\016\n\006status\030\003 \001(\t\"A\n\023GetSuccessorReques" +
-      "t\022\023\n\013requestorIp\030\001 \001(\t\022\025\n\rrequestorPort\030" +
-      "\002 \001(\005\"B\n\024GetSuccessorResponse\022\023\n\013success" +
-      "orIp\030\001 \001(\t\022\025\n\rsuccessorPort\030\002 \001(\005\"C\n\025Get" +
-      "PredecessorRequest\022\023\n\013requestorIp\030\001 \001(\t\022" +
-      "\025\n\rrequestorPort\030\002 \001(\005\"H\n\026GetPredecessor" +
-      "Response\022\025\n\rpredecessorIp\030\001 \001(\t\022\027\n\017prede" +
-      "cessorPort\030\002 \001(\005\"W\n\035ClosestPrecedingFing" +
-      "erRequest\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPor" +
-      "t\030\002 \001(\005\022\020\n\010targetId\030\003 \001(\005\"\222\001\n\036ClosestPre" +
-      "cedingFingerResponse\022\023\n\013requestorIp\030\001 \001(" +
-      "\t\022\025\n\rrequestorPort\030\002 \001(\005\022 \n\030closestPrece" +
-      "dingFingerIp\030\003 \001(\t\022\"\n\032closestPrecedingFi" +
-      "ngerPort\030\004 \001(\005\"N\n\024FindSuccessorRequest\022\020" +
-      "\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\020\n\010" +
-      "targetId\030\003 \001(\005\"o\n\025FindSuccessorResponse\022" +
+      "\n\013chord.proto\"]\n\017MoveKeysRequest\022\020\n\010send" +
+      "erIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\022\n\nrangeS" +
+      "tart\030\003 \001(\005\022\020\n\010rangeEnd\030\004 \001(\005\">\n\020MoveKeys" +
+      "Response\022\r\n\005value\030\001 \003(\t\022\013\n\003key\030\002 \003(\005\022\016\n\006" +
+      "status\030\003 \001(\t\"q\n\030UpdateFingerTableRequest" +
+      "\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\r" +
+      "\n\005index\030\003 \001(\005\022\016\n\006nodeIp\030\004 \001(\t\022\020\n\010nodePor" +
+      "t\030\005 \001(\005\"W\n\031UpdateFingerTableResponse\022\023\n\013" +
+      "requestorIp\030\001 \001(\t\022\025\n\rrequestorPort\030\002 \001(\005" +
+      "\022\016\n\006status\030\003 \001(\t\"A\n\023GetSuccessorRequest\022" +
       "\023\n\013requestorIp\030\001 \001(\t\022\025\n\rrequestorPort\030\002 " +
-      "\001(\005\022\023\n\013successorIp\030\003 \001(\t\022\025\n\rsuccessorPor" +
-      "t\030\004 \001(\005\"3\n\013JoinRequest\022\020\n\010senderIp\030\001 \001(\t" +
-      "\022\022\n\nsenderPort\030\002 \001(\005\"D\n\014JoinResponse\022\020\n\010" +
-      "senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\016\n\006st" +
-      "atus\030\003 \001(\t\"(\n\nPutRequest\022\013\n\003key\030\001 \001(\t\022\r\n" +
-      "\005value\030\002 \001(\t\"9\n\013PutResponse\022\013\n\003key\030\001 \001(\t" +
-      "\022\r\n\005value\030\002 \001(\t\022\016\n\006status\030\003 \001(\t\"(\n\nGetRe" +
-      "quest\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\"9\n\013Get" +
-      "Response\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\022\016\n\006" +
-      "status\030\003 \001(\t2\241\004\n\014ChordService\022@\n\rFindSuc" +
-      "cessor\022\025.FindSuccessorRequest\032\026.FindSucc" +
-      "essorResponse\"\000\022=\n\014GetSuccessor\022\024.GetSuc" +
-      "cessorRequest\032\025.GetSuccessorResponse\"\000\022C" +
-      "\n\016GetPredecessor\022\026.GetPredecessorRequest" +
-      "\032\027.GetPredecessorResponse\"\000\022L\n\021UpdateFin" +
-      "gerTable\022\031.UpdateFingerTableRequest\032\032.Up" +
-      "dateFingerTableResponse\"\000\022[\n\026ClosestPrec" +
-      "edingFinger\022\036.ClosestPrecedingFingerRequ" +
-      "est\032\037.ClosestPrecedingFingerResponse\"\000\022%" +
-      "\n\004Join\022\014.JoinRequest\032\r.JoinResponse\"\000\0221\n" +
-      "\010MoveKeys\022\020.MoveKeysRequest\032\021.MoveKeysRe" +
-      "sponse\"\000\022\"\n\003Put\022\013.PutRequest\032\014.PutRespon" +
-      "se\"\000\022\"\n\003Get\022\013.GetRequest\032\014.GetResponse\"\000" +
-      "B\007\n\005protob\006proto3"
+      "\001(\005\"B\n\024GetSuccessorResponse\022\023\n\013successor" +
+      "Ip\030\001 \001(\t\022\025\n\rsuccessorPort\030\002 \001(\005\"C\n\025GetPr" +
+      "edecessorRequest\022\023\n\013requestorIp\030\001 \001(\t\022\025\n" +
+      "\rrequestorPort\030\002 \001(\005\"H\n\026GetPredecessorRe" +
+      "sponse\022\025\n\rpredecessorIp\030\001 \001(\t\022\027\n\017predece" +
+      "ssorPort\030\002 \001(\005\"W\n\035ClosestPrecedingFinger" +
+      "Request\022\020\n\010senderIp\030\001 \001(\t\022\022\n\nsenderPort\030" +
+      "\002 \001(\005\022\020\n\010targetId\030\003 \001(\005\"\222\001\n\036ClosestPrece" +
+      "dingFingerResponse\022\023\n\013requestorIp\030\001 \001(\t\022" +
+      "\025\n\rrequestorPort\030\002 \001(\005\022 \n\030closestPrecedi" +
+      "ngFingerIp\030\003 \001(\t\022\"\n\032closestPrecedingFing" +
+      "erPort\030\004 \001(\005\"N\n\024FindSuccessorRequest\022\020\n\010" +
+      "senderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\020\n\010ta" +
+      "rgetId\030\003 \001(\005\"o\n\025FindSuccessorResponse\022\023\n" +
+      "\013requestorIp\030\001 \001(\t\022\025\n\rrequestorPort\030\002 \001(" +
+      "\005\022\023\n\013successorIp\030\003 \001(\t\022\025\n\rsuccessorPort\030" +
+      "\004 \001(\005\"3\n\013JoinRequest\022\020\n\010senderIp\030\001 \001(\t\022\022" +
+      "\n\nsenderPort\030\002 \001(\005\"D\n\014JoinResponse\022\020\n\010se" +
+      "nderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\016\n\006stat" +
+      "us\030\003 \001(\t\"(\n\nPutRequest\022\013\n\003key\030\001 \001(\t\022\r\n\005v" +
+      "alue\030\002 \001(\t\"9\n\013PutResponse\022\013\n\003key\030\001 \001(\t\022\r" +
+      "\n\005value\030\002 \001(\t\022\016\n\006status\030\003 \001(\t\"(\n\nGetRequ" +
+      "est\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\"9\n\013GetRe" +
+      "sponse\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\022\016\n\006st" +
+      "atus\030\003 \001(\t2\241\004\n\014ChordService\022@\n\rFindSucce" +
+      "ssor\022\025.FindSuccessorRequest\032\026.FindSucces" +
+      "sorResponse\"\000\022=\n\014GetSuccessor\022\024.GetSucce" +
+      "ssorRequest\032\025.GetSuccessorResponse\"\000\022C\n\016" +
+      "GetPredecessor\022\026.GetPredecessorRequest\032\027" +
+      ".GetPredecessorResponse\"\000\022L\n\021UpdateFinge" +
+      "rTable\022\031.UpdateFingerTableRequest\032\032.Upda" +
+      "teFingerTableResponse\"\000\022[\n\026ClosestPreced" +
+      "ingFinger\022\036.ClosestPrecedingFingerReques" +
+      "t\032\037.ClosestPrecedingFingerResponse\"\000\022%\n\004" +
+      "Join\022\014.JoinRequest\032\r.JoinResponse\"\000\0221\n\010M" +
+      "oveKeys\022\020.MoveKeysRequest\032\021.MoveKeysResp" +
+      "onse\"\000\022\"\n\003Put\022\013.PutRequest\032\014.PutResponse" +
+      "\"\000\022\"\n\003Get\022\013.GetRequest\032\014.GetResponse\"\000B\007" +
+      "\n\005protob\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -13385,13 +13293,13 @@ public final class Chord {
     internal_static_MoveKeysRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_MoveKeysRequest_descriptor,
-        new java.lang.String[] { "SenderIp", "SenderPort", "ReceiverIp", "ReceiverPort", "Start", "End", });
+        new java.lang.String[] { "SenderIp", "SenderPort", "RangeStart", "RangeEnd", });
     internal_static_MoveKeysResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_MoveKeysResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_MoveKeysResponse_descriptor,
-        new java.lang.String[] { "SenderIp", "SenderPort", "Values", });
+        new java.lang.String[] { "Value", "Key", "Status", });
     internal_static_UpdateFingerTableRequest_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_UpdateFingerTableRequest_fieldAccessorTable = new

@@ -394,6 +394,9 @@ public final class ChordServiceGrpc {
     }
 
     /**
+     * <pre>
+     * move keys from range (predecessor, node] to node
+     * </pre>
      */
     public void moveKeys(proto.Chord.MoveKeysRequest request,
         io.grpc.stub.StreamObserver<proto.Chord.MoveKeysResponse> responseObserver) {
@@ -559,6 +562,9 @@ public final class ChordServiceGrpc {
     }
 
     /**
+     * <pre>
+     * move keys from range (predecessor, node] to node
+     * </pre>
      */
     public void moveKeys(proto.Chord.MoveKeysRequest request,
         io.grpc.stub.StreamObserver<proto.Chord.MoveKeysResponse> responseObserver) {
@@ -653,6 +659,9 @@ public final class ChordServiceGrpc {
     }
 
     /**
+     * <pre>
+     * move keys from range (predecessor, node] to node
+     * </pre>
      */
     public proto.Chord.MoveKeysResponse moveKeys(proto.Chord.MoveKeysRequest request) {
       return blockingUnaryCall(
@@ -750,6 +759,9 @@ public final class ChordServiceGrpc {
     }
 
     /**
+     * <pre>
+     * move keys from range (predecessor, node] to node
+     * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<proto.Chord.MoveKeysResponse> moveKeys(
         proto.Chord.MoveKeysRequest request) {
