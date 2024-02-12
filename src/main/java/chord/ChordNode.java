@@ -16,8 +16,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import static java.lang.Math.pow;
 
@@ -45,11 +47,16 @@ public class ChordNode {
         server = ServerBuilder.forPort(port)
                 .addService(new ChordNode.ChordServiceImpl())
                 .build();
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        consoleHandler.setLevel(Level.ALL); // Set logging level
+        SimpleFormatter f = new SimpleFormatter();
+        consoleHandler.setFormatter(new SimpleFormatter());
+        logger.addHandler(consoleHandler);
     }
 
     public void start() throws Exception {
         server.start();
-        logger.info("Server started, listening on " + node.port);
+        info("Server started, listening on " + node.port);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             logger.warning("*** shutting down gRPC server since JVM is shutting down");
             try {
@@ -93,7 +100,7 @@ public class ChordNode {
     }
 
     private void info(String msg, Object... params) {
-        logger.log(Level.INFO, msg, params);
+        logger.log(Level.INFO, node+msg, params);
     }
 
     private static void debug(String msg, Object... params) {
@@ -398,35 +405,43 @@ public class ChordNode {
 
     public static void main(String[] args) throws Exception {
         // start node
-        ChordNode node = new ChordNode("localhost", 8980);
-        node.start();
+        System.setProperty("java.util.logging.SimpleFormatter.format",
+                "%1$tT.%1$tL %4$s %2$s %5$s%6$s%n");
+        ChordNode bootstrap = new ChordNode("localhost", 8980);
+        ChordNode node2 = new ChordNode("localhost", 8981);
+        bootstrap.start();
+        node2.start();
 
-        String input;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            System.out.println("Enter 'join <ip>:<port>' to join network");
-            System.out.println("Enter 'run' to start the node");
-            System.out.println("Enter 'exit' to quit");
-            System.out.println("Enter 'put <key> <value>' to put a record");
-            System.out.println("Enter 'get <key>' to get a record");
-            System.out.println("Enter 'print' to print finger table");
-            System.out.print("Enter your message: ");
-            input = reader.readLine();
-            String[] tokens = input.split("\\s+");
-            if ("EXIT".equalsIgnoreCase(tokens[0])) {
-                System.exit(0);
-            }
-            if ("RUN".equalsIgnoreCase(tokens[0])) {
-                break;
-            }
-            if ("JOIN".equalsIgnoreCase(tokens[0])) {
-                String ip = tokens[1].split(":")[0];
-                String port = tokens[1].split(":")[1];
-                NodeReference bootstrap = new NodeReference(ip, Integer.parseInt(port));
-                node.join(bootstrap);
-            }
-        }
+        bootstrap.blockUntilShutdown();
+        node2.blockUntilShutdown();
 
-        node.blockUntilShutdown();
+
+
+//        String input;
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//        while (true) {
+//            System.out.println("Enter 'join <ip>:<port>' to join network");
+//            System.out.println("Enter 'run' to start the node");
+//            System.out.println("Enter 'exit' to quit");
+//            System.out.println("Enter 'put <key> <value>' to put a record");
+//            System.out.println("Enter 'get <key>' to get a record");
+//            System.out.println("Enter 'print' to print finger table");
+//            System.out.print("Enter your message: ");
+//            input = reader.readLine();
+//            String[] tokens = input.split("\\s+");
+//            if ("EXIT".equalsIgnoreCase(tokens[0])) {
+//                System.exit(0);
+//            }
+//            if ("RUN".equalsIgnoreCase(tokens[0])) {
+//                break;
+//            }
+//            if ("JOIN".equalsIgnoreCase(tokens[0])) {
+//                String ip = tokens[1].split(":")[0];
+//                String port = tokens[1].split(":")[1];
+//                NodeReference bootstrap = new NodeReference(ip, Integer.parseInt(port));
+//                node.join(bootstrap);
+//            }
+//        }
+
     }
 }
