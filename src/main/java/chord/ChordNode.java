@@ -5,6 +5,8 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import proto.Chord;
 import proto.ChordServiceGrpc;
 
@@ -16,15 +18,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import java.util.logging.*;
 
 import static java.lang.Math.pow;
 
 public class ChordNode {
-    private static final Logger logger = Logger.getLogger(ChordNode.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(ChordNode.class);
     private NodeReference predecessor;
     private final NodeReference node;
     private NodeReference successor;
@@ -47,25 +46,20 @@ public class ChordNode {
         server = ServerBuilder.forPort(port)
                 .addService(new ChordNode.ChordServiceImpl())
                 .build();
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.ALL); // Set logging level
-        SimpleFormatter f = new SimpleFormatter();
-        consoleHandler.setFormatter(new SimpleFormatter());
-        logger.addHandler(consoleHandler);
     }
 
     public void start() throws Exception {
         server.start();
-        info("Server started, listening on " + node.port);
+        logger.debug("Server started, listening on " + node.port);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            logger.warning("*** shutting down gRPC server since JVM is shutting down");
+            logger.warn("*** shutting down gRPC server since JVM is shutting down");
             try {
                 stop();
             } catch (InterruptedException e) {
-                logger.warning("*** server shut down interrupted");
+                logger.warn("*** server shut down interrupted");
                 e.printStackTrace(System.err);
             }
-            logger.warning("*** server shut down");
+            logger.warn("*** server shut down");
         }));
     }
 
@@ -88,7 +82,7 @@ public class ChordNode {
         try {
             md = MessageDigest.getInstance("SHA-1");
         } catch (NoSuchAlgorithmException e) {
-            warning("Failed to calculate SHA-1 for input %s:%d", input);
+//            logger.warn("Failed to calculate SHA-1 for input %s:%d", input);
             e.printStackTrace(System.err);
             return 0;
         }
@@ -99,23 +93,23 @@ public class ChordNode {
                 .intValue();
     }
 
-    private void info(String msg, Object... params) {
-        logger.log(Level.INFO, node+msg, params);
-    }
-
-    private static void debug(String msg, Object... params) {
-        msg = "method: " + Thread.currentThread().getStackTrace()[2].getMethodName() + " "+ msg;
-        logger.log(Level.FINE, msg, params);
-    }
-
-    private static void trace(String msg, Object... params) {
-        msg = "method: " + Thread.currentThread().getStackTrace()[2].getMethodName() + " "+ msg;
-        logger.log(Level.FINEST, msg, params);
-    }
-
-    private static void warning(String msg, Object... params) {
-        logger.log(Level.WARNING, msg, params);
-    }
+//    private void info(String msg, Object... params) {
+//        logger.log(Level.INFO, node+msg, params);
+//    }
+//
+//    private static void debug(String msg, Object... params) {
+//        msg = "method: " + Thread.currentThread().getStackTrace()[2].getMethodName() + " "+ msg;
+//        logger.debug(msg, params);
+//    }
+//
+//    private static void trace(String msg, Object... params) {
+//        msg = "method: " + Thread.currentThread().getStackTrace()[2].getMethodName() + " "+ msg;
+//        logger.log(Level.FINEST, msg, params);
+//    }
+//
+//    private static void warning(String msg, Object... params) {
+//        logger.log(Level.WARNING, msg, params);
+//    }
 
     public static class NodeReference {
         public final String ip;
@@ -405,15 +399,15 @@ public class ChordNode {
 
     public static void main(String[] args) throws Exception {
         // start node
-        System.setProperty("java.util.logging.SimpleFormatter.format",
-                "%1$tT.%1$tL %4$s %2$s %5$s%6$s%n");
+//        System.setProperty("java.util.logging.SimpleFormatter.format",
+//                "%1$tT.%1$tL %4$s %2$s %5$s%6$s%n");
         ChordNode bootstrap = new ChordNode("localhost", 8980);
-        ChordNode node2 = new ChordNode("localhost", 8981);
+//        ChordNode node2 = new ChordNode("localhost", 8981);
         bootstrap.start();
-        node2.start();
-
+//        node2.start();
+//
         bootstrap.blockUntilShutdown();
-        node2.blockUntilShutdown();
+//        node2.blockUntilShutdown();
 
 
 
