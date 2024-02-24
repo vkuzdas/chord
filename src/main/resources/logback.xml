@@ -1,13 +1,17 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level: %highlight(%-25M: %msg%n)</pattern>
+<!--            19:09:30.991 [main] DEBUG: Server started, listening on 8980 -->
+
+<!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern> -->
+<!--            18:34:17.370 [main] DEBUG chord.ChordNode - Server started, listening on 8980 -->
         </encoder>
     </appender>
 
     <logger name="io.grpc" level="OFF" />
 
-    <root level="debug">
+    <root level="trace">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>
