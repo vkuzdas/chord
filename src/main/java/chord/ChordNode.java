@@ -23,9 +23,8 @@ public class ChordNode {
     private static final Logger logger = LoggerFactory.getLogger(ChordNode.class);
     private NodeReference predecessor;
     private final NodeReference node;
-    private NodeReference successor;
     private final NavigableMap<Integer, String> localData = new TreeMap<>();
-    private final ArrayList<NodeReference> fingerTable;
+    private final ArrayList<Finger> fingerTable = new ArrayList<>();
     private boolean isAlone = true;
 
 //    private static final int m = 160; // TODO: number of bits in id as well as max size of fingerTable
@@ -38,8 +37,12 @@ public class ChordNode {
     public ChordNode(String ip, int port) {
         this.node = new NodeReference(ip, port);
         this.predecessor = node;
-        this.successor = node;
-        fingerTable = new ArrayList<>(Collections.nCopies(m, node));
+
+        for (int i = 1; i <= m; i++) {
+            int start = (node.id + (int)pow(2, i-1)) % (int)pow(2, m);
+            int end = (node.id + (int)pow(2, i) - 1) % (int)pow(2, m);
+            fingerTable.add(new Finger(start, end, node));
+        }
 
         server = ServerBuilder.forPort(port)
                 .addService(new ChordNode.ChordServiceImpl())
@@ -92,28 +95,7 @@ public class ChordNode {
     }
 
 
-    public static class NodeReference {
-        public final String ip;
-        public final int port;
-        public int id;
 
-        public NodeReference(String ip, int port) {
-            this.ip = ip;
-            this.port = port;
-            this.id = calculateSHA1(this.toString());
-        }
-
-        @Override
-        public String toString() {
-            return ip + ":" + port;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            NodeReference other = (NodeReference) obj;
-            return this.port == other.port && this.ip.equals(other.ip);
-        }
-    }
 
     // Called on X from client
     public void join(NodeReference n_) {
@@ -123,6 +105,7 @@ public class ChordNode {
     }
 
     private void moveKeys_RPC() {
+        NodeReference successor = fingerTable.get(0).node;
         ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.toString()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.MoveKeysRequest request = Chord.MoveKeysRequest.newBuilder()
@@ -169,17 +152,20 @@ public class ChordNode {
 
 
     private void initFingerTable(NodeReference n_) {
-        int targetId = fingerTable.get(0).id;
-        this.successor = findSuccessor_RPC(n_, targetId);
-        fingerTable.set(0, this.successor);
-        this.predecessor = getPredecessor_RPC(this.successor);
+        int targetId = fingerTable.get(0).start;
+        NodeReference S = findSuccessor_RPC(n_, targetId);
+        int sse = node.id+1 % (int)pow(2, m);
+        fingerTable.set(0, new Finger(sse, sse+1, S)); // the first finger
+
+        this.predecessor = getPredecessor_RPC(fingerTable.get(0).node);
         for (int i = 0; i < m-1; i++) {
-            NodeReference curr = fingerTable.get(i);
-            NodeReference next = fingerTable.get(i+1);
-            if (isBetweenExclusive(next.id, node.id, curr.id) || next.id==node.id) {
-                fingerTable.set(i+1, curr);
+            Finger curr = fingerTable.get(i);
+            Finger next = fingerTable.get(i+1);
+            if (isBetweenExclusive(next.start, node.id, curr.node.id) || next.start==node.id) {
+                fingerTable.get(i+1).setNode(curr.node);
             } else {
-                fingerTable.set(i+1, findSuccessor_RPC(n_, next.id));
+                NodeReference n_s = findSuccessor_RPC(n_, next.start);
+                fingerTable.get(i+1).setNode(n_s);
             }
         }
     }
@@ -218,7 +204,7 @@ public class ChordNode {
 
     public NodeReference getSuccessor_RPC(NodeReference n_) {
         if (n_.equals(node)) {
-            return successor;
+            return fingerTable.get(0).node;
         }
         Chord.GetSuccessorRequest req = Chord.GetSuccessorRequest
                 .newBuilder()
@@ -254,9 +240,9 @@ public class ChordNode {
         // send request to node n_ with id
         if (n_.equals(node)) {
             for (int i = m-1; i >= 0; i--) {
-                NodeReference curr = fingerTable.get(i);
-                if (isBetweenExclusive(curr.id, node.id, id)) {
-                    return curr;
+                Finger curr = fingerTable.get(i);
+                if (isBetweenExclusive(curr.node.id, node.id, id)) {
+                    return curr.node;
                 }
             }
             return this.node;
@@ -304,8 +290,7 @@ public class ChordNode {
             NodeReference n = ChordNode.this.findSuccessor(targetId);
             if (isAlone) { // TODO: set true when all nodes leave/shutdown
                 NodeReference joiningNode = new NodeReference(request.getSenderIp(), request.getSenderPort());
-                successor = joiningNode;
-                fingerTable.set(0, joiningNode);
+                fingerTable.get(0).setNode(joiningNode);
                 isAlone = false;
             }
 
@@ -320,6 +305,7 @@ public class ChordNode {
         // return this.successor
         @Override
         public void getSuccessor(Chord.GetSuccessorRequest request, StreamObserver<Chord.GetSuccessorResponse> responseObserver) {
+            NodeReference successor = fingerTable.get(0).node;
             Chord.GetSuccessorResponse response = Chord.GetSuccessorResponse.newBuilder()
                     .setSuccessorIp(successor.ip)
                     .setSuccessorPort(successor.port)
@@ -343,9 +329,9 @@ public class ChordNode {
         public void updateFingerTable(Chord.UpdateFingerTableRequest request, StreamObserver<Chord.UpdateFingerTableResponse> responseObserver) {
             int index = request.getIndex();
             NodeReference s = new NodeReference(request.getNodeIp(), request.getNodePort());
-            NodeReference i = fingerTable.get(index);
+            NodeReference i = fingerTable.get(index).node;
             if (isBetweenExclusive(s.id, node.id, i.id) || s.id==node.id) {
-                fingerTable.set(index, s);
+                fingerTable.get(index).setNode(s);
                 updateFingerTableOf_RPC(predecessor, s, index);
             }
             Chord.UpdateFingerTableResponse response = Chord.UpdateFingerTableResponse.newBuilder()
@@ -359,7 +345,7 @@ public class ChordNode {
         public void closestPrecedingFinger(Chord.ClosestPrecedingFingerRequest request, StreamObserver<Chord.ClosestPrecedingFingerResponse> responseObserver) {
             int id = request.getTargetId();
             for (int i = m-1; i >= 0; i--) {
-                NodeReference curr = fingerTable.get(i);
+                NodeReference curr = fingerTable.get(i).node;
                 if (isBetweenExclusive(curr.id, node.id, id) || curr.id==node.id) {
                     Chord.ClosestPrecedingFingerResponse r = Chord.ClosestPrecedingFingerResponse.newBuilder()
                             .setClosestPrecedingFingerIp(curr.ip)
