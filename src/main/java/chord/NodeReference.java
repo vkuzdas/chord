@@ -1,6 +1,6 @@
 package chord;
 
-import static chord.ChordNode.calculateSHA1;
+import static chord.Util.calculateSHA1;
 
 public class NodeReference {
     public final String ip;
@@ -10,7 +10,7 @@ public class NodeReference {
     public NodeReference(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.id = calculateSHA1(this.toString());
+        this.id = calculateSHA1(this.toString(), ChordNode.m);
     }
 
     @Override

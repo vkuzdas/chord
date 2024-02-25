@@ -10,13 +10,10 @@ import org.slf4j.LoggerFactory;
 import proto.Chord;
 import proto.ChordServiceGrpc;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static chord.Util.*;
 import static java.lang.Math.pow;
 
 public class ChordNode {
@@ -28,7 +25,7 @@ public class ChordNode {
     private boolean isAlone = true;
 
 //    private static final int m = 160; // TODO: number of bits in id as well as max size of fingerTable
-    private static final int m = 4; // 0-255 ids
+    public static final int m = 4; // 0-255 ids
 
     private final Server server;
     private ChordServiceGrpc.ChordServiceBlockingStub blockingStub;
@@ -78,23 +75,6 @@ public class ChordNode {
 
 
 
-    public static int calculateSHA1(String input) {
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-1");
-        } catch (NoSuchAlgorithmException e) {
-            logger.warn("Failed to calculate SHA-1 for input %s", input);
-            e.printStackTrace(System.err);
-            return 0;
-        }
-
-        return new BigInteger(1,
-                md.digest(input.getBytes(StandardCharsets.UTF_8)))
-                .mod(BigInteger.valueOf((long)pow(2,m)-1))
-                .intValue();
-    }
-
-
 
 
     // Called on X from client
@@ -125,13 +105,14 @@ public class ChordNode {
     }
 
     private void updateOthers() {
+        // update ith finger of p node
         for (int i = 0; i < m; i++) {
             int id = node.id - (int)pow(2, i-1);
-            if (id<0) { // wraparound
+            if (id < 0) { // wraparound
                 id = id + (int)pow(2, m);
             }
             NodeReference p = findPredecessor(id);
-            logger.debug("updateOthers: pred of {} is {}, i={}", id, p, i);
+            logger.debug("updateOthers: pred of {} is {}:{}, i={}", id, p, calculateSHA1(p.toString(), m), i);
             updateFingerTableOf_RPC(p, node, i);
         }
     }
@@ -161,7 +142,7 @@ public class ChordNode {
         for (int i = 0; i < m-1; i++) {
             Finger curr = fingerTable.get(i);
             Finger next = fingerTable.get(i+1);
-            if (isBetweenExclusive(next.start, node.id, curr.node.id) || next.start==node.id) {
+            if (inRange_CloseOpen(next.start, node.id, curr.node.id)) {
                 fingerTable.get(i+1).setNode(curr.node);
             } else {
                 NodeReference n_s = findSuccessor_RPC(n_, next.start);
@@ -228,10 +209,12 @@ public class ChordNode {
         if (n_.equals(S)) { // when there is only bootstrap in the network
             return n_;
         }
-         while ( !(isBetweenExclusive(id, n_.id, S.id) || id==S.id) ) {
+        while (!inRange_OpenClose(id, n_.id, S.id)) {
+            logger.debug("findPredecessor: {} !E [{}, {})", id, n_.id, S.id);
             n_ = closestPrecedingFingerOf(n_, id);
             S = getSuccessor_RPC(n_);
         }
+        logger.debug("findPredecessor: {} E [{}, {})", id, n_.id, S.id);
         return n_;
     }
 
@@ -241,7 +224,7 @@ public class ChordNode {
         if (n_.equals(node)) {
             for (int i = m-1; i >= 0; i--) {
                 Finger curr = fingerTable.get(i);
-                if (isBetweenExclusive(curr.node.id, node.id, id)) {
+                if (inRange_OpenOpen(curr.node.id, node.id, id)) {
                     return curr.node;
                 }
             }
@@ -265,17 +248,6 @@ public class ChordNode {
         return new NodeReference(response.getClosestPrecedingFingerIp(), response.getClosestPrecedingFingerPort());
     }
 
-    public static boolean isBetweenExclusive(int id, int start, int end) {
-        // Wrap around arch; id ∈ [start, 2^m) || id ∈ [0, end)
-        if (start > end) { // Wrap around
-            if (id > start)
-                return true;
-            if (id > 0 && id < end)
-                return true;
-            return false;
-        }
-        return id > start && id < end;
-    }
 
 
 
@@ -330,7 +302,7 @@ public class ChordNode {
             int index = request.getIndex();
             NodeReference s = new NodeReference(request.getNodeIp(), request.getNodePort());
             NodeReference i = fingerTable.get(index).node;
-            if (isBetweenExclusive(s.id, node.id, i.id) || s.id==node.id) {
+            if (inRange_CloseOpen(s.id, node.id, i.id)) {
                 fingerTable.get(index).setNode(s);
                 updateFingerTableOf_RPC(predecessor, s, index);
             }
@@ -346,7 +318,7 @@ public class ChordNode {
             int id = request.getTargetId();
             for (int i = m-1; i >= 0; i--) {
                 NodeReference curr = fingerTable.get(i).node;
-                if (isBetweenExclusive(curr.id, node.id, id) || curr.id==node.id) {
+                if (inRange_CloseOpen(curr.id, node.id, id) || curr.id==node.id) {
                     Chord.ClosestPrecedingFingerResponse r = Chord.ClosestPrecedingFingerResponse.newBuilder()
                             .setClosestPrecedingFingerIp(curr.ip)
                             .setClosestPrecedingFingerPort(curr.port)
@@ -392,7 +364,7 @@ public class ChordNode {
 
     public static void main(String[] args) throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
-        ChordNode node2 = new ChordNode("localhost", 8981);
+        ChordNode node2 = new ChordNode("localhost", 8982);
         bootstrap.start();
         node2.start();
 
