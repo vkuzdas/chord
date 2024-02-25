@@ -26,9 +26,10 @@ public class ChordNode {
     private NodeReference successor;
     private final NavigableMap<Integer, String> localData = new TreeMap<>();
     private final ArrayList<NodeReference> fingerTable;
+    private boolean isAlone = true;
 
 //    private static final int m = 160; // TODO: number of bits in id as well as max size of fingerTable
-    private static final int m = 8; // 0-255 ids
+    private static final int m = 4; // 0-255 ids
 
     private final Server server;
     private ChordServiceGrpc.ChordServiceBlockingStub blockingStub;
@@ -86,7 +87,7 @@ public class ChordNode {
 
         return new BigInteger(1,
                 md.digest(input.getBytes(StandardCharsets.UTF_8)))
-                .mod(BigInteger.valueOf(255L))// TODO: delete
+                .mod(BigInteger.valueOf((long)pow(2,m)-1))
                 .intValue();
     }
 
@@ -95,7 +96,6 @@ public class ChordNode {
         public final String ip;
         public final int port;
         public int id;
-        public int end;
 
         public NodeReference(String ip, int port) {
             this.ip = ip;
@@ -118,7 +118,7 @@ public class ChordNode {
     // Called on X from client
     public void join(NodeReference n_) {
         initFingerTable(n_);
-//        updateOthers();
+        updateOthers();
 //        moveKeys_RPC(); //from the range (predecessor,n] from successor
     }
 
@@ -142,8 +142,13 @@ public class ChordNode {
     }
 
     private void updateOthers() {
-        for (int i = 1; i < m+1; i++) {
-            NodeReference p = findPredecessor(node.id - (int)pow(2, i-1));
+        for (int i = 0; i < m; i++) {
+            int id = node.id - (int)pow(2, i-1);
+            if (id<0) { // wraparound
+                id = id + (int)pow(2, m);
+            }
+            NodeReference p = findPredecessor(id);
+            logger.debug("updateOthers: pred of {} is {}, i={}", id, p, i);
             updateFingerTableOf_RPC(p, node, i);
         }
     }
@@ -166,17 +171,17 @@ public class ChordNode {
     private void initFingerTable(NodeReference n_) {
         int targetId = fingerTable.get(0).id;
         this.successor = findSuccessor_RPC(n_, targetId);
-//        fingerTable.set(0, this.successor);
-//        this.predecessor = getPredecessor_RPC(this.successor);
-//        for (int i = 0; i < m-1; i++) {
-//            NodeReference curr = fingerTable.get(i);
-//            NodeReference next = fingerTable.get(i+1);
-//            if (isBetween(next.id, node.id, curr.id)) {
-//                fingerTable.set(i+1, curr);
-//            } else {
-//                fingerTable.set(i+1, findSuccessor_RPC(n_, next.id));
-//            }
-//        }
+        fingerTable.set(0, this.successor);
+        this.predecessor = getPredecessor_RPC(this.successor);
+        for (int i = 0; i < m-1; i++) {
+            NodeReference curr = fingerTable.get(i);
+            NodeReference next = fingerTable.get(i+1);
+            if (isBetweenExclusive(next.id, node.id, curr.id) || next.id==node.id) {
+                fingerTable.set(i+1, curr);
+            } else {
+                fingerTable.set(i+1, findSuccessor_RPC(n_, next.id));
+            }
+        }
     }
 
     public NodeReference getPredecessor_RPC(NodeReference targetNode) {
@@ -234,11 +239,12 @@ public class ChordNode {
         }
         NodeReference n_ = this.node;
         NodeReference S = getSuccessor_RPC(n_);
-        if (n_.equals(S)) { // special initial condition where there is only one node in the network
+        if (n_.equals(S)) { // when there is only bootstrap in the network
             return n_;
         }
-        while ( !(isBetweenExclusive(id, n_.id, S.id) || id==S.id) ) {
+         while ( !(isBetweenExclusive(id, n_.id, S.id) || id==S.id) ) {
             n_ = closestPrecedingFingerOf(n_, id);
+            S = getSuccessor_RPC(n_);
         }
         return n_;
     }
@@ -255,11 +261,11 @@ public class ChordNode {
             }
             return this.node;
         } else {
-            return closestPrecedingFinger_GRPC(n_, id);
+            return closestPrecedingFinger_RPC(n_, id);
         }
     }
 
-    private NodeReference closestPrecedingFinger_GRPC(NodeReference n_, int id) {
+    private NodeReference closestPrecedingFinger_RPC(NodeReference n_, int id) {
         Chord.ClosestPrecedingFingerRequest cpfr = Chord.ClosestPrecedingFingerRequest
                 .newBuilder()
                 .setTargetId(id)
@@ -294,7 +300,14 @@ public class ChordNode {
         @Override
         public void findSuccessor(Chord.FindSuccessorRequest request, StreamObserver<Chord.FindSuccessorResponse> responseObserver) {
             int targetId = request.getTargetId();
+
             NodeReference n = ChordNode.this.findSuccessor(targetId);
+            if (isAlone) { // TODO: set true when all nodes leave/shutdown
+                NodeReference joiningNode = new NodeReference(request.getSenderIp(), request.getSenderPort());
+                successor = joiningNode;
+                fingerTable.set(0, joiningNode);
+                isAlone = false;
+            }
 
             Chord.FindSuccessorResponse r = Chord.FindSuccessorResponse.newBuilder()
                     .setSuccessorIp(n.ip)
@@ -320,7 +333,7 @@ public class ChordNode {
         public void getPredecessor(Chord.GetPredecessorRequest request, StreamObserver<Chord.GetPredecessorResponse> responseObserver) {
             Chord.GetPredecessorResponse response = Chord.GetPredecessorResponse.newBuilder()
                     .setPredecessorIp(predecessor.ip)
-                    .setPredecessorPort(successor.port)
+                    .setPredecessorPort(predecessor.port)
                     .build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
@@ -338,7 +351,6 @@ public class ChordNode {
             Chord.UpdateFingerTableResponse response = Chord.UpdateFingerTableResponse.newBuilder()
                     .setStatus("OK")
                     .build();
-            // todo: consider adding status logic
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }
