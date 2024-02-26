@@ -85,7 +85,8 @@ message JoinResponse {
 
 message PutRequest {
   string key = 1;
-  string value = 2;
+  int32 id = 2;
+  string value = 3;
 }
 message PutResponse {
   string key = 1;
@@ -95,7 +96,7 @@ message PutResponse {
 
 message GetRequest {
   string key = 1;
-  string value = 2;
+  int32 id = 2;
 }
 message GetResponse {
   string key = 1;

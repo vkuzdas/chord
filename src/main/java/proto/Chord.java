@@ -10119,11 +10119,16 @@ public final class Chord {
         getKeyBytes();
 
     /**
-     * <code>string value = 2;</code>
+     * <code>int32 id = 2;</code>
+     */
+    int getId();
+
+    /**
+     * <code>string value = 3;</code>
      */
     java.lang.String getValue();
     /**
-     * <code>string value = 2;</code>
+     * <code>string value = 3;</code>
      */
     com.google.protobuf.ByteString
         getValueBytes();
@@ -10142,6 +10147,7 @@ public final class Chord {
     }
     private PutRequest() {
       key_ = "";
+      id_ = 0;
       value_ = "";
     }
 
@@ -10175,7 +10181,12 @@ public final class Chord {
               key_ = s;
               break;
             }
-            case 18: {
+            case 16: {
+
+              id_ = input.readInt32();
+              break;
+            }
+            case 26: {
               java.lang.String s = input.readStringRequireUtf8();
 
               value_ = s;
@@ -10247,10 +10258,19 @@ public final class Chord {
       }
     }
 
-    public static final int VALUE_FIELD_NUMBER = 2;
+    public static final int ID_FIELD_NUMBER = 2;
+    private int id_;
+    /**
+     * <code>int32 id = 2;</code>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    public static final int VALUE_FIELD_NUMBER = 3;
     private volatile java.lang.Object value_;
     /**
-     * <code>string value = 2;</code>
+     * <code>string value = 3;</code>
      */
     public java.lang.String getValue() {
       java.lang.Object ref = value_;
@@ -10265,7 +10285,7 @@ public final class Chord {
       }
     }
     /**
-     * <code>string value = 2;</code>
+     * <code>string value = 3;</code>
      */
     public com.google.protobuf.ByteString
         getValueBytes() {
@@ -10298,8 +10318,11 @@ public final class Chord {
       if (!getKeyBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, key_);
       }
+      if (id_ != 0) {
+        output.writeInt32(2, id_);
+      }
       if (!getValueBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, value_);
       }
       unknownFields.writeTo(output);
     }
@@ -10313,8 +10336,12 @@ public final class Chord {
       if (!getKeyBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, key_);
       }
+      if (id_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, id_);
+      }
       if (!getValueBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, value_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, value_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -10334,6 +10361,8 @@ public final class Chord {
       boolean result = true;
       result = result && getKey()
           .equals(other.getKey());
+      result = result && (getId()
+          == other.getId());
       result = result && getValue()
           .equals(other.getValue());
       result = result && unknownFields.equals(other.unknownFields);
@@ -10349,6 +10378,8 @@ public final class Chord {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + KEY_FIELD_NUMBER;
       hash = (53 * hash) + getKey().hashCode();
+      hash = (37 * hash) + ID_FIELD_NUMBER;
+      hash = (53 * hash) + getId();
       hash = (37 * hash) + VALUE_FIELD_NUMBER;
       hash = (53 * hash) + getValue().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -10486,6 +10517,8 @@ public final class Chord {
         super.clear();
         key_ = "";
 
+        id_ = 0;
+
         value_ = "";
 
         return this;
@@ -10515,6 +10548,7 @@ public final class Chord {
       public proto.Chord.PutRequest buildPartial() {
         proto.Chord.PutRequest result = new proto.Chord.PutRequest(this);
         result.key_ = key_;
+        result.id_ = id_;
         result.value_ = value_;
         onBuilt();
         return result;
@@ -10567,6 +10601,9 @@ public final class Chord {
         if (!other.getKey().isEmpty()) {
           key_ = other.key_;
           onChanged();
+        }
+        if (other.getId() != 0) {
+          setId(other.getId());
         }
         if (!other.getValue().isEmpty()) {
           value_ = other.value_;
@@ -10670,9 +10707,35 @@ public final class Chord {
         return this;
       }
 
+      private int id_ ;
+      /**
+       * <code>int32 id = 2;</code>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>int32 id = 2;</code>
+       */
+      public Builder setId(int value) {
+        
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 id = 2;</code>
+       */
+      public Builder clearId() {
+        
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
       private java.lang.Object value_ = "";
       /**
-       * <code>string value = 2;</code>
+       * <code>string value = 3;</code>
        */
       public java.lang.String getValue() {
         java.lang.Object ref = value_;
@@ -10687,7 +10750,7 @@ public final class Chord {
         }
       }
       /**
-       * <code>string value = 2;</code>
+       * <code>string value = 3;</code>
        */
       public com.google.protobuf.ByteString
           getValueBytes() {
@@ -10703,7 +10766,7 @@ public final class Chord {
         }
       }
       /**
-       * <code>string value = 2;</code>
+       * <code>string value = 3;</code>
        */
       public Builder setValue(
           java.lang.String value) {
@@ -10716,7 +10779,7 @@ public final class Chord {
         return this;
       }
       /**
-       * <code>string value = 2;</code>
+       * <code>string value = 3;</code>
        */
       public Builder clearValue() {
         
@@ -10725,7 +10788,7 @@ public final class Chord {
         return this;
       }
       /**
-       * <code>string value = 2;</code>
+       * <code>string value = 3;</code>
        */
       public Builder setValueBytes(
           com.google.protobuf.ByteString value) {
@@ -11630,14 +11693,9 @@ public final class Chord {
         getKeyBytes();
 
     /**
-     * <code>string value = 2;</code>
+     * <code>int32 id = 2;</code>
      */
-    java.lang.String getValue();
-    /**
-     * <code>string value = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getValueBytes();
+    int getId();
   }
   /**
    * Protobuf type {@code GetRequest}
@@ -11653,7 +11711,7 @@ public final class Chord {
     }
     private GetRequest() {
       key_ = "";
-      value_ = "";
+      id_ = 0;
     }
 
     @java.lang.Override
@@ -11686,10 +11744,9 @@ public final class Chord {
               key_ = s;
               break;
             }
-            case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 16: {
 
-              value_ = s;
+              id_ = input.readInt32();
               break;
             }
             default: {
@@ -11758,38 +11815,13 @@ public final class Chord {
       }
     }
 
-    public static final int VALUE_FIELD_NUMBER = 2;
-    private volatile java.lang.Object value_;
+    public static final int ID_FIELD_NUMBER = 2;
+    private int id_;
     /**
-     * <code>string value = 2;</code>
+     * <code>int32 id = 2;</code>
      */
-    public java.lang.String getValue() {
-      java.lang.Object ref = value_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        value_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string value = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getValueBytes() {
-      java.lang.Object ref = value_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        value_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getId() {
+      return id_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -11809,8 +11841,8 @@ public final class Chord {
       if (!getKeyBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, key_);
       }
-      if (!getValueBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_);
+      if (id_ != 0) {
+        output.writeInt32(2, id_);
       }
       unknownFields.writeTo(output);
     }
@@ -11824,8 +11856,9 @@ public final class Chord {
       if (!getKeyBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, key_);
       }
-      if (!getValueBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, value_);
+      if (id_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, id_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -11845,8 +11878,8 @@ public final class Chord {
       boolean result = true;
       result = result && getKey()
           .equals(other.getKey());
-      result = result && getValue()
-          .equals(other.getValue());
+      result = result && (getId()
+          == other.getId());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -11860,8 +11893,8 @@ public final class Chord {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + KEY_FIELD_NUMBER;
       hash = (53 * hash) + getKey().hashCode();
-      hash = (37 * hash) + VALUE_FIELD_NUMBER;
-      hash = (53 * hash) + getValue().hashCode();
+      hash = (37 * hash) + ID_FIELD_NUMBER;
+      hash = (53 * hash) + getId();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -11997,7 +12030,7 @@ public final class Chord {
         super.clear();
         key_ = "";
 
-        value_ = "";
+        id_ = 0;
 
         return this;
       }
@@ -12026,7 +12059,7 @@ public final class Chord {
       public proto.Chord.GetRequest buildPartial() {
         proto.Chord.GetRequest result = new proto.Chord.GetRequest(this);
         result.key_ = key_;
-        result.value_ = value_;
+        result.id_ = id_;
         onBuilt();
         return result;
       }
@@ -12079,9 +12112,8 @@ public final class Chord {
           key_ = other.key_;
           onChanged();
         }
-        if (!other.getValue().isEmpty()) {
-          value_ = other.value_;
-          onChanged();
+        if (other.getId() != 0) {
+          setId(other.getId());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -12181,71 +12213,28 @@ public final class Chord {
         return this;
       }
 
-      private java.lang.Object value_ = "";
+      private int id_ ;
       /**
-       * <code>string value = 2;</code>
+       * <code>int32 id = 2;</code>
        */
-      public java.lang.String getValue() {
-        java.lang.Object ref = value_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          value_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public int getId() {
+        return id_;
       }
       /**
-       * <code>string value = 2;</code>
+       * <code>int32 id = 2;</code>
        */
-      public com.google.protobuf.ByteString
-          getValueBytes() {
-        java.lang.Object ref = value_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          value_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string value = 2;</code>
-       */
-      public Builder setValue(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        value_ = value;
+      public Builder setId(int value) {
+        
+        id_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string value = 2;</code>
+       * <code>int32 id = 2;</code>
        */
-      public Builder clearValue() {
+      public Builder clearId() {
         
-        value_ = getDefaultInstance().getValue();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string value = 2;</code>
-       */
-      public Builder setValueBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        value_ = value;
+        id_ = 0;
         onChanged();
         return this;
       }
@@ -13255,26 +13244,26 @@ public final class Chord {
       "\004 \001(\005\"3\n\013JoinRequest\022\020\n\010senderIp\030\001 \001(\t\022\022" +
       "\n\nsenderPort\030\002 \001(\005\"D\n\014JoinResponse\022\020\n\010se" +
       "nderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\016\n\006stat" +
-      "us\030\003 \001(\t\"(\n\nPutRequest\022\013\n\003key\030\001 \001(\t\022\r\n\005v" +
-      "alue\030\002 \001(\t\"9\n\013PutResponse\022\013\n\003key\030\001 \001(\t\022\r" +
-      "\n\005value\030\002 \001(\t\022\016\n\006status\030\003 \001(\t\"(\n\nGetRequ" +
-      "est\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\"9\n\013GetRe" +
-      "sponse\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\022\016\n\006st" +
-      "atus\030\003 \001(\t2\241\004\n\014ChordService\022@\n\rFindSucce" +
-      "ssor\022\025.FindSuccessorRequest\032\026.FindSucces" +
-      "sorResponse\"\000\022=\n\014GetSuccessor\022\024.GetSucce" +
-      "ssorRequest\032\025.GetSuccessorResponse\"\000\022C\n\016" +
-      "GetPredecessor\022\026.GetPredecessorRequest\032\027" +
-      ".GetPredecessorResponse\"\000\022L\n\021UpdateFinge" +
-      "rTable\022\031.UpdateFingerTableRequest\032\032.Upda" +
-      "teFingerTableResponse\"\000\022[\n\026ClosestPreced" +
-      "ingFinger\022\036.ClosestPrecedingFingerReques" +
-      "t\032\037.ClosestPrecedingFingerResponse\"\000\022%\n\004" +
-      "Join\022\014.JoinRequest\032\r.JoinResponse\"\000\0221\n\010M" +
-      "oveKeys\022\020.MoveKeysRequest\032\021.MoveKeysResp" +
-      "onse\"\000\022\"\n\003Put\022\013.PutRequest\032\014.PutResponse" +
-      "\"\000\022\"\n\003Get\022\013.GetRequest\032\014.GetResponse\"\000B\007" +
-      "\n\005protob\006proto3"
+      "us\030\003 \001(\t\"4\n\nPutRequest\022\013\n\003key\030\001 \001(\t\022\n\n\002i" +
+      "d\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\"9\n\013PutResponse\022\013\n" +
+      "\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\022\016\n\006status\030\003 \001(" +
+      "\t\"%\n\nGetRequest\022\013\n\003key\030\001 \001(\t\022\n\n\002id\030\002 \001(\005" +
+      "\"9\n\013GetResponse\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
+      "\001(\t\022\016\n\006status\030\003 \001(\t2\241\004\n\014ChordService\022@\n\r" +
+      "FindSuccessor\022\025.FindSuccessorRequest\032\026.F" +
+      "indSuccessorResponse\"\000\022=\n\014GetSuccessor\022\024" +
+      ".GetSuccessorRequest\032\025.GetSuccessorRespo" +
+      "nse\"\000\022C\n\016GetPredecessor\022\026.GetPredecessor" +
+      "Request\032\027.GetPredecessorResponse\"\000\022L\n\021Up" +
+      "dateFingerTable\022\031.UpdateFingerTableReque" +
+      "st\032\032.UpdateFingerTableResponse\"\000\022[\n\026Clos" +
+      "estPrecedingFinger\022\036.ClosestPrecedingFin" +
+      "gerRequest\032\037.ClosestPrecedingFingerRespo" +
+      "nse\"\000\022%\n\004Join\022\014.JoinRequest\032\r.JoinRespon" +
+      "se\"\000\0221\n\010MoveKeys\022\020.MoveKeysRequest\032\021.Mov" +
+      "eKeysResponse\"\000\022\"\n\003Put\022\013.PutRequest\032\014.Pu" +
+      "tResponse\"\000\022\"\n\003Get\022\013.GetRequest\032\014.GetRes" +
+      "ponse\"\000B\007\n\005protob\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -13377,7 +13366,7 @@ public final class Chord {
     internal_static_PutRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_PutRequest_descriptor,
-        new java.lang.String[] { "Key", "Value", });
+        new java.lang.String[] { "Key", "Id", "Value", });
     internal_static_PutResponse_descriptor =
       getDescriptor().getMessageTypes().get(15);
     internal_static_PutResponse_fieldAccessorTable = new
@@ -13389,7 +13378,7 @@ public final class Chord {
     internal_static_GetRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_GetRequest_descriptor,
-        new java.lang.String[] { "Key", "Value", });
+        new java.lang.String[] { "Key", "Id", });
     internal_static_GetResponse_descriptor =
       getDescriptor().getMessageTypes().get(17);
     internal_static_GetResponse_fieldAccessorTable = new

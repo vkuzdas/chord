@@ -48,7 +48,7 @@ public class ChordNode {
 
     public void start() throws Exception {
         server.start();
-        logger.debug("Server started, listening on {}", node.port);
+        logger.trace("Server started, listening on {}", node.port);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             logger.warn("*** shutting down gRPC server since JVM is shutting down");
             try {
@@ -73,15 +73,54 @@ public class ChordNode {
         }
     }
 
+    public int getDataSize() {
+        return localData.size();
+    }
 
 
+    public void put(String key, String value) {
+        int id = calculateSHA1(key, m);
+        NodeReference n_ = findSuccessor(id);
+        if (n_.equals(node)) {
+            localData.put(id, value);
+            logger.debug("<{},{}> saved on {}", id, value, node.id);
+        } else {
+            ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
+            blockingStub = ChordServiceGrpc.newBlockingStub(ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build());
+            Chord.PutRequest request = Chord.PutRequest.newBuilder()
+                    .setKey(key)
+                    .setId(calculateSHA1(key, m))
+                    .setValue(value)
+                    .build();
+            blockingStub.put(request);
+            channel.shutdown();
+        }
+    }
 
+    public String get(String key) {
+        int id = calculateSHA1(key, m);
+        NodeReference n_ = findSuccessor(id);
+        if (n_.equals(node)) {
+            String value = localData.get(id);
+            logger.debug("n:{} returning <{},{}>", node.id, id, value);
+            return value;
+        } else {
+            ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
+            blockingStub = ChordServiceGrpc.newBlockingStub(channel);
+            Chord.GetRequest request = Chord.GetRequest.newBuilder()
+                    .setId(id)
+                    .build();
+            Chord.GetResponse response = blockingStub.get(request);
+            channel.shutdown();
+            return response.getValue();
+        }
+    }
 
     // Called on X from client
-    public void join(NodeReference n_) {
-        initFingerTable(n_);
+    public void join(ChordNode n_) {
+        initFingerTable(n_.node);
         updateOthers();
-//        moveKeys_RPC(); //from the range (predecessor,n] from successor
+        moveKeys_RPC(); //from the range (predecessor,n] from successor
     }
 
     private void moveKeys_RPC() {
@@ -342,36 +381,77 @@ public class ChordNode {
             int start = request.getRangeStart();
             int end = request.getRangeEnd();
             // range = (start, end]
-            localData.subMap(start+1, end+1).forEach((k, v) -> {
-                response.addKey(k);
-                response.addValue(v);
-                localData.remove(k);
-            });
+            if (!localData.isEmpty()) {
+                if (start < end) {
+                    localData.subMap(start+1, end+1).forEach((k, v) -> {
+                        response.addKey(k);
+                        response.addValue(v);
+                        localData.remove(k);
+                    });
+                } else {
+                    localData.subMap(start+1, (int)pow(2, m)).forEach((k, v) -> {
+                        response.addKey(k);
+                        response.addValue(v);
+                        localData.remove(k);
+                    });
+                    localData.subMap(0, end+1).forEach((k, v) -> {
+                        response.addKey(k);
+                        response.addValue(v);
+                        localData.remove(k);
+                    });
+                }
+            }
+            logger.debug("{} moves {} keys to {}", node.id, response.getKeyCount(), calculateSHA1(request.getSenderIp()+":"+request.getSenderPort(), m));
             responseObserver.onNext(response.build());
             responseObserver.onCompleted();
         }
 
         @Override
         public void put(Chord.PutRequest request, StreamObserver<Chord.PutResponse> responseObserver) {
-            super.put(request, responseObserver);
+            localData.put(request.getId(), request.getValue());
+            logger.debug("<{},{}> saved on {}", request.getId(), request.getValue(), node.id);
         }
 
         @Override
         public void get(Chord.GetRequest request, StreamObserver<Chord.GetResponse> responseObserver) {
-            super.get(request, responseObserver);
+            String value = localData.get(request.getId());
+            logger.debug("n:{} returning <{},{}>", node.id, request.getId(), value);
+            Chord.GetResponse response = Chord.GetResponse.newBuilder()
+                    .setValue(value)
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
         }
     }
 
     public static void main(String[] args) throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
-        ChordNode node2 = new ChordNode("localhost", 8982);
         bootstrap.start();
+
+        bootstrap.put("icecream", "sweet");
+        bootstrap.put("lollipop", "sour");
+
+        ChordNode node2 = new ChordNode("localhost", 8981);
         node2.start();
+        node2.join(bootstrap);
 
-        node2.join(bootstrap.node);
 
-        bootstrap.blockUntilShutdown();
-        node2.blockUntilShutdown();
+
+
+//        ChordNode bootstrap = new ChordNode("localhost", 8980);
+//        ChordNode node2 = new ChordNode("localhost", 8981);
+//        bootstrap.start();
+//        node2.start();
+//
+//        node2.join(bootstrap.node);
+//
+//        bootstrap.blockUntilShutdown();
+//        node2.blockUntilShutdown();
+
+
+
+
+
 
 
 //        String input;
