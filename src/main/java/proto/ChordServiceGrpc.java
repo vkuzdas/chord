@@ -251,6 +251,38 @@ public final class ChordServiceGrpc {
      return getMoveKeysMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<proto.Chord.Notification,
+      proto.Chord.NotificationResponse> getNotifyMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "Notify",
+      requestType = proto.Chord.Notification.class,
+      responseType = proto.Chord.NotificationResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<proto.Chord.Notification,
+      proto.Chord.NotificationResponse> getNotifyMethod() {
+    io.grpc.MethodDescriptor<proto.Chord.Notification, proto.Chord.NotificationResponse> getNotifyMethod;
+    if ((getNotifyMethod = ChordServiceGrpc.getNotifyMethod) == null) {
+      synchronized (ChordServiceGrpc.class) {
+        if ((getNotifyMethod = ChordServiceGrpc.getNotifyMethod) == null) {
+          ChordServiceGrpc.getNotifyMethod = getNotifyMethod = 
+              io.grpc.MethodDescriptor.<proto.Chord.Notification, proto.Chord.NotificationResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "ChordService", "Notify"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.Notification.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.NotificationResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new ChordServiceMethodDescriptorSupplier("Notify"))
+                  .build();
+          }
+        }
+     }
+     return getNotifyMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<proto.Chord.PutRequest,
       proto.Chord.PutResponse> getPutMethod;
 
@@ -405,6 +437,13 @@ public final class ChordServiceGrpc {
 
     /**
      */
+    public void notify(proto.Chord.Notification request,
+        io.grpc.stub.StreamObserver<proto.Chord.NotificationResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getNotifyMethod(), responseObserver);
+    }
+
+    /**
+     */
     public void put(proto.Chord.PutRequest request,
         io.grpc.stub.StreamObserver<proto.Chord.PutResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getPutMethod(), responseObserver);
@@ -468,6 +507,13 @@ public final class ChordServiceGrpc {
                 proto.Chord.MoveKeysRequest,
                 proto.Chord.MoveKeysResponse>(
                   this, METHODID_MOVE_KEYS)))
+          .addMethod(
+            getNotifyMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                proto.Chord.Notification,
+                proto.Chord.NotificationResponse>(
+                  this, METHODID_NOTIFY)))
           .addMethod(
             getPutMethod(),
             asyncUnaryCall(
@@ -574,6 +620,14 @@ public final class ChordServiceGrpc {
 
     /**
      */
+    public void notify(proto.Chord.Notification request,
+        io.grpc.stub.StreamObserver<proto.Chord.NotificationResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getNotifyMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
     public void put(proto.Chord.PutRequest request,
         io.grpc.stub.StreamObserver<proto.Chord.PutResponse> responseObserver) {
       asyncUnaryCall(
@@ -666,6 +720,13 @@ public final class ChordServiceGrpc {
     public proto.Chord.MoveKeysResponse moveKeys(proto.Chord.MoveKeysRequest request) {
       return blockingUnaryCall(
           getChannel(), getMoveKeysMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public proto.Chord.NotificationResponse notify(proto.Chord.Notification request) {
+      return blockingUnaryCall(
+          getChannel(), getNotifyMethod(), getCallOptions(), request);
     }
 
     /**
@@ -771,6 +832,14 @@ public final class ChordServiceGrpc {
 
     /**
      */
+    public com.google.common.util.concurrent.ListenableFuture<proto.Chord.NotificationResponse> notify(
+        proto.Chord.Notification request) {
+      return futureUnaryCall(
+          getChannel().newCall(getNotifyMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
     public com.google.common.util.concurrent.ListenableFuture<proto.Chord.PutResponse> put(
         proto.Chord.PutRequest request) {
       return futureUnaryCall(
@@ -793,8 +862,9 @@ public final class ChordServiceGrpc {
   private static final int METHODID_CLOSEST_PRECEDING_FINGER = 4;
   private static final int METHODID_JOIN = 5;
   private static final int METHODID_MOVE_KEYS = 6;
-  private static final int METHODID_PUT = 7;
-  private static final int METHODID_GET = 8;
+  private static final int METHODID_NOTIFY = 7;
+  private static final int METHODID_PUT = 8;
+  private static final int METHODID_GET = 9;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -840,6 +910,10 @@ public final class ChordServiceGrpc {
         case METHODID_MOVE_KEYS:
           serviceImpl.moveKeys((proto.Chord.MoveKeysRequest) request,
               (io.grpc.stub.StreamObserver<proto.Chord.MoveKeysResponse>) responseObserver);
+          break;
+        case METHODID_NOTIFY:
+          serviceImpl.notify((proto.Chord.Notification) request,
+              (io.grpc.stub.StreamObserver<proto.Chord.NotificationResponse>) responseObserver);
           break;
         case METHODID_PUT:
           serviceImpl.put((proto.Chord.PutRequest) request,
@@ -917,6 +991,7 @@ public final class ChordServiceGrpc {
               .addMethod(getClosestPrecedingFingerMethod())
               .addMethod(getJoinMethod())
               .addMethod(getMoveKeysMethod())
+              .addMethod(getNotifyMethod())
               .addMethod(getPutMethod())
               .addMethod(getGetMethod())
               .build();

@@ -104,6 +104,13 @@ message GetResponse {
   string status = 3;
 }
 
+message Notification {
+  string senderIp = 1;
+  int32 senderPort = 2;
+  int32 id = 3;
+}
+message NotificationResponse {}
+
 service ChordService {
   // invoke findSuccessor procedure on targetNode
   rpc FindSuccessor(FindSuccessorRequest) returns (FindSuccessorResponse) {}
@@ -117,6 +124,8 @@ service ChordService {
 
   // move keys from range (predecessor, node] to node
   rpc MoveKeys(MoveKeysRequest) returns (MoveKeysResponse) {}
+
+  rpc Notify(Notification) returns (NotificationResponse) {}
 
   rpc Put(PutRequest) returns (PutResponse) {}
   rpc Get(GetRequest) returns (GetResponse) {}
