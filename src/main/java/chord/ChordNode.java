@@ -23,7 +23,7 @@ public class ChordNode {
     private final NavigableMap<Integer, String> localData = new TreeMap<>();
     private final ArrayList<Finger> fingerTable = new ArrayList<>();
     private boolean isAlone = true;
-    public static final int CHECK_INTERVAL = 5000; // 5s
+    public static int CHECK_INTERVAL = 5000;
 
 //    private static final int m = 160; // TODO: number of bits in id as well as max size of fingerTable
     public static final int m = 4; // 0-255 ids
@@ -31,6 +31,17 @@ public class ChordNode {
     private final Server server;
     private ChordServiceGrpc.ChordServiceBlockingStub blockingStub;
 
+    public NodeReference getNodeReference() {
+        return node;
+    }
+
+    public NodeReference getPredecessor() {
+        return predecessor;
+    }
+
+    public NodeReference getSuccessor() {
+        return fingerTable.get(0).node;
+    }
 
     public ChordNode(String ip, int port) {
         this.node = new NodeReference(ip, port);
@@ -138,7 +149,7 @@ public class ChordNode {
                 stabilize();
                 printStatus();
             }
-        },1000, 3000);
+        },1000, CHECK_INTERVAL);
     }
 
     private void fix_fingers() {
@@ -187,7 +198,7 @@ public class ChordNode {
         channel.shutdown();
     }
 
-    private void updateOthers() {
+    private void updateOthers() { // updatuje itej finger uzlu p
         // update ith finger of p node
         for (int i = 0; i < m; i++) {
             int id = node.id - (int)pow(2, i-1);
@@ -195,7 +206,7 @@ public class ChordNode {
                 id = id + (int)pow(2, m);
             }
             NodeReference p = findPredecessor(id);
-//            logger.debug("updateOthers: pred of {} is {}:{}, i={}", id, p, calculateSHA1(p.toString(), m), i);
+            logger.debug("ID={} pred of {} is {}:{}, i={}", node.id, id, p, calculateSHA1(p.toString(), m), i);
             updateFingerTableOf_RPC(p, node, i);
         }
     }
@@ -293,7 +304,7 @@ public class ChordNode {
             return n_;
         }
         while (!inRange_OpenClose(id, n_.id, S.id)) {
-//            logger.debug("findPredecessor: {} !E [{}, {})", id, n_.id, S.id);
+            logger.debug("ID={} findPredecessor: {} !E [{}, {})", node.id, id, n_.id, S.id);
             n_ = closestPrecedingFingerOf(n_, id);
             S = getSuccessor_RPC(n_);
         }
@@ -328,7 +339,9 @@ public class ChordNode {
         logger.debug("[{}] asking node [{}] for closestPrecedingFinger of id={}", node, n_, id);
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.ClosestPrecedingFingerResponse response = blockingStub.closestPrecedingFinger(cpfr);
-        return new NodeReference(response.getClosestPrecedingFingerIp(), response.getClosestPrecedingFingerPort());
+        NodeReference cpf = new NodeReference(response.getClosestPrecedingFingerIp(), response.getClosestPrecedingFingerPort());
+        logger.debug("[{}] got {}", node, cpf);
+        return cpf;
     }
 
 
@@ -402,11 +415,13 @@ public class ChordNode {
             int id = request.getTargetId();
             for (int i = m-1; i >= 0; i--) {
                 NodeReference curr = fingerTable.get(i).node;
-                if (inRange_CloseOpen(curr.id, node.id, id) || curr.id==node.id) {
+                logger.debug("[{}]   {} e ({}, {})", node, curr.id, node.id, id);
+                if (inRange_OpenOpen(curr.id, node.id, id)) {
                     Chord.ClosestPrecedingFingerResponse r = Chord.ClosestPrecedingFingerResponse.newBuilder()
                             .setClosestPrecedingFingerIp(curr.ip)
                             .setClosestPrecedingFingerPort(curr.port)
                             .build();
+                    logger.debug("[{}] responding with cpf of [{}] ", node, curr);
                     responseObserver.onNext(r);
                     responseObserver.onCompleted();
                     return;
@@ -416,6 +431,7 @@ public class ChordNode {
                     .setClosestPrecedingFingerIp(node.ip)
                     .setClosestPrecedingFingerPort(node.port)
                     .build();
+            logger.debug("[{}] responding with cpf of [{}] ", node, node);
             responseObserver.onNext(r);
             responseObserver.onCompleted();
         }
@@ -484,15 +500,17 @@ public class ChordNode {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         bootstrap.start();
 
-        bootstrap.put("icecream", "sweet");
-        bootstrap.put("lollipop", "sour");
-
         ChordNode node2 = new ChordNode("localhost", 8981);
         node2.start();
         node2.join(bootstrap);
 
+        ChordNode node3 = new ChordNode("localhost", 8982);
+        node3.start();
+        node3.join(node2);
+
         bootstrap.blockUntilShutdown();
         node2.blockUntilShutdown();
+        node3.blockUntilShutdown();
 
 
 
