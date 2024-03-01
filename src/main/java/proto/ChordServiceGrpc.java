@@ -219,6 +219,102 @@ public final class ChordServiceGrpc {
      return getJoinMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<proto.Chord.UpdatePredecessorRequest,
+      proto.Chord.UpdatePredecessorResponse> getUpdatePredecessorMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "UpdatePredecessor",
+      requestType = proto.Chord.UpdatePredecessorRequest.class,
+      responseType = proto.Chord.UpdatePredecessorResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<proto.Chord.UpdatePredecessorRequest,
+      proto.Chord.UpdatePredecessorResponse> getUpdatePredecessorMethod() {
+    io.grpc.MethodDescriptor<proto.Chord.UpdatePredecessorRequest, proto.Chord.UpdatePredecessorResponse> getUpdatePredecessorMethod;
+    if ((getUpdatePredecessorMethod = ChordServiceGrpc.getUpdatePredecessorMethod) == null) {
+      synchronized (ChordServiceGrpc.class) {
+        if ((getUpdatePredecessorMethod = ChordServiceGrpc.getUpdatePredecessorMethod) == null) {
+          ChordServiceGrpc.getUpdatePredecessorMethod = getUpdatePredecessorMethod = 
+              io.grpc.MethodDescriptor.<proto.Chord.UpdatePredecessorRequest, proto.Chord.UpdatePredecessorResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "ChordService", "UpdatePredecessor"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.UpdatePredecessorRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.UpdatePredecessorResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new ChordServiceMethodDescriptorSupplier("UpdatePredecessor"))
+                  .build();
+          }
+        }
+     }
+     return getUpdatePredecessorMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<proto.Chord.UpdateSuccessorRequest,
+      proto.Chord.UpdateSuccessorRequest> getUpdateSuccessorMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "UpdateSuccessor",
+      requestType = proto.Chord.UpdateSuccessorRequest.class,
+      responseType = proto.Chord.UpdateSuccessorRequest.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<proto.Chord.UpdateSuccessorRequest,
+      proto.Chord.UpdateSuccessorRequest> getUpdateSuccessorMethod() {
+    io.grpc.MethodDescriptor<proto.Chord.UpdateSuccessorRequest, proto.Chord.UpdateSuccessorRequest> getUpdateSuccessorMethod;
+    if ((getUpdateSuccessorMethod = ChordServiceGrpc.getUpdateSuccessorMethod) == null) {
+      synchronized (ChordServiceGrpc.class) {
+        if ((getUpdateSuccessorMethod = ChordServiceGrpc.getUpdateSuccessorMethod) == null) {
+          ChordServiceGrpc.getUpdateSuccessorMethod = getUpdateSuccessorMethod = 
+              io.grpc.MethodDescriptor.<proto.Chord.UpdateSuccessorRequest, proto.Chord.UpdateSuccessorRequest>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "ChordService", "UpdateSuccessor"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.UpdateSuccessorRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.UpdateSuccessorRequest.getDefaultInstance()))
+                  .setSchemaDescriptor(new ChordServiceMethodDescriptorSupplier("UpdateSuccessor"))
+                  .build();
+          }
+        }
+     }
+     return getUpdateSuccessorMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<proto.Chord.MoveKeysToSuccessorRequest,
+      proto.Chord.MoveKeysToSuccessorResponse> getMoveKeysToSuccessorMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "MoveKeysToSuccessor",
+      requestType = proto.Chord.MoveKeysToSuccessorRequest.class,
+      responseType = proto.Chord.MoveKeysToSuccessorResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<proto.Chord.MoveKeysToSuccessorRequest,
+      proto.Chord.MoveKeysToSuccessorResponse> getMoveKeysToSuccessorMethod() {
+    io.grpc.MethodDescriptor<proto.Chord.MoveKeysToSuccessorRequest, proto.Chord.MoveKeysToSuccessorResponse> getMoveKeysToSuccessorMethod;
+    if ((getMoveKeysToSuccessorMethod = ChordServiceGrpc.getMoveKeysToSuccessorMethod) == null) {
+      synchronized (ChordServiceGrpc.class) {
+        if ((getMoveKeysToSuccessorMethod = ChordServiceGrpc.getMoveKeysToSuccessorMethod) == null) {
+          ChordServiceGrpc.getMoveKeysToSuccessorMethod = getMoveKeysToSuccessorMethod = 
+              io.grpc.MethodDescriptor.<proto.Chord.MoveKeysToSuccessorRequest, proto.Chord.MoveKeysToSuccessorResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "ChordService", "MoveKeysToSuccessor"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.MoveKeysToSuccessorRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.MoveKeysToSuccessorResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new ChordServiceMethodDescriptorSupplier("MoveKeysToSuccessor"))
+                  .build();
+          }
+        }
+     }
+     return getMoveKeysToSuccessorMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<proto.Chord.MoveKeysRequest,
       proto.Chord.MoveKeysResponse> getMoveKeysMethod;
 
@@ -427,6 +523,30 @@ public final class ChordServiceGrpc {
 
     /**
      * <pre>
+     * upon leaving
+     * </pre>
+     */
+    public void updatePredecessor(proto.Chord.UpdatePredecessorRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.UpdatePredecessorResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getUpdatePredecessorMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void updateSuccessor(proto.Chord.UpdateSuccessorRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.UpdateSuccessorRequest> responseObserver) {
+      asyncUnimplementedUnaryCall(getUpdateSuccessorMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void moveKeysToSuccessor(proto.Chord.MoveKeysToSuccessorRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.MoveKeysToSuccessorResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getMoveKeysToSuccessorMethod(), responseObserver);
+    }
+
+    /**
+     * <pre>
      * move keys from range (predecessor, node] to node
      * </pre>
      */
@@ -500,6 +620,27 @@ public final class ChordServiceGrpc {
                 proto.Chord.JoinRequest,
                 proto.Chord.JoinResponse>(
                   this, METHODID_JOIN)))
+          .addMethod(
+            getUpdatePredecessorMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                proto.Chord.UpdatePredecessorRequest,
+                proto.Chord.UpdatePredecessorResponse>(
+                  this, METHODID_UPDATE_PREDECESSOR)))
+          .addMethod(
+            getUpdateSuccessorMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                proto.Chord.UpdateSuccessorRequest,
+                proto.Chord.UpdateSuccessorRequest>(
+                  this, METHODID_UPDATE_SUCCESSOR)))
+          .addMethod(
+            getMoveKeysToSuccessorMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                proto.Chord.MoveKeysToSuccessorRequest,
+                proto.Chord.MoveKeysToSuccessorResponse>(
+                  this, METHODID_MOVE_KEYS_TO_SUCCESSOR)))
           .addMethod(
             getMoveKeysMethod(),
             asyncUnaryCall(
@@ -609,6 +750,33 @@ public final class ChordServiceGrpc {
 
     /**
      * <pre>
+     * upon leaving
+     * </pre>
+     */
+    public void updatePredecessor(proto.Chord.UpdatePredecessorRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.UpdatePredecessorResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getUpdatePredecessorMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void updateSuccessor(proto.Chord.UpdateSuccessorRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.UpdateSuccessorRequest> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getUpdateSuccessorMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void moveKeysToSuccessor(proto.Chord.MoveKeysToSuccessorRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.MoveKeysToSuccessorResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getMoveKeysToSuccessorMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     * <pre>
      * move keys from range (predecessor, node] to node
      * </pre>
      */
@@ -710,6 +878,30 @@ public final class ChordServiceGrpc {
     public proto.Chord.JoinResponse join(proto.Chord.JoinRequest request) {
       return blockingUnaryCall(
           getChannel(), getJoinMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
+     * upon leaving
+     * </pre>
+     */
+    public proto.Chord.UpdatePredecessorResponse updatePredecessor(proto.Chord.UpdatePredecessorRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getUpdatePredecessorMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public proto.Chord.UpdateSuccessorRequest updateSuccessor(proto.Chord.UpdateSuccessorRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getUpdateSuccessorMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public proto.Chord.MoveKeysToSuccessorResponse moveKeysToSuccessor(proto.Chord.MoveKeysToSuccessorRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getMoveKeysToSuccessorMethod(), getCallOptions(), request);
     }
 
     /**
@@ -821,6 +1013,33 @@ public final class ChordServiceGrpc {
 
     /**
      * <pre>
+     * upon leaving
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<proto.Chord.UpdatePredecessorResponse> updatePredecessor(
+        proto.Chord.UpdatePredecessorRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getUpdatePredecessorMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<proto.Chord.UpdateSuccessorRequest> updateSuccessor(
+        proto.Chord.UpdateSuccessorRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getUpdateSuccessorMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<proto.Chord.MoveKeysToSuccessorResponse> moveKeysToSuccessor(
+        proto.Chord.MoveKeysToSuccessorRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getMoveKeysToSuccessorMethod(), getCallOptions()), request);
+    }
+
+    /**
+     * <pre>
      * move keys from range (predecessor, node] to node
      * </pre>
      */
@@ -861,10 +1080,13 @@ public final class ChordServiceGrpc {
   private static final int METHODID_UPDATE_FINGER_TABLE = 3;
   private static final int METHODID_CLOSEST_PRECEDING_FINGER = 4;
   private static final int METHODID_JOIN = 5;
-  private static final int METHODID_MOVE_KEYS = 6;
-  private static final int METHODID_NOTIFY = 7;
-  private static final int METHODID_PUT = 8;
-  private static final int METHODID_GET = 9;
+  private static final int METHODID_UPDATE_PREDECESSOR = 6;
+  private static final int METHODID_UPDATE_SUCCESSOR = 7;
+  private static final int METHODID_MOVE_KEYS_TO_SUCCESSOR = 8;
+  private static final int METHODID_MOVE_KEYS = 9;
+  private static final int METHODID_NOTIFY = 10;
+  private static final int METHODID_PUT = 11;
+  private static final int METHODID_GET = 12;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -906,6 +1128,18 @@ public final class ChordServiceGrpc {
         case METHODID_JOIN:
           serviceImpl.join((proto.Chord.JoinRequest) request,
               (io.grpc.stub.StreamObserver<proto.Chord.JoinResponse>) responseObserver);
+          break;
+        case METHODID_UPDATE_PREDECESSOR:
+          serviceImpl.updatePredecessor((proto.Chord.UpdatePredecessorRequest) request,
+              (io.grpc.stub.StreamObserver<proto.Chord.UpdatePredecessorResponse>) responseObserver);
+          break;
+        case METHODID_UPDATE_SUCCESSOR:
+          serviceImpl.updateSuccessor((proto.Chord.UpdateSuccessorRequest) request,
+              (io.grpc.stub.StreamObserver<proto.Chord.UpdateSuccessorRequest>) responseObserver);
+          break;
+        case METHODID_MOVE_KEYS_TO_SUCCESSOR:
+          serviceImpl.moveKeysToSuccessor((proto.Chord.MoveKeysToSuccessorRequest) request,
+              (io.grpc.stub.StreamObserver<proto.Chord.MoveKeysToSuccessorResponse>) responseObserver);
           break;
         case METHODID_MOVE_KEYS:
           serviceImpl.moveKeys((proto.Chord.MoveKeysRequest) request,
@@ -990,6 +1224,9 @@ public final class ChordServiceGrpc {
               .addMethod(getUpdateFingerTableMethod())
               .addMethod(getClosestPrecedingFingerMethod())
               .addMethod(getJoinMethod())
+              .addMethod(getUpdatePredecessorMethod())
+              .addMethod(getUpdateSuccessorMethod())
+              .addMethod(getMoveKeysToSuccessorMethod())
               .addMethod(getMoveKeysMethod())
               .addMethod(getNotifyMethod())
               .addMethod(getPutMethod())

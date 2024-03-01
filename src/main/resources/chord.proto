@@ -111,6 +111,42 @@ message Notification {
 }
 message NotificationResponse {}
 
+message UpdatePredecessorRequest {
+  string senderIp = 1;
+  int32 senderPort = 2;
+  string predecessorIp = 3;
+  int32 predecessorPort = 4;
+}
+message UpdatePredecessorResponse {
+  string requestorIp = 1;
+  int32 requestorPort = 2;
+  string status = 3;
+}
+
+message UpdateSuccessorRequest {
+  string senderIp = 1;
+  int32 senderPort = 2;
+  string successorIp = 3;
+  int32 successorPort = 4;
+}
+message UpdateSuccessorResponse {
+  string requestorIp = 1;
+  int32 requestorPort = 2;
+  string status = 3;
+}
+
+message MoveKeysToSuccessorRequest {
+  string senderIp = 1;
+  int32 senderPort = 2;
+  repeated string value = 3;
+  repeated int32 key = 4;
+}
+message MoveKeysToSuccessorResponse {
+  string requestorIp = 1;
+  int32 requestorPort = 2;
+  string status = 3;
+}
+
 service ChordService {
   // invoke findSuccessor procedure on targetNode
   rpc FindSuccessor(FindSuccessorRequest) returns (FindSuccessorResponse) {}
@@ -121,6 +157,11 @@ service ChordService {
   rpc UpdateFingerTable(UpdateFingerTableRequest) returns (UpdateFingerTableResponse) {}
   rpc ClosestPrecedingFinger(ClosestPrecedingFingerRequest) returns (ClosestPrecedingFingerResponse) {}
   rpc Join(JoinRequest) returns (JoinResponse) {}
+
+  // upon leaving
+  rpc UpdatePredecessor(UpdatePredecessorRequest) returns (UpdatePredecessorResponse) {}
+  rpc UpdateSuccessor(UpdateSuccessorRequest) returns (UpdateSuccessorRequest) {}
+  rpc MoveKeysToSuccessor(MoveKeysToSuccessorRequest) returns (MoveKeysToSuccessorResponse) {}
 
   // move keys from range (predecessor, node] to node
   rpc MoveKeys(MoveKeysRequest) returns (MoveKeysResponse) {}
