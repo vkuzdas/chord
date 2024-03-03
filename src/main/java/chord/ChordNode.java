@@ -23,7 +23,7 @@ public class ChordNode {
     private final NavigableMap<Integer, String> localData = new TreeMap<>();
     private final ArrayList<Finger> fingerTable = new ArrayList<>();
     private boolean isAlone = true;
-    public static int CHECK_INTERVAL = 2500;
+    public static int CHECK_INTERVAL = 500;
     private Timer stabilizationTimer;
 
 //    private static final int m = 160; // TODO: number of bits in id as well as max size of fingerTable
@@ -75,6 +75,7 @@ public class ChordNode {
     }
 
     public void stopServer() throws InterruptedException {
+        stopFixThread();
         if (server != null) {
             server.shutdown().awaitTermination(5, TimeUnit.SECONDS);
         }
@@ -594,17 +595,6 @@ public class ChordNode {
         ChordNode node3 = new ChordNode("localhost", 8982);
         node3.startServer();
         node3.join(node2);
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    node2.stopServer();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }, 5000); // delay in milliseconds
 
         bootstrap.blockUntilShutdown();
         node2.blockUntilShutdown();

@@ -26,6 +26,9 @@ public class ChordNodeTest {
 
         assertEquals(bootstrap.getDataSize(), 1);
         assertEquals(node2.getDataSize(), 1);
+
+        bootstrap.stopServer();
+        node2.stopServer();
     }
 
     @Test
@@ -56,6 +59,10 @@ public class ChordNodeTest {
 
         await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getPredecessor().id == 0);
         await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getSuccessor().id == 10);
+
+        bootstrap.stopServer();
+        node2.stopServer();
+        node3.stopServer();
     }
 
     @Test
@@ -86,6 +93,10 @@ public class ChordNodeTest {
 
         await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getPredecessor().id == 0);
         await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getSuccessor().id == 10);
+
+        bootstrap.stopServer();
+        node2.stopServer();
+        node3.stopServer();
     }
 
 }
