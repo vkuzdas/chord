@@ -113,43 +113,51 @@ class ChordNodeTest {
         node3.join(bootstrap);
 
         Thread.sleep(5000); // let the network stabilize
-        node2.stopServer();
         node2.leave();
-        Thread.sleep(5000); // stabilize again
+        node2.stopServer();
 
         // assert that there are no references to the node that left
+        // FIXME: this does not validate FingerTable eradication since it just so happens to not be there
         assertNotEquals(bootstrap.getPredecessor(), node2.getNodeReference());
         assertFalse(bootstrap.containedInFingerTable(node2.getNodeReference()));
 
         assertNotEquals(node3.getPredecessor(), node2.getNodeReference());
         assertFalse(node3.containedInFingerTable(node2.getNodeReference()));
+
+        bootstrap.stopServer();
+        node3.stopServer();
     }
 
     @Test
     void chainedLeave() throws Exception {
-        // TODO: in next commit
-//        ChordNode bootstrap = new ChordNode("localhost", 8980);
-//        bootstrap.startServer();
-//
-//        ChordNode node2 = new ChordNode("localhost", 8981);
-//        node2.startServer();
-//        node2.join(bootstrap);
-//
-//        ChordNode node3 = new ChordNode("localhost", 8982);
-//        node3.startServer();
-//        node3.join(node2);
-//
-//        Thread.sleep(5000); // let the network stabilize
-//        node2.stopServer();
-//        node2.leave();
-//        Thread.sleep(5000); // stabilize again
-//
-//        // assert that there are no references to the node that left
-//        assertNotEquals(bootstrap.getPredecessor(), node2.getNodeReference());
-//        assertFalse(bootstrap.containedInFingerTable(node2.getNodeReference()));
-//
-//        assertNotEquals(node3.getPredecessor(), node2.getNodeReference());
-//        assertFalse(node3.containedInFingerTable(node2.getNodeReference()));
+        ChordNode bootstrap = new ChordNode("localhost", 8980);
+        bootstrap.startServer();
+
+        ChordNode node2 = new ChordNode("localhost", 8981);
+        node2.startServer();
+        node2.join(bootstrap);
+
+        ChordNode node3 = new ChordNode("localhost", 8982);
+        node3.startServer();
+        node3.join(node2);
+
+        System.out.println("will sleep now");
+        Thread.sleep(5000); // let the network stabilize
+        System.out.println("will sleep now");
+        node2.stopServer();
+        node2.leave();
+
+
+        // FIXME: this does not validate FingerTable eradication since it just so happens to not be there
+        assertNotEquals(bootstrap.getPredecessor(), node2.getNodeReference());
+        assertFalse(bootstrap.containedInFingerTable(node2.getNodeReference()));
+
+        assertNotEquals(node3.getPredecessor(), node2.getNodeReference());
+        assertFalse(node3.containedInFingerTable(node2.getNodeReference()));
+
+
+        bootstrap.stopServer();
+        node3.stopServer();
     }
 
 }
