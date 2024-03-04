@@ -1,5 +1,6 @@
 package chord;
 
+import com.google.common.annotations.VisibleForTesting;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Server;
@@ -11,7 +12,6 @@ import proto.Chord;
 import proto.ChordServiceGrpc;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static chord.Util.*;
 import static java.lang.Math.pow;
@@ -32,25 +32,15 @@ public class ChordNode {
     private final Server server;
     private ChordServiceGrpc.ChordServiceBlockingStub blockingStub;
 
-    public NodeReference getNodeReference() {
-        return node;
-    }
-
-    public NodeReference getPredecessor() {
-        return predecessor;
-    }
-
-    public NodeReference getSuccessor() {
-        return fingerTable.get(0).node;
-    }
 
     public ChordNode(String ip, int port) {
         this.node = new NodeReference(ip, port);
         this.predecessor = node;
 
         for (int i = 1; i <= m; i++) {
-            int start = (node.id + (int)pow(2, i-1)) % (int)pow(2, m);
-            int end = (node.id + (int)pow(2, i) - 1) % (int)pow(2, m);
+            int mod = (int)pow(2, m);
+            int start = (node.id + (int)pow(2, i-1)) % mod;
+            int end =   (node.id + (int)pow(2, i  )) % mod;
             fingerTable.add(new Finger(start, end, node));
         }
 
@@ -77,7 +67,7 @@ public class ChordNode {
     public void stopServer() throws InterruptedException {
         stopFixThread();
         if (server != null) {
-            server.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+            server.shutdown();
         }
     }
 
@@ -138,6 +128,11 @@ public class ChordNode {
         startFixThread();
     }
 
+    /**
+     * Upon leaving, node should be deleted from other nodes that store its reference
+     * This means setting this.node.Predecessor.Successor, this.node.Successor.Predecessor
+     * and finally any fingertable that this.node might be included in
+     */
     public void leave() {
         // no need to delete n from FingerTables since periodic fix_fingers will do it
         stopFixThread();
@@ -151,26 +146,24 @@ public class ChordNode {
 
     private void updateNeighbors() {
         // TODO: should I notify them to stop stabilize for a while?, maybe stopping timer for a while
+        // update S.P = this.node.P
         NodeReference successor = fingerTable.get(0).node;
         ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.toString()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.UpdateSuccessorRequest usr = Chord.UpdateSuccessorRequest.newBuilder()
-                .setSenderIp(node.ip)
-                .setSenderPort(node.port)
-                .setSuccessorIp(successor.ip)
-                .setSuccessorPort(successor.port)
+                .setNewIp(this.predecessor.ip)
+                .setNewPort(this.predecessor.port)
                 .build();
         blockingStub.updateSuccessor(usr);
         channel.shutdown();
 
+        // update P.S = this.node.S
         NodeReference predecessor = this.predecessor;
         channel = ManagedChannelBuilder.forTarget(predecessor.toString()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.UpdatePredecessorRequest upr = Chord.UpdatePredecessorRequest.newBuilder()
-                .setSenderIp(node.ip)
-                .setSenderPort(node.port)
-                .setPredecessorIp(predecessor.ip)
-                .setPredecessorPort(predecessor.port)
+                .setNewIp(successor.ip)
+                .setNewPort(successor.port)
                 .build();
         blockingStub.updatePredecessor(upr);
         channel.shutdown();
@@ -194,6 +187,12 @@ public class ChordNode {
 
     private void printStatus() {
         logger.debug("[{}:{}] P={}, S={}", node, node.id, predecessor, fingerTable.get(0).node);
+        logger.trace("[{}:{}]  ==== FT ====", node, node.id);
+        for (int i = 0; i < fingerTable.size(); i++) {
+            Finger finger = fingerTable.get(i);
+            logger.trace("Index: {}, [{},{}), Succ: [{}:{}]", i, finger.start, finger.end, finger.node, finger.node.id);
+        }
+        logger.trace("=====================");
     }
 
     private void startFixThread() {
@@ -202,6 +201,7 @@ public class ChordNode {
         stabilizationTimer.schedule(new TimerTask() {
             @Override
             public void run() {
+                printStatus();
                 fix_fingers();
                 stabilize();
                 printStatus();
@@ -558,18 +558,40 @@ public class ChordNode {
             responseObserver.onCompleted();
         }
 
+        /**
+         * RPC called from this.Successor
+         * @param request to change Predecessor to newIp and newPort
+         */
         @Override
         public void updatePredecessor(Chord.UpdatePredecessorRequest request, StreamObserver<Chord.UpdatePredecessorResponse> responseObserver) {
-            logger.debug("[{}:{}] will set P={} (instead of p={}) from {}", node, node.id, request.getPredecessorPort(), predecessor, request.getSenderPort());
-            predecessor = new NodeReference(request.getPredecessorIp(), request.getPredecessorPort());
+            stopFixThread(); // to synchronize
+            NodeReference oldSucc = fingerTable.get(0).node;
+            logger.debug("[{}:{}]  will set S={} (prev_s={})", node, node.id, request.getNewPort(), oldSucc);
+
+            // update Successor
+            fingerTable.get(0).setNode(new NodeReference(request.getNewIp(), request.getNewPort()));
+
+            startFixThread();
+            // TODO: remove from fingertable
             responseObserver.onNext(Chord.UpdatePredecessorResponse.newBuilder().build());
             responseObserver.onCompleted();
         }
 
+        /**
+         * RPC called from this.Predecessor
+         * @param request to change Predecessor to newIp and newPort
+         */
         @Override
         public void updateSuccessor(Chord.UpdateSuccessorRequest request, StreamObserver<Chord.UpdateSuccessorRequest> responseObserver) {
-            logger.debug("[{}:{}] will set S={} (instead of s={}) from {}", node, node.id, request.getSuccessorPort(), fingerTable.get(0).node, request.getSenderPort());
-            fingerTable.get(0).setNode(new NodeReference(request.getSuccessorIp(), request.getSuccessorPort()));
+            stopFixThread(); // to synchronize
+            logger.debug("[{}:{}]  will set P={} (prev_p={})", node, node.id, request.getNewPort(), predecessor);
+
+            // update Predecessor
+            predecessor = new NodeReference(request.getNewIp(), request.getNewPort());
+
+            // TODO: remove from fingertable
+
+            startFixThread();
             responseObserver.onNext(Chord.UpdateSuccessorRequest.newBuilder().build());
             responseObserver.onCompleted();
         }
@@ -584,65 +606,49 @@ public class ChordNode {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        ChordNode bootstrap = new ChordNode("localhost", 8980);
-        bootstrap.startServer();
+    @VisibleForTesting
+    public NodeReference getNodeReference() {
+        return node;
+    }
 
-        ChordNode node2 = new ChordNode("localhost", 8981);
-        node2.startServer();
-        node2.join(bootstrap);
+    @VisibleForTesting
+    public boolean containedInFingerTable(NodeReference n) {
+        for (Finger f: this.fingerTable) {
+            if(n.equals(f.node))
+                return true;
+        }
+        return false;
+    }
 
-        ChordNode node3 = new ChordNode("localhost", 8982);
-        node3.startServer();
-        node3.join(node2);
+    @VisibleForTesting
+    public NodeReference getPredecessor() {
+        return predecessor;
+    }
 
-        bootstrap.blockUntilShutdown();
-        node2.blockUntilShutdown();
-        node3.blockUntilShutdown();
+    @VisibleForTesting
+    public NodeReference getSuccessor() {
+        return fingerTable.get(0).node;
+    }
 
-
-
+//    public static void main(String[] args) throws Exception {
 //        ChordNode bootstrap = new ChordNode("localhost", 8980);
-//        ChordNode node2 = new ChordNode("localhost", 8981);
-//        bootstrap.start();
-//        node2.start();
+//        bootstrap.startServer();
+//        bootstrap.containedInFingerTable(new NodeReference("r",1));
 //
-//        node2.join(bootstrap.node);
+//        ChordNode node2 = new ChordNode("localhost", 8981);
+//        node2.startServer();
+//        node2.join(bootstrap.getNodeReference());
+//
+//        ChordNode node3 = new ChordNode("localhost", 8982);
+//        node3.startServer();
+//        node3.join(node2.getNodeReference());
+//
+//        Thread.sleep(5000);
+//        node2.stopServer();
+//        node2.leave();
 //
 //        bootstrap.blockUntilShutdown();
-//        node2.blockUntilShutdown();
-
-
-
-
-
-
-
-//        String input;
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-//        while (true) {
-//            System.out.println("Enter 'join <ip>:<port>' to join network");
-//            System.out.println("Enter 'run' to start the node");
-//            System.out.println("Enter 'exit' to quit");
-//            System.out.println("Enter 'put <key> <value>' to put a record");
-//            System.out.println("Enter 'get <key>' to get a record");
-//            System.out.println("Enter 'print' to print finger table");
-//            System.out.print("Enter your message: ");
-//            input = reader.readLine();
-//            String[] tokens = input.split("\\s+");
-//            if ("EXIT".equalsIgnoreCase(tokens[0])) {
-//                System.exit(0);
-//            }
-//            if ("RUN".equalsIgnoreCase(tokens[0])) {
-//                break;
-//            }
-//            if ("JOIN".equalsIgnoreCase(tokens[0])) {
-//                String ip = tokens[1].split(":")[0];
-//                String port = tokens[1].split(":")[1];
-//                NodeReference bootstrap = new NodeReference(ip, Integer.parseInt(port));
-//                node.join(bootstrap);
-//            }
-//        }
-
-    }
+////        node2.blockUntilShutdown();
+//        node3.blockUntilShutdown();
+//    }
 }

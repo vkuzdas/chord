@@ -14208,34 +14208,19 @@ public final class Chord {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>string senderIp = 1;</code>
+     * <code>string newIp = 1;</code>
      */
-    java.lang.String getSenderIp();
+    java.lang.String getNewIp();
     /**
-     * <code>string senderIp = 1;</code>
+     * <code>string newIp = 1;</code>
      */
     com.google.protobuf.ByteString
-        getSenderIpBytes();
+        getNewIpBytes();
 
     /**
-     * <code>int32 senderPort = 2;</code>
+     * <code>int32 newPort = 2;</code>
      */
-    int getSenderPort();
-
-    /**
-     * <code>string predecessorIp = 3;</code>
-     */
-    java.lang.String getPredecessorIp();
-    /**
-     * <code>string predecessorIp = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getPredecessorIpBytes();
-
-    /**
-     * <code>int32 predecessorPort = 4;</code>
-     */
-    int getPredecessorPort();
+    int getNewPort();
   }
   /**
    * Protobuf type {@code UpdatePredecessorRequest}
@@ -14250,10 +14235,8 @@ public final class Chord {
       super(builder);
     }
     private UpdatePredecessorRequest() {
-      senderIp_ = "";
-      senderPort_ = 0;
-      predecessorIp_ = "";
-      predecessorPort_ = 0;
+      newIp_ = "";
+      newPort_ = 0;
     }
 
     @java.lang.Override
@@ -14283,23 +14266,12 @@ public final class Chord {
             case 10: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              senderIp_ = s;
+              newIp_ = s;
               break;
             }
             case 16: {
 
-              senderPort_ = input.readInt32();
-              break;
-            }
-            case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              predecessorIp_ = s;
-              break;
-            }
-            case 32: {
-
-              predecessorPort_ = input.readInt32();
+              newPort_ = input.readInt32();
               break;
             }
             default: {
@@ -14334,90 +14306,47 @@ public final class Chord {
               proto.Chord.UpdatePredecessorRequest.class, proto.Chord.UpdatePredecessorRequest.Builder.class);
     }
 
-    public static final int SENDERIP_FIELD_NUMBER = 1;
-    private volatile java.lang.Object senderIp_;
+    public static final int NEWIP_FIELD_NUMBER = 1;
+    private volatile java.lang.Object newIp_;
     /**
-     * <code>string senderIp = 1;</code>
+     * <code>string newIp = 1;</code>
      */
-    public java.lang.String getSenderIp() {
-      java.lang.Object ref = senderIp_;
+    public java.lang.String getNewIp() {
+      java.lang.Object ref = newIp_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        senderIp_ = s;
+        newIp_ = s;
         return s;
       }
     }
     /**
-     * <code>string senderIp = 1;</code>
+     * <code>string newIp = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getSenderIpBytes() {
-      java.lang.Object ref = senderIp_;
+        getNewIpBytes() {
+      java.lang.Object ref = newIp_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        senderIp_ = b;
+        newIp_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int SENDERPORT_FIELD_NUMBER = 2;
-    private int senderPort_;
+    public static final int NEWPORT_FIELD_NUMBER = 2;
+    private int newPort_;
     /**
-     * <code>int32 senderPort = 2;</code>
+     * <code>int32 newPort = 2;</code>
      */
-    public int getSenderPort() {
-      return senderPort_;
-    }
-
-    public static final int PREDECESSORIP_FIELD_NUMBER = 3;
-    private volatile java.lang.Object predecessorIp_;
-    /**
-     * <code>string predecessorIp = 3;</code>
-     */
-    public java.lang.String getPredecessorIp() {
-      java.lang.Object ref = predecessorIp_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        predecessorIp_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string predecessorIp = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getPredecessorIpBytes() {
-      java.lang.Object ref = predecessorIp_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        predecessorIp_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int PREDECESSORPORT_FIELD_NUMBER = 4;
-    private int predecessorPort_;
-    /**
-     * <code>int32 predecessorPort = 4;</code>
-     */
-    public int getPredecessorPort() {
-      return predecessorPort_;
+    public int getNewPort() {
+      return newPort_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -14434,17 +14363,11 @@ public final class Chord {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getSenderIpBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, senderIp_);
+      if (!getNewIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, newIp_);
       }
-      if (senderPort_ != 0) {
-        output.writeInt32(2, senderPort_);
-      }
-      if (!getPredecessorIpBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, predecessorIp_);
-      }
-      if (predecessorPort_ != 0) {
-        output.writeInt32(4, predecessorPort_);
+      if (newPort_ != 0) {
+        output.writeInt32(2, newPort_);
       }
       unknownFields.writeTo(output);
     }
@@ -14455,19 +14378,12 @@ public final class Chord {
       if (size != -1) return size;
 
       size = 0;
-      if (!getSenderIpBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, senderIp_);
+      if (!getNewIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, newIp_);
       }
-      if (senderPort_ != 0) {
+      if (newPort_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, senderPort_);
-      }
-      if (!getPredecessorIpBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, predecessorIp_);
-      }
-      if (predecessorPort_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, predecessorPort_);
+          .computeInt32Size(2, newPort_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -14485,14 +14401,10 @@ public final class Chord {
       proto.Chord.UpdatePredecessorRequest other = (proto.Chord.UpdatePredecessorRequest) obj;
 
       boolean result = true;
-      result = result && getSenderIp()
-          .equals(other.getSenderIp());
-      result = result && (getSenderPort()
-          == other.getSenderPort());
-      result = result && getPredecessorIp()
-          .equals(other.getPredecessorIp());
-      result = result && (getPredecessorPort()
-          == other.getPredecessorPort());
+      result = result && getNewIp()
+          .equals(other.getNewIp());
+      result = result && (getNewPort()
+          == other.getNewPort());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -14504,14 +14416,10 @@ public final class Chord {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + SENDERIP_FIELD_NUMBER;
-      hash = (53 * hash) + getSenderIp().hashCode();
-      hash = (37 * hash) + SENDERPORT_FIELD_NUMBER;
-      hash = (53 * hash) + getSenderPort();
-      hash = (37 * hash) + PREDECESSORIP_FIELD_NUMBER;
-      hash = (53 * hash) + getPredecessorIp().hashCode();
-      hash = (37 * hash) + PREDECESSORPORT_FIELD_NUMBER;
-      hash = (53 * hash) + getPredecessorPort();
+      hash = (37 * hash) + NEWIP_FIELD_NUMBER;
+      hash = (53 * hash) + getNewIp().hashCode();
+      hash = (37 * hash) + NEWPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getNewPort();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -14645,13 +14553,9 @@ public final class Chord {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        senderIp_ = "";
+        newIp_ = "";
 
-        senderPort_ = 0;
-
-        predecessorIp_ = "";
-
-        predecessorPort_ = 0;
+        newPort_ = 0;
 
         return this;
       }
@@ -14679,10 +14583,8 @@ public final class Chord {
       @java.lang.Override
       public proto.Chord.UpdatePredecessorRequest buildPartial() {
         proto.Chord.UpdatePredecessorRequest result = new proto.Chord.UpdatePredecessorRequest(this);
-        result.senderIp_ = senderIp_;
-        result.senderPort_ = senderPort_;
-        result.predecessorIp_ = predecessorIp_;
-        result.predecessorPort_ = predecessorPort_;
+        result.newIp_ = newIp_;
+        result.newPort_ = newPort_;
         onBuilt();
         return result;
       }
@@ -14731,19 +14633,12 @@ public final class Chord {
 
       public Builder mergeFrom(proto.Chord.UpdatePredecessorRequest other) {
         if (other == proto.Chord.UpdatePredecessorRequest.getDefaultInstance()) return this;
-        if (!other.getSenderIp().isEmpty()) {
-          senderIp_ = other.senderIp_;
+        if (!other.getNewIp().isEmpty()) {
+          newIp_ = other.newIp_;
           onChanged();
         }
-        if (other.getSenderPort() != 0) {
-          setSenderPort(other.getSenderPort());
-        }
-        if (!other.getPredecessorIp().isEmpty()) {
-          predecessorIp_ = other.predecessorIp_;
-          onChanged();
-        }
-        if (other.getPredecessorPort() != 0) {
-          setPredecessorPort(other.getPredecessorPort());
+        if (other.getNewPort() != 0) {
+          setNewPort(other.getNewPort());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -14774,192 +14669,97 @@ public final class Chord {
         return this;
       }
 
-      private java.lang.Object senderIp_ = "";
+      private java.lang.Object newIp_ = "";
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string newIp = 1;</code>
        */
-      public java.lang.String getSenderIp() {
-        java.lang.Object ref = senderIp_;
+      public java.lang.String getNewIp() {
+        java.lang.Object ref = newIp_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          senderIp_ = s;
+          newIp_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string newIp = 1;</code>
        */
       public com.google.protobuf.ByteString
-          getSenderIpBytes() {
-        java.lang.Object ref = senderIp_;
+          getNewIpBytes() {
+        java.lang.Object ref = newIp_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          senderIp_ = b;
+          newIp_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string newIp = 1;</code>
        */
-      public Builder setSenderIp(
+      public Builder setNewIp(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        senderIp_ = value;
+        newIp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string newIp = 1;</code>
        */
-      public Builder clearSenderIp() {
+      public Builder clearNewIp() {
         
-        senderIp_ = getDefaultInstance().getSenderIp();
+        newIp_ = getDefaultInstance().getNewIp();
         onChanged();
         return this;
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string newIp = 1;</code>
        */
-      public Builder setSenderIpBytes(
+      public Builder setNewIpBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        senderIp_ = value;
+        newIp_ = value;
         onChanged();
         return this;
       }
 
-      private int senderPort_ ;
+      private int newPort_ ;
       /**
-       * <code>int32 senderPort = 2;</code>
+       * <code>int32 newPort = 2;</code>
        */
-      public int getSenderPort() {
-        return senderPort_;
+      public int getNewPort() {
+        return newPort_;
       }
       /**
-       * <code>int32 senderPort = 2;</code>
+       * <code>int32 newPort = 2;</code>
        */
-      public Builder setSenderPort(int value) {
+      public Builder setNewPort(int value) {
         
-        senderPort_ = value;
+        newPort_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 senderPort = 2;</code>
+       * <code>int32 newPort = 2;</code>
        */
-      public Builder clearSenderPort() {
+      public Builder clearNewPort() {
         
-        senderPort_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object predecessorIp_ = "";
-      /**
-       * <code>string predecessorIp = 3;</code>
-       */
-      public java.lang.String getPredecessorIp() {
-        java.lang.Object ref = predecessorIp_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          predecessorIp_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>string predecessorIp = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getPredecessorIpBytes() {
-        java.lang.Object ref = predecessorIp_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          predecessorIp_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string predecessorIp = 3;</code>
-       */
-      public Builder setPredecessorIp(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        predecessorIp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string predecessorIp = 3;</code>
-       */
-      public Builder clearPredecessorIp() {
-        
-        predecessorIp_ = getDefaultInstance().getPredecessorIp();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string predecessorIp = 3;</code>
-       */
-      public Builder setPredecessorIpBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        predecessorIp_ = value;
-        onChanged();
-        return this;
-      }
-
-      private int predecessorPort_ ;
-      /**
-       * <code>int32 predecessorPort = 4;</code>
-       */
-      public int getPredecessorPort() {
-        return predecessorPort_;
-      }
-      /**
-       * <code>int32 predecessorPort = 4;</code>
-       */
-      public Builder setPredecessorPort(int value) {
-        
-        predecessorPort_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 predecessorPort = 4;</code>
-       */
-      public Builder clearPredecessorPort() {
-        
-        predecessorPort_ = 0;
+        newPort_ = 0;
         onChanged();
         return this;
       }
@@ -15771,34 +15571,19 @@ public final class Chord {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>string senderIp = 1;</code>
+     * <code>string newIp = 1;</code>
      */
-    java.lang.String getSenderIp();
+    java.lang.String getNewIp();
     /**
-     * <code>string senderIp = 1;</code>
+     * <code>string newIp = 1;</code>
      */
     com.google.protobuf.ByteString
-        getSenderIpBytes();
+        getNewIpBytes();
 
     /**
-     * <code>int32 senderPort = 2;</code>
+     * <code>int32 newPort = 2;</code>
      */
-    int getSenderPort();
-
-    /**
-     * <code>string successorIp = 3;</code>
-     */
-    java.lang.String getSuccessorIp();
-    /**
-     * <code>string successorIp = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getSuccessorIpBytes();
-
-    /**
-     * <code>int32 successorPort = 4;</code>
-     */
-    int getSuccessorPort();
+    int getNewPort();
   }
   /**
    * Protobuf type {@code UpdateSuccessorRequest}
@@ -15813,10 +15598,8 @@ public final class Chord {
       super(builder);
     }
     private UpdateSuccessorRequest() {
-      senderIp_ = "";
-      senderPort_ = 0;
-      successorIp_ = "";
-      successorPort_ = 0;
+      newIp_ = "";
+      newPort_ = 0;
     }
 
     @java.lang.Override
@@ -15846,23 +15629,12 @@ public final class Chord {
             case 10: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              senderIp_ = s;
+              newIp_ = s;
               break;
             }
             case 16: {
 
-              senderPort_ = input.readInt32();
-              break;
-            }
-            case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              successorIp_ = s;
-              break;
-            }
-            case 32: {
-
-              successorPort_ = input.readInt32();
+              newPort_ = input.readInt32();
               break;
             }
             default: {
@@ -15897,90 +15669,47 @@ public final class Chord {
               proto.Chord.UpdateSuccessorRequest.class, proto.Chord.UpdateSuccessorRequest.Builder.class);
     }
 
-    public static final int SENDERIP_FIELD_NUMBER = 1;
-    private volatile java.lang.Object senderIp_;
+    public static final int NEWIP_FIELD_NUMBER = 1;
+    private volatile java.lang.Object newIp_;
     /**
-     * <code>string senderIp = 1;</code>
+     * <code>string newIp = 1;</code>
      */
-    public java.lang.String getSenderIp() {
-      java.lang.Object ref = senderIp_;
+    public java.lang.String getNewIp() {
+      java.lang.Object ref = newIp_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        senderIp_ = s;
+        newIp_ = s;
         return s;
       }
     }
     /**
-     * <code>string senderIp = 1;</code>
+     * <code>string newIp = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getSenderIpBytes() {
-      java.lang.Object ref = senderIp_;
+        getNewIpBytes() {
+      java.lang.Object ref = newIp_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        senderIp_ = b;
+        newIp_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int SENDERPORT_FIELD_NUMBER = 2;
-    private int senderPort_;
+    public static final int NEWPORT_FIELD_NUMBER = 2;
+    private int newPort_;
     /**
-     * <code>int32 senderPort = 2;</code>
+     * <code>int32 newPort = 2;</code>
      */
-    public int getSenderPort() {
-      return senderPort_;
-    }
-
-    public static final int SUCCESSORIP_FIELD_NUMBER = 3;
-    private volatile java.lang.Object successorIp_;
-    /**
-     * <code>string successorIp = 3;</code>
-     */
-    public java.lang.String getSuccessorIp() {
-      java.lang.Object ref = successorIp_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        successorIp_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string successorIp = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getSuccessorIpBytes() {
-      java.lang.Object ref = successorIp_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        successorIp_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int SUCCESSORPORT_FIELD_NUMBER = 4;
-    private int successorPort_;
-    /**
-     * <code>int32 successorPort = 4;</code>
-     */
-    public int getSuccessorPort() {
-      return successorPort_;
+    public int getNewPort() {
+      return newPort_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -15997,17 +15726,11 @@ public final class Chord {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getSenderIpBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, senderIp_);
+      if (!getNewIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, newIp_);
       }
-      if (senderPort_ != 0) {
-        output.writeInt32(2, senderPort_);
-      }
-      if (!getSuccessorIpBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, successorIp_);
-      }
-      if (successorPort_ != 0) {
-        output.writeInt32(4, successorPort_);
+      if (newPort_ != 0) {
+        output.writeInt32(2, newPort_);
       }
       unknownFields.writeTo(output);
     }
@@ -16018,19 +15741,12 @@ public final class Chord {
       if (size != -1) return size;
 
       size = 0;
-      if (!getSenderIpBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, senderIp_);
+      if (!getNewIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, newIp_);
       }
-      if (senderPort_ != 0) {
+      if (newPort_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, senderPort_);
-      }
-      if (!getSuccessorIpBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, successorIp_);
-      }
-      if (successorPort_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, successorPort_);
+          .computeInt32Size(2, newPort_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -16048,14 +15764,10 @@ public final class Chord {
       proto.Chord.UpdateSuccessorRequest other = (proto.Chord.UpdateSuccessorRequest) obj;
 
       boolean result = true;
-      result = result && getSenderIp()
-          .equals(other.getSenderIp());
-      result = result && (getSenderPort()
-          == other.getSenderPort());
-      result = result && getSuccessorIp()
-          .equals(other.getSuccessorIp());
-      result = result && (getSuccessorPort()
-          == other.getSuccessorPort());
+      result = result && getNewIp()
+          .equals(other.getNewIp());
+      result = result && (getNewPort()
+          == other.getNewPort());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -16067,14 +15779,10 @@ public final class Chord {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + SENDERIP_FIELD_NUMBER;
-      hash = (53 * hash) + getSenderIp().hashCode();
-      hash = (37 * hash) + SENDERPORT_FIELD_NUMBER;
-      hash = (53 * hash) + getSenderPort();
-      hash = (37 * hash) + SUCCESSORIP_FIELD_NUMBER;
-      hash = (53 * hash) + getSuccessorIp().hashCode();
-      hash = (37 * hash) + SUCCESSORPORT_FIELD_NUMBER;
-      hash = (53 * hash) + getSuccessorPort();
+      hash = (37 * hash) + NEWIP_FIELD_NUMBER;
+      hash = (53 * hash) + getNewIp().hashCode();
+      hash = (37 * hash) + NEWPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getNewPort();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -16208,13 +15916,9 @@ public final class Chord {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        senderIp_ = "";
+        newIp_ = "";
 
-        senderPort_ = 0;
-
-        successorIp_ = "";
-
-        successorPort_ = 0;
+        newPort_ = 0;
 
         return this;
       }
@@ -16242,10 +15946,8 @@ public final class Chord {
       @java.lang.Override
       public proto.Chord.UpdateSuccessorRequest buildPartial() {
         proto.Chord.UpdateSuccessorRequest result = new proto.Chord.UpdateSuccessorRequest(this);
-        result.senderIp_ = senderIp_;
-        result.senderPort_ = senderPort_;
-        result.successorIp_ = successorIp_;
-        result.successorPort_ = successorPort_;
+        result.newIp_ = newIp_;
+        result.newPort_ = newPort_;
         onBuilt();
         return result;
       }
@@ -16294,19 +15996,12 @@ public final class Chord {
 
       public Builder mergeFrom(proto.Chord.UpdateSuccessorRequest other) {
         if (other == proto.Chord.UpdateSuccessorRequest.getDefaultInstance()) return this;
-        if (!other.getSenderIp().isEmpty()) {
-          senderIp_ = other.senderIp_;
+        if (!other.getNewIp().isEmpty()) {
+          newIp_ = other.newIp_;
           onChanged();
         }
-        if (other.getSenderPort() != 0) {
-          setSenderPort(other.getSenderPort());
-        }
-        if (!other.getSuccessorIp().isEmpty()) {
-          successorIp_ = other.successorIp_;
-          onChanged();
-        }
-        if (other.getSuccessorPort() != 0) {
-          setSuccessorPort(other.getSuccessorPort());
+        if (other.getNewPort() != 0) {
+          setNewPort(other.getNewPort());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -16337,192 +16032,97 @@ public final class Chord {
         return this;
       }
 
-      private java.lang.Object senderIp_ = "";
+      private java.lang.Object newIp_ = "";
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string newIp = 1;</code>
        */
-      public java.lang.String getSenderIp() {
-        java.lang.Object ref = senderIp_;
+      public java.lang.String getNewIp() {
+        java.lang.Object ref = newIp_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          senderIp_ = s;
+          newIp_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string newIp = 1;</code>
        */
       public com.google.protobuf.ByteString
-          getSenderIpBytes() {
-        java.lang.Object ref = senderIp_;
+          getNewIpBytes() {
+        java.lang.Object ref = newIp_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          senderIp_ = b;
+          newIp_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string newIp = 1;</code>
        */
-      public Builder setSenderIp(
+      public Builder setNewIp(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        senderIp_ = value;
+        newIp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string newIp = 1;</code>
        */
-      public Builder clearSenderIp() {
+      public Builder clearNewIp() {
         
-        senderIp_ = getDefaultInstance().getSenderIp();
+        newIp_ = getDefaultInstance().getNewIp();
         onChanged();
         return this;
       }
       /**
-       * <code>string senderIp = 1;</code>
+       * <code>string newIp = 1;</code>
        */
-      public Builder setSenderIpBytes(
+      public Builder setNewIpBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        senderIp_ = value;
+        newIp_ = value;
         onChanged();
         return this;
       }
 
-      private int senderPort_ ;
+      private int newPort_ ;
       /**
-       * <code>int32 senderPort = 2;</code>
+       * <code>int32 newPort = 2;</code>
        */
-      public int getSenderPort() {
-        return senderPort_;
+      public int getNewPort() {
+        return newPort_;
       }
       /**
-       * <code>int32 senderPort = 2;</code>
+       * <code>int32 newPort = 2;</code>
        */
-      public Builder setSenderPort(int value) {
+      public Builder setNewPort(int value) {
         
-        senderPort_ = value;
+        newPort_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 senderPort = 2;</code>
+       * <code>int32 newPort = 2;</code>
        */
-      public Builder clearSenderPort() {
+      public Builder clearNewPort() {
         
-        senderPort_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object successorIp_ = "";
-      /**
-       * <code>string successorIp = 3;</code>
-       */
-      public java.lang.String getSuccessorIp() {
-        java.lang.Object ref = successorIp_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          successorIp_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>string successorIp = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getSuccessorIpBytes() {
-        java.lang.Object ref = successorIp_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          successorIp_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string successorIp = 3;</code>
-       */
-      public Builder setSuccessorIp(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        successorIp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string successorIp = 3;</code>
-       */
-      public Builder clearSuccessorIp() {
-        
-        successorIp_ = getDefaultInstance().getSuccessorIp();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string successorIp = 3;</code>
-       */
-      public Builder setSuccessorIpBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        successorIp_ = value;
-        onChanged();
-        return this;
-      }
-
-      private int successorPort_ ;
-      /**
-       * <code>int32 successorPort = 4;</code>
-       */
-      public int getSuccessorPort() {
-        return successorPort_;
-      }
-      /**
-       * <code>int32 successorPort = 4;</code>
-       */
-      public Builder setSuccessorPort(int value) {
-        
-        successorPort_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 successorPort = 4;</code>
-       */
-      public Builder clearSuccessorPort() {
-        
-        successorPort_ = 0;
+        newPort_ = 0;
         onChanged();
         return this;
       }
@@ -19234,43 +18834,40 @@ public final class Chord {
       "\"9\n\013GetResponse\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
       "\001(\t\022\016\n\006status\030\003 \001(\t\"@\n\014Notification\022\020\n\010s" +
       "enderIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\n\n\002id\030" +
-      "\003 \001(\005\"\026\n\024NotificationResponse\"p\n\030UpdateP" +
-      "redecessorRequest\022\020\n\010senderIp\030\001 \001(\t\022\022\n\ns" +
-      "enderPort\030\002 \001(\005\022\025\n\rpredecessorIp\030\003 \001(\t\022\027" +
-      "\n\017predecessorPort\030\004 \001(\005\"W\n\031UpdatePredece" +
-      "ssorResponse\022\023\n\013requestorIp\030\001 \001(\t\022\025\n\rreq" +
-      "uestorPort\030\002 \001(\005\022\016\n\006status\030\003 \001(\t\"j\n\026Upda" +
-      "teSuccessorRequest\022\020\n\010senderIp\030\001 \001(\t\022\022\n\n" +
-      "senderPort\030\002 \001(\005\022\023\n\013successorIp\030\003 \001(\t\022\025\n" +
-      "\rsuccessorPort\030\004 \001(\005\"U\n\027UpdateSuccessorR" +
-      "esponse\022\023\n\013requestorIp\030\001 \001(\t\022\025\n\rrequesto" +
-      "rPort\030\002 \001(\005\022\016\n\006status\030\003 \001(\t\"^\n\032MoveKeysT" +
-      "oSuccessorRequest\022\020\n\010senderIp\030\001 \001(\t\022\022\n\ns" +
-      "enderPort\030\002 \001(\005\022\r\n\005value\030\003 \003(\t\022\013\n\003key\030\004 " +
-      "\003(\005\"Y\n\033MoveKeysToSuccessorResponse\022\023\n\013re" +
-      "questorIp\030\001 \001(\t\022\025\n\rrequestorPort\030\002 \001(\005\022\016" +
-      "\n\006status\030\003 \001(\t2\274\006\n\014ChordService\022@\n\rFindS" +
-      "uccessor\022\025.FindSuccessorRequest\032\026.FindSu" +
-      "ccessorResponse\"\000\022=\n\014GetSuccessor\022\024.GetS" +
-      "uccessorRequest\032\025.GetSuccessorResponse\"\000" +
-      "\022C\n\016GetPredecessor\022\026.GetPredecessorReque" +
-      "st\032\027.GetPredecessorResponse\"\000\022L\n\021UpdateF" +
-      "ingerTable\022\031.UpdateFingerTableRequest\032\032." +
-      "UpdateFingerTableResponse\"\000\022[\n\026ClosestPr" +
-      "ecedingFinger\022\036.ClosestPrecedingFingerRe" +
-      "quest\032\037.ClosestPrecedingFingerResponse\"\000" +
-      "\022%\n\004Join\022\014.JoinRequest\032\r.JoinResponse\"\000\022" +
-      "L\n\021UpdatePredecessor\022\031.UpdatePredecessor" +
-      "Request\032\032.UpdatePredecessorResponse\"\000\022E\n" +
-      "\017UpdateSuccessor\022\027.UpdateSuccessorReques" +
-      "t\032\027.UpdateSuccessorRequest\"\000\022R\n\023MoveKeys" +
-      "ToSuccessor\022\033.MoveKeysToSuccessorRequest" +
-      "\032\034.MoveKeysToSuccessorResponse\"\000\0221\n\010Move" +
-      "Keys\022\020.MoveKeysRequest\032\021.MoveKeysRespons" +
-      "e\"\000\0220\n\006Notify\022\r.Notification\032\025.Notificat" +
-      "ionResponse\"\000\022\"\n\003Put\022\013.PutRequest\032\014.PutR" +
-      "esponse\"\000\022\"\n\003Get\022\013.GetRequest\032\014.GetRespo" +
-      "nse\"\000B\007\n\005protob\006proto3"
+      "\003 \001(\005\"\026\n\024NotificationResponse\":\n\030UpdateP" +
+      "redecessorRequest\022\r\n\005newIp\030\001 \001(\t\022\017\n\007newP" +
+      "ort\030\002 \001(\005\"W\n\031UpdatePredecessorResponse\022\023" +
+      "\n\013requestorIp\030\001 \001(\t\022\025\n\rrequestorPort\030\002 \001" +
+      "(\005\022\016\n\006status\030\003 \001(\t\"8\n\026UpdateSuccessorReq" +
+      "uest\022\r\n\005newIp\030\001 \001(\t\022\017\n\007newPort\030\002 \001(\005\"U\n\027" +
+      "UpdateSuccessorResponse\022\023\n\013requestorIp\030\001" +
+      " \001(\t\022\025\n\rrequestorPort\030\002 \001(\005\022\016\n\006status\030\003 " +
+      "\001(\t\"^\n\032MoveKeysToSuccessorRequest\022\020\n\010sen" +
+      "derIp\030\001 \001(\t\022\022\n\nsenderPort\030\002 \001(\005\022\r\n\005value" +
+      "\030\003 \003(\t\022\013\n\003key\030\004 \003(\005\"Y\n\033MoveKeysToSuccess" +
+      "orResponse\022\023\n\013requestorIp\030\001 \001(\t\022\025\n\rreque" +
+      "storPort\030\002 \001(\005\022\016\n\006status\030\003 \001(\t2\274\006\n\014Chord" +
+      "Service\022@\n\rFindSuccessor\022\025.FindSuccessor" +
+      "Request\032\026.FindSuccessorResponse\"\000\022=\n\014Get" +
+      "Successor\022\024.GetSuccessorRequest\032\025.GetSuc" +
+      "cessorResponse\"\000\022C\n\016GetPredecessor\022\026.Get" +
+      "PredecessorRequest\032\027.GetPredecessorRespo" +
+      "nse\"\000\022L\n\021UpdateFingerTable\022\031.UpdateFinge" +
+      "rTableRequest\032\032.UpdateFingerTableRespons" +
+      "e\"\000\022[\n\026ClosestPrecedingFinger\022\036.ClosestP" +
+      "recedingFingerRequest\032\037.ClosestPreceding" +
+      "FingerResponse\"\000\022%\n\004Join\022\014.JoinRequest\032\r" +
+      ".JoinResponse\"\000\022L\n\021UpdatePredecessor\022\031.U" +
+      "pdatePredecessorRequest\032\032.UpdatePredeces" +
+      "sorResponse\"\000\022E\n\017UpdateSuccessor\022\027.Updat" +
+      "eSuccessorRequest\032\027.UpdateSuccessorReque" +
+      "st\"\000\022R\n\023MoveKeysToSuccessor\022\033.MoveKeysTo" +
+      "SuccessorRequest\032\034.MoveKeysToSuccessorRe" +
+      "sponse\"\000\0221\n\010MoveKeys\022\020.MoveKeysRequest\032\021" +
+      ".MoveKeysResponse\"\000\0220\n\006Notify\022\r.Notifica" +
+      "tion\032\025.NotificationResponse\"\000\022\"\n\003Put\022\013.P" +
+      "utRequest\032\014.PutResponse\"\000\022\"\n\003Get\022\013.GetRe" +
+      "quest\032\014.GetResponse\"\000B\007\n\005protob\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -19409,7 +19006,7 @@ public final class Chord {
     internal_static_UpdatePredecessorRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_UpdatePredecessorRequest_descriptor,
-        new java.lang.String[] { "SenderIp", "SenderPort", "PredecessorIp", "PredecessorPort", });
+        new java.lang.String[] { "NewIp", "NewPort", });
     internal_static_UpdatePredecessorResponse_descriptor =
       getDescriptor().getMessageTypes().get(21);
     internal_static_UpdatePredecessorResponse_fieldAccessorTable = new
@@ -19421,7 +19018,7 @@ public final class Chord {
     internal_static_UpdateSuccessorRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_UpdateSuccessorRequest_descriptor,
-        new java.lang.String[] { "SenderIp", "SenderPort", "SuccessorIp", "SuccessorPort", });
+        new java.lang.String[] { "NewIp", "NewPort", });
     internal_static_UpdateSuccessorResponse_descriptor =
       getDescriptor().getMessageTypes().get(23);
     internal_static_UpdateSuccessorResponse_fieldAccessorTable = new

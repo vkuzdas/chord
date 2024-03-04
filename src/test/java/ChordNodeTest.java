@@ -3,12 +3,12 @@ import org.junit.jupiter.api.Test;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ChordNodeTest {
+class ChordNodeTest {
 
     @Test
-    public void moveKeys() throws Exception {
+    void moveKeys() throws Exception {
         assertEquals(ChordNode.m, 4); // Chord space assumption for the test
 
         ChordNode bootstrap = new ChordNode("localhost", 8980);
@@ -32,7 +32,7 @@ public class ChordNodeTest {
     }
 
     @Test
-    public void threeJoinOnBootstrap() throws Exception {
+    void threeJoinOnBootstrap() throws Exception {
         assertEquals(ChordNode.m, 4); // Chord space assumption for the test
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         bootstrap.startServer();
@@ -66,7 +66,7 @@ public class ChordNodeTest {
     }
 
     @Test
-    public void chainedJoin() throws Exception {
+    void chainedJoin() throws Exception {
         assertEquals(ChordNode.m, 4); // Chord space assumption for the test
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         bootstrap.startServer();
@@ -97,6 +97,59 @@ public class ChordNodeTest {
         bootstrap.stopServer();
         node2.stopServer();
         node3.stopServer();
+    }
+
+    @Test
+    void leaveFromBootstrap() throws Exception {
+        ChordNode bootstrap = new ChordNode("localhost", 8980);
+        bootstrap.startServer();
+
+        ChordNode node2 = new ChordNode("localhost", 8981);
+        node2.startServer();
+        node2.join(bootstrap);
+
+        ChordNode node3 = new ChordNode("localhost", 8982);
+        node3.startServer();
+        node3.join(bootstrap);
+
+        Thread.sleep(5000); // let the network stabilize
+        node2.stopServer();
+        node2.leave();
+        Thread.sleep(5000); // stabilize again
+
+        // assert that there are no references to the node that left
+        assertNotEquals(bootstrap.getPredecessor(), node2.getNodeReference());
+        assertFalse(bootstrap.containedInFingerTable(node2.getNodeReference()));
+
+        assertNotEquals(node3.getPredecessor(), node2.getNodeReference());
+        assertFalse(node3.containedInFingerTable(node2.getNodeReference()));
+    }
+
+    @Test
+    void chainedLeave() throws Exception {
+        // TODO: in next commit
+//        ChordNode bootstrap = new ChordNode("localhost", 8980);
+//        bootstrap.startServer();
+//
+//        ChordNode node2 = new ChordNode("localhost", 8981);
+//        node2.startServer();
+//        node2.join(bootstrap);
+//
+//        ChordNode node3 = new ChordNode("localhost", 8982);
+//        node3.startServer();
+//        node3.join(node2);
+//
+//        Thread.sleep(5000); // let the network stabilize
+//        node2.stopServer();
+//        node2.leave();
+//        Thread.sleep(5000); // stabilize again
+//
+//        // assert that there are no references to the node that left
+//        assertNotEquals(bootstrap.getPredecessor(), node2.getNodeReference());
+//        assertFalse(bootstrap.containedInFingerTable(node2.getNodeReference()));
+//
+//        assertNotEquals(node3.getPredecessor(), node2.getNodeReference());
+//        assertFalse(node3.containedInFingerTable(node2.getNodeReference()));
     }
 
 }

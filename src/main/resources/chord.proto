@@ -112,10 +112,8 @@ message Notification {
 message NotificationResponse {}
 
 message UpdatePredecessorRequest {
-  string senderIp = 1;
-  int32 senderPort = 2;
-  string predecessorIp = 3;
-  int32 predecessorPort = 4;
+  string newIp = 1;
+  int32 newPort = 2;
 }
 message UpdatePredecessorResponse {
   string requestorIp = 1;
@@ -124,10 +122,8 @@ message UpdatePredecessorResponse {
 }
 
 message UpdateSuccessorRequest {
-  string senderIp = 1;
-  int32 senderPort = 2;
-  string successorIp = 3;
-  int32 successorPort = 4;
+  string newIp = 1;
+  int32 newPort = 2;
 }
 message UpdateSuccessorResponse {
   string requestorIp = 1;
