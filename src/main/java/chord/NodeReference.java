@@ -10,12 +10,16 @@ public class NodeReference {
     public NodeReference(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.id = calculateSHA1(this.toString(), ChordNode.m);
+        this.id = calculateSHA1(this.getAddress(), ChordNode.m);
+    }
+
+    public String getAddress() {
+        return ip + ":" + port;
     }
 
     @Override
     public String toString() {
-        return ip + ":" + port;
+        return ip + ":" + port + ":" + id;
     }
 
     @Override

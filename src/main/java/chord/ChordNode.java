@@ -117,8 +117,8 @@ public class ChordNode {
             logger.debug("<{},{}> saved on {}", id, value, node.id);
         } else {
             NodeReference n_ = findSuccessor(id);
-            ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
-            blockingStub = ChordServiceGrpc.newBlockingStub(ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build());
+            ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
+            blockingStub = ChordServiceGrpc.newBlockingStub(channel);
             Chord.PutRequest request = Chord.PutRequest.newBuilder()
                     .setKey(key)
                     .setId(calculateSHA1(key, m))
@@ -137,7 +137,7 @@ public class ChordNode {
             return value;
         } else {
             NodeReference n_ = findSuccessor(id);
-            ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
+            ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
             blockingStub = ChordServiceGrpc.newBlockingStub(channel);
             Chord.GetRequest request = Chord.GetRequest.newBuilder()
                     .setId(id)
@@ -155,7 +155,7 @@ public class ChordNode {
             logger.debug("n:{} removed <{},{}>", node.id, id, localData.get(id));
             localData.remove(id);
         } else {
-            ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
+            ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
             blockingStub = ChordServiceGrpc.newBlockingStub(channel);
             Chord.DeleteRequest request = Chord.DeleteRequest.newBuilder()
                     .setId(id)
@@ -182,7 +182,7 @@ public class ChordNode {
      */
     private void updateNeighborsJoining_RPC() {
         NodeReference successor = fingerTable.get(0).node;
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.toString()).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.getAddress()).usePlaintext().build();
 
         // node.S.P = node
         Chord.UpdateSuccessorRequest.Builder successorRequest = Chord.UpdateSuccessorRequest.newBuilder()
@@ -192,7 +192,7 @@ public class ChordNode {
         channel.shutdown();
 
         NodeReference predecessor = this.predecessor;
-        channel = ManagedChannelBuilder.forTarget(predecessor.toString()).usePlaintext().build();
+        channel = ManagedChannelBuilder.forTarget(predecessor.getAddress()).usePlaintext().build();
 
         // node.P.S = node
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
@@ -225,7 +225,7 @@ public class ChordNode {
         // TODO: should I notify them to stop stabilize for a while?, maybe stopping timer for a while
         // update S.P = this.node.P
         NodeReference successor = fingerTable.get(0).node;
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.toString()).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.getAddress()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.UpdateSuccessorRequest usr = Chord.UpdateSuccessorRequest.newBuilder()
                 .setNewIp(this.predecessor.ip)
@@ -236,7 +236,7 @@ public class ChordNode {
 
         // update P.S = this.node.S
         NodeReference predecessor = this.predecessor;
-        channel = ManagedChannelBuilder.forTarget(predecessor.toString()).usePlaintext().build();
+        channel = ManagedChannelBuilder.forTarget(predecessor.getAddress()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.UpdatePredecessorRequest upr = Chord.UpdatePredecessorRequest.newBuilder()
                 .setNewIp(successor.ip)
@@ -249,7 +249,7 @@ public class ChordNode {
     // all nodes from n are moved to n.successor
     private void moveKeysToSuccessor_RPC() {
         NodeReference successor = fingerTable.get(0).node;
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.toString()).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.getAddress()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.MoveKeysToSuccessorRequest.Builder request = Chord.MoveKeysToSuccessorRequest.newBuilder()
                 .setSenderIp(node.ip)
@@ -315,7 +315,7 @@ public class ChordNode {
         }
         // notify n.S of n's existence
         logger.debug("[{}:{}] existence notified to [{}:{}]", node, node.id, s, s.id);
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(s.toString()).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(s.getAddress()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.Notification notification = Chord.Notification.newBuilder()
                 .setSenderIp(node.ip)
@@ -328,7 +328,7 @@ public class ChordNode {
 
     private void moveKeys_RPC() {
         NodeReference successor = fingerTable.get(0).node;
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.toString()).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.getAddress()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.MoveKeysRequest request = Chord.MoveKeysRequest.newBuilder()
                 .setSenderIp(node.ip)
@@ -357,7 +357,7 @@ public class ChordNode {
                 id = id + (int)pow(2, m);
             }
             NodeReference p = findPredecessor(id);
-            logger.debug("[{}:{}]  pred of {} is {}:{}, i={}", node, node.id, id, p, calculateSHA1(p.toString(), m), i);
+            logger.debug("[{}:{}]  pred of {} is {}:{}, i={}", node, node.id, id, p, calculateSHA1(p.getAddress(), m), i);
             updateFingerTableOf_RPC(p, node, i);
         }
     }
@@ -370,7 +370,7 @@ public class ChordNode {
                 .setNodeIp(sender.ip)
                 .setNodePort(sender.port)
                 .build();
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(predecessor.toString()).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(predecessor.getAddress()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         blockingStub.updateFingerTable(req);
         channel.shutdown();
@@ -400,7 +400,7 @@ public class ChordNode {
 
 
     public NodeReference getPredecessor_RPC(NodeReference targetNode) {
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(targetNode.toString()).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(targetNode.getAddress()).usePlaintext().build();
         Chord.GetPredecessorRequest request = Chord.GetPredecessorRequest.newBuilder()
                 .setRequestorIp(this.node.ip)
                 .setRequestorPort(this.node.port)
@@ -413,7 +413,7 @@ public class ChordNode {
     }
 
     public NodeReference findSuccessor_RPC(NodeReference n_, int targetId) {
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
         Chord.FindSuccessorRequest request = Chord.FindSuccessorRequest.newBuilder()
                 .setSenderIp(this.node.ip)
                 .setSenderPort(this.node.port)
@@ -448,7 +448,7 @@ public class ChordNode {
                 .setRequestorIp(this.node.ip)
                 .setRequestorPort(this.node.port)
                 .build();
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.GetSuccessorResponse response = blockingStub.getSuccessor(req);
         channel.shutdown();
@@ -506,7 +506,7 @@ public class ChordNode {
                 .setSenderIp(this.node.ip)
                 .setSenderPort(this.node.port)
                 .build();
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.ip + ":" + n_.port).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
         logger.debug("[{}] asking node [{}] for closestPrecedingFinger of id={}", node, n_, id);
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.ClosestPrecedingFingerResponse response = blockingStub.closestPrecedingFinger(cpfr);
