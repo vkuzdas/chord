@@ -12,22 +12,24 @@ import proto.Chord;
 import proto.ChordServiceGrpc;
 
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static chord.Util.*;
 import static java.lang.Math.pow;
 
 public class ChordNode {
     private static final Logger logger = LoggerFactory.getLogger(ChordNode.class);
+    private final ReentrantLock lock = new ReentrantLock();
     private NodeReference predecessor;
     private final NodeReference node;
     private final NavigableMap<Integer, String> localData = new TreeMap<>();
     private final ArrayList<Finger> fingerTable = new ArrayList<>();
-    public static int CHECK_INTERVAL = 500;
+    public static int STABILIZATION_INTERVAL = 500;
     private Timer stabilizationTimer;
     private TimerTask stabilizationTimerTask;
 
 //    private static final int m = 160; // TODO: number of bits in id as well as max size of fingerTable
-    public static final int m = 4; // 0-255 ids
+    public static int m = 4; // 0-255 ids
 
     private final Server server;
     private ChordServiceGrpc.ChordServiceBlockingStub blockingStub;
@@ -79,6 +81,25 @@ public class ChordNode {
     public int getDataSize() {
         return localData.size();
     }
+
+    private void syncUpdatePredecessor(NodeReference newPredecessor) {
+        lock.lock();
+        try {
+            predecessor = newPredecessor;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void syncUpdateFingerTable(int index, NodeReference newFinger) {
+        lock.lock();
+        try {
+            fingerTable.get(index).setNode(newFinger);
+        } finally {
+            lock.unlock();
+        }
+    }
+
 
 
     public void put(String key, String value) {
@@ -239,7 +260,7 @@ public class ChordNode {
                 printStatus();
             }
         };
-        stabilizationTimer.schedule(stabilizationTimerTask,1000, CHECK_INTERVAL);
+        stabilizationTimer.schedule(stabilizationTimerTask,1000, STABILIZATION_INTERVAL);
     }
 
     private void stopFixThread() {
@@ -252,7 +273,7 @@ public class ChordNode {
 
     private void fix_fingers() {
         int i = new Random().nextInt(m-1)+1;
-        fingerTable.get(i).setNode(findSuccessor(fingerTable.get(i).start));
+        syncUpdateFingerTable(i, findSuccessor(fingerTable.get(i).start));
     }
 
     private void stabilize() {
@@ -265,7 +286,7 @@ public class ChordNode {
         NodeReference s_p = getPredecessor_RPC(s);
         logger.debug("[{}:{}]  s_p {}:{} ?E ({}, {})", node, node.id, s_p, s_p.id, node.id, s.id);
         if (inRange_OpenOpen(s_p.id, node.id, s.id)) {
-            fingerTable.get(0).setNode(s_p);
+            syncUpdateFingerTable(0, s_p);
         }
         // notify n.S of n's existence
         logger.debug("[{}:{}] existence notified to [{}:{}]", node, node.id, s, s.id);
@@ -316,17 +337,17 @@ public class ChordNode {
         }
     }
 
-    private void updateFingerTableOf_RPC(NodeReference p, NodeReference s, int index) {
+    private void updateFingerTableOf_RPC(NodeReference predecessor, NodeReference sender, int index) {
         Chord.UpdateFingerTableRequest req = Chord.UpdateFingerTableRequest.newBuilder()
                 .setSenderIp(node.ip)
                 .setSenderPort(node.port)
                 .setIndex(index)
-                .setNodeIp(s.ip)
-                .setNodePort(s.port)
+                .setNodeIp(sender.ip)
+                .setNodePort(sender.port)
                 .build();
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(p.toString()).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(predecessor.toString()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
-        Chord.UpdateFingerTableResponse response = blockingStub.updateFingerTable(req);
+        blockingStub.updateFingerTable(req);
         channel.shutdown();
     }
 
@@ -334,10 +355,9 @@ public class ChordNode {
     private void initFingerTable(NodeReference n_) {
         int targetId = fingerTable.get(0).start;
         NodeReference S = findSuccessor_RPC(n_, targetId);
-        int sse = node.id+1 % (int)pow(2, m);
-        fingerTable.set(0, new Finger(sse, sse+1, S)); // the first finger
+        syncUpdateFingerTable(0, S);
 
-        this.predecessor = getPredecessor_RPC(fingerTable.get(0).node);
+        syncUpdatePredecessor(getPredecessor_RPC(S));
 
         updateNeighborsJoining_RPC();
 
@@ -352,7 +372,6 @@ public class ChordNode {
             }
         }
     }
-
 
 
     public NodeReference getPredecessor_RPC(NodeReference targetNode) {
@@ -382,11 +401,19 @@ public class ChordNode {
         return new NodeReference(response.getSuccessorIp(), response.getSuccessorPort());
     }
 
+    /**
+     * Successor of id is responsible for id (stores it locally) <br>
+     * It is found by moving forward around the ChordRing toward most immediately preceding node of id using {@link ChordNode#findPredecessor(int) findPredecessor} <br>
+     * Once the most immediate predecessor of id is found, we just return this node successor, therefore finding id's sucessor <br>
+     */
     public NodeReference findSuccessor(int id) {
         NodeReference n_ = findPredecessor(id);
         return getSuccessor_RPC(n_);
     }
 
+    /**
+     * Prompt contact node to return it's successor
+     */
     public NodeReference getSuccessor_RPC(NodeReference n_) {
         if (n_.equals(node)) {
             return fingerTable.get(0).node;
@@ -403,6 +430,9 @@ public class ChordNode {
         return new NodeReference(response.getSuccessorIp(), response.getSuccessorPort());
     }
 
+    /**
+     * Contacts series of nodes moving around the ChordRing towards id
+     */
     public NodeReference findPredecessor(int id) {
         // contacts series of nodes moving forward around the Chord towards id
         if (id == node.id) {
@@ -422,7 +452,10 @@ public class ChordNode {
         return n_;
     }
 
-    // GRPC call
+    /**
+     * Either find closest preceding finger of id from this node's finger table
+     * or prompt contact node to return it's closest preceding finger of id
+     */
     public NodeReference closestPrecedingFingerOf(NodeReference n_, int id) {
         // send request to node n_ with id
         if (n_.equals(node)) {
@@ -438,6 +471,9 @@ public class ChordNode {
         }
     }
 
+    /**
+     * Prompt contact node to return closest preceding finger of id from it's finger table
+     */
     private NodeReference closestPrecedingFinger_RPC(NodeReference n_, int id) {
         Chord.ClosestPrecedingFingerRequest cpfr = Chord.ClosestPrecedingFingerRequest
                 .newBuilder()
@@ -461,7 +497,9 @@ public class ChordNode {
     /** Procedures served to other nodes */
     private class ChordServiceImpl extends ChordServiceGrpc.ChordServiceImplBase {
 
-        // invokes findSuccessor procedure
+        /**
+         * Requestor wants this.node to find successor of targetId
+         */
         @Override
         public void findSuccessor(Chord.FindSuccessorRequest request, StreamObserver<Chord.FindSuccessorResponse> responseObserver) {
             int targetId = request.getTargetId();
@@ -475,7 +513,9 @@ public class ChordNode {
             responseObserver.onCompleted();
         }
 
-        // return this.successor
+        /**
+         * return this.successor
+         */
         @Override
         public void getSuccessor(Chord.GetSuccessorRequest request, StreamObserver<Chord.GetSuccessorResponse> responseObserver) {
             NodeReference successor = fingerTable.get(0).node;
@@ -487,7 +527,9 @@ public class ChordNode {
             responseObserver.onCompleted();
         }
 
-        // return this.predecessor
+        /**
+         * return this.predecessor
+         */
         @Override
         public void getPredecessor(Chord.GetPredecessorRequest request, StreamObserver<Chord.GetPredecessorResponse> responseObserver) {
             Chord.GetPredecessorResponse response = Chord.GetPredecessorResponse.newBuilder()
@@ -498,14 +540,17 @@ public class ChordNode {
             responseObserver.onCompleted();
         }
 
+        /**
+         * this.node prompted to insert sending node into its finger table
+         */
         @Override
         public void updateFingerTable(Chord.UpdateFingerTableRequest request, StreamObserver<Chord.UpdateFingerTableResponse> responseObserver) {
             int index = request.getIndex();
-            NodeReference s = new NodeReference(request.getNodeIp(), request.getNodePort());
+            NodeReference sender = new NodeReference(request.getNodeIp(), request.getNodePort());
             NodeReference i = fingerTable.get(index).node;
-            if (inRange_CloseOpen(s.id, node.id, i.id)) {
-                fingerTable.get(index).setNode(s);
-                updateFingerTableOf_RPC(predecessor, s, index);
+            if (inRange_CloseOpen(sender.id, node.id, i.id)) {
+                syncUpdateFingerTable(index, sender);
+                updateFingerTableOf_RPC(predecessor, sender, index);
             }
             Chord.UpdateFingerTableResponse response = Chord.UpdateFingerTableResponse.newBuilder()
                     .setStatus("OK")
@@ -514,6 +559,9 @@ public class ChordNode {
             responseObserver.onCompleted();
         }
 
+        /**
+         * Requestor prompted this.node to return closest preceding finger of id (most immediate predecessor from it's point of view)
+         */
         @Override
         public void closestPrecedingFinger(Chord.ClosestPrecedingFingerRequest request, StreamObserver<Chord.ClosestPrecedingFingerResponse> responseObserver) {
             int id = request.getTargetId();
@@ -540,6 +588,9 @@ public class ChordNode {
             responseObserver.onCompleted();
         }
 
+        /**
+         * this.node is prompted to tranfer its keys to requestor (requestor has joined)
+         */
         @Override
         public void moveKeys(Chord.MoveKeysRequest request, StreamObserver<Chord.MoveKeysResponse> responseObserver) {
             Chord.MoveKeysResponse.Builder response = Chord.MoveKeysResponse.newBuilder();
@@ -571,6 +622,9 @@ public class ChordNode {
             responseObserver.onCompleted();
         }
 
+        /**
+         * hashTable.put()
+         */
         @Override
         public void put(Chord.PutRequest request, StreamObserver<Chord.PutResponse> responseObserver) {
             localData.put(request.getId(), request.getValue());
@@ -579,6 +633,9 @@ public class ChordNode {
             responseObserver.onCompleted();
         }
 
+        /**
+         * hashTable.get()
+         */
         @Override
         public void get(Chord.GetRequest request, StreamObserver<Chord.GetResponse> responseObserver) {
             String value = localData.get(request.getId());
@@ -590,12 +647,15 @@ public class ChordNode {
             responseObserver.onCompleted();
         }
 
+        /**
+         * this.node was notified about predecessor's existence, will set P to new predecessor
+         */
         @Override
         public void notify(Chord.Notification request, StreamObserver<Chord.NotificationResponse> responseObserver) {
             logger.debug("[{}:{}] existence of node [{}:{}:{}] was notified", node, node.id, request.getSenderIp(), request.getSenderPort(), request.getId());
             logger.debug("[{}:{}] will set P={}, if {} E ({}, {})", node, node.id, request.getId(), request.getId(), predecessor.id, node.id);
             if (predecessor == node || inRange_OpenOpen(request.getId(), predecessor.id, node.id)) {
-                predecessor = new NodeReference(request.getSenderIp(), request.getSenderPort());
+                syncUpdatePredecessor(new NodeReference(request.getSenderIp(), request.getSenderPort()));
             }
             responseObserver.onNext(Chord.NotificationResponse.newBuilder().build());
             responseObserver.onCompleted();
@@ -611,7 +671,7 @@ public class ChordNode {
             logger.debug("[{}:{}]  will set S={} (prev_s={})", node, node.id, request.getNewPort(), oldSucc);
 
             // update Successor
-            fingerTable.get(0).setNode(new NodeReference(request.getNewIp(), request.getNewPort()));
+            syncUpdateFingerTable(0, new NodeReference(request.getNewIp(), request.getNewPort()));
 
             // TODO: remove from fingertable
             responseObserver.onNext(Chord.UpdatePredecessorResponse.newBuilder().build());
@@ -624,15 +684,19 @@ public class ChordNode {
          */
         @Override
         public void updateSuccessor(Chord.UpdateSuccessorRequest request, StreamObserver<Chord.UpdateSuccessorRequest> responseObserver) {
-            // update Predecessor
-            predecessor = new NodeReference(request.getNewIp(), request.getNewPort());
+            syncUpdatePredecessor(new NodeReference(request.getNewIp(), request.getNewPort()));
 
-            // TODO: remove from fingertable
+            // TODO: remove from fingertable??
 
             responseObserver.onNext(Chord.UpdateSuccessorRequest.newBuilder().build());
             responseObserver.onCompleted();
         }
 
+        /**
+         * Preceding node leaves network and transfers its keys to this.node
+         * @param request
+         * @param responseObserver
+         */
         @Override
         public void moveKeysToSuccessor(Chord.MoveKeysToSuccessorRequest request, StreamObserver<Chord.MoveKeysToSuccessorResponse> responseObserver) {
             for (int i = 0; i < request.getKeyCount(); i++) {
@@ -668,6 +732,8 @@ public class ChordNode {
     }
 
     public static void main(String[] args) throws Exception {
+
+        // TODO: no node should be able to join without calling createRing first
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         bootstrap.startServer();
 
@@ -680,11 +746,7 @@ public class ChordNode {
         node3.join(bootstrap);
 
         Thread.sleep(5000); // let the network stabilize
-        node2.leave();
-        node2.stopServer();
-
-//        bootstrap.blockUntilShutdown();
-//        node2.blockUntilShutdown();
-//        node3.blockUntilShutdown();
+        bootstrap.leave();
+        Thread.sleep(5000); // let the network stabilize
     }
 }

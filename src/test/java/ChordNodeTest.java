@@ -1,4 +1,5 @@
 import chord.ChordNode;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -6,6 +7,15 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ChordNodeTest {
+
+    static int FIX_FINGER_TIMEOUT;
+
+    @BeforeAll
+    static void setUp() {
+        ChordNode.m = 4; // Chord space assumption for the test
+        ChordNode.STABILIZATION_INTERVAL = 500; // Chord space assumption for the test
+        FIX_FINGER_TIMEOUT = ChordNode.m * ChordNode.STABILIZATION_INTERVAL;
+    }
 
     @Test
     void moveKeys() throws Exception {
@@ -112,7 +122,7 @@ class ChordNodeTest {
         node3.startServer();
         node3.join(bootstrap);
 
-        Thread.sleep(5000); // let the network stabilize
+        Thread.sleep(FIX_FINGER_TIMEOUT); // let the network stabilize
         node2.leave();
         node2.stopServer();
 
@@ -141,9 +151,7 @@ class ChordNodeTest {
         node3.startServer();
         node3.join(node2);
 
-        System.out.println("will sleep now");
-        Thread.sleep(5000); // let the network stabilize
-        System.out.println("will sleep now");
+        Thread.sleep(FIX_FINGER_TIMEOUT); // let the network stabilize
         node2.stopServer();
         node2.leave();
 
