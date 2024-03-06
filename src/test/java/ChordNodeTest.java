@@ -18,9 +18,29 @@ class ChordNodeTest {
     }
 
     @Test
-    void moveKeys() throws Exception {
-        assertEquals(ChordNode.m, 4); // Chord space assumption for the test
+    void delete() throws Exception {
+        ChordNode bootstrap = new ChordNode("localhost", 8980);
+        bootstrap.startServer();
+        ChordNode node2 = new ChordNode("localhost", 8981);
+        node2.startServer();
+        node2.join(bootstrap);
 
+        node2.put("icecream", "sweet");
+        bootstrap.put("lollipop", "sour");
+
+        assertEquals(bootstrap.getDataSize() + node2.getDataSize(), 2);
+
+        bootstrap.delete("icecream");
+        bootstrap.delete("lollipop");
+
+        assertEquals(bootstrap.getDataSize() + node2.getDataSize(), 0);
+
+        bootstrap.stopServer();
+        node2.stopServer();
+    }
+
+    @Test
+    void moveKeys() throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         bootstrap.startServer();
 
@@ -43,7 +63,6 @@ class ChordNodeTest {
 
     @Test
     void threeJoinOnBootstrap() throws Exception {
-        assertEquals(ChordNode.m, 4); // Chord space assumption for the test
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         bootstrap.startServer();
 
@@ -77,7 +96,6 @@ class ChordNodeTest {
 
     @Test
     void chainedJoin() throws Exception {
-        assertEquals(ChordNode.m, 4); // Chord space assumption for the test
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         bootstrap.startServer();
 

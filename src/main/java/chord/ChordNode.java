@@ -18,20 +18,30 @@ import static chord.Util.*;
 import static java.lang.Math.pow;
 
 public class ChordNode {
+
     private static final Logger logger = LoggerFactory.getLogger(ChordNode.class);
+
     private final ReentrantLock lock = new ReentrantLock();
+
     private NodeReference predecessor;
+
     private final NodeReference node;
-    private final NavigableMap<Integer, String> localData = new TreeMap<>();
+
     private final ArrayList<Finger> fingerTable = new ArrayList<>();
-    public static int STABILIZATION_INTERVAL = 500;
+
+    private final NavigableMap<Integer, String> localData = new TreeMap<>();
+
     private Timer stabilizationTimer;
+
     private TimerTask stabilizationTimerTask;
 
-//    private static final int m = 160; // TODO: number of bits in id as well as max size of fingerTable
+    //    private static final int m = 160; // TODO: number of bits in id as well as max size of fingerTable
     public static int m = 4; // 0-255 ids
 
+    public static int STABILIZATION_INTERVAL = 500;
+
     private final Server server;
+
     private ChordServiceGrpc.ChordServiceBlockingStub blockingStub;
 
 
@@ -100,15 +110,13 @@ public class ChordNode {
         }
     }
 
-
-
     public void put(String key, String value) {
         int id = calculateSHA1(key, m);
-        NodeReference n_ = findSuccessor(id);
-        if (n_.equals(node)) {
+        if(inRange_OpenClose(id, predecessor.id, node.id)) {
             localData.put(id, value);
             logger.debug("<{},{}> saved on {}", id, value, node.id);
         } else {
+            NodeReference n_ = findSuccessor(id);
             ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
             blockingStub = ChordServiceGrpc.newBlockingStub(ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build());
             Chord.PutRequest request = Chord.PutRequest.newBuilder()
@@ -123,12 +131,12 @@ public class ChordNode {
 
     public String get(String key) {
         int id = calculateSHA1(key, m);
-        NodeReference n_ = findSuccessor(id);
-        if (n_.equals(node)) {
+        if(inRange_OpenClose(id, predecessor.id, node.id)) {
             String value = localData.get(id);
             logger.debug("n:{} returning <{},{}>", node.id, id, value);
             return value;
         } else {
+            NodeReference n_ = findSuccessor(id);
             ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
             blockingStub = ChordServiceGrpc.newBlockingStub(channel);
             Chord.GetRequest request = Chord.GetRequest.newBuilder()
@@ -137,6 +145,23 @@ public class ChordNode {
             Chord.GetResponse response = blockingStub.get(request);
             channel.shutdown();
             return response.getValue();
+        }
+    }
+
+    public void delete(String key) {
+        int id = calculateSHA1(key, m);
+        NodeReference n_ = findSuccessor(id);
+        if (inRange_OpenClose(id, predecessor.id, node.id)) {
+            logger.debug("n:{} removed <{},{}>", node.id, id, localData.get(id));
+            localData.remove(id);
+        } else {
+            ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.toString()).usePlaintext().build();
+            blockingStub = ChordServiceGrpc.newBlockingStub(channel);
+            Chord.DeleteRequest request = Chord.DeleteRequest.newBuilder()
+                    .setId(id)
+                    .build();
+            blockingStub.delete(request);
+            channel.shutdown();
         }
     }
 
@@ -623,7 +648,7 @@ public class ChordNode {
         }
 
         /**
-         * hashTable.put()
+         * distributedHashTable.put()
          */
         @Override
         public void put(Chord.PutRequest request, StreamObserver<Chord.PutResponse> responseObserver) {
@@ -634,7 +659,7 @@ public class ChordNode {
         }
 
         /**
-         * hashTable.get()
+         * distributedHashTable.get()
          */
         @Override
         public void get(Chord.GetRequest request, StreamObserver<Chord.GetResponse> responseObserver) {
@@ -644,6 +669,18 @@ public class ChordNode {
                     .setValue(value)
                     .build();
             responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+
+        /**
+         * distributedHashTable.remove()
+         */
+        @Override
+        public void delete(Chord.DeleteRequest request, StreamObserver<Chord.DeleteResponse> responseObserver) {
+            int id = request.getId();
+            logger.debug("n:{} removing <{},{}>", node.id, id, localData.get(id));
+            localData.remove(id);
+            responseObserver.onNext(Chord.DeleteResponse.newBuilder().build());
             responseObserver.onCompleted();
         }
 

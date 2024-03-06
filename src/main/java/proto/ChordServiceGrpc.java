@@ -443,6 +443,38 @@ public final class ChordServiceGrpc {
      return getGetMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<proto.Chord.DeleteRequest,
+      proto.Chord.DeleteResponse> getDeleteMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "Delete",
+      requestType = proto.Chord.DeleteRequest.class,
+      responseType = proto.Chord.DeleteResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<proto.Chord.DeleteRequest,
+      proto.Chord.DeleteResponse> getDeleteMethod() {
+    io.grpc.MethodDescriptor<proto.Chord.DeleteRequest, proto.Chord.DeleteResponse> getDeleteMethod;
+    if ((getDeleteMethod = ChordServiceGrpc.getDeleteMethod) == null) {
+      synchronized (ChordServiceGrpc.class) {
+        if ((getDeleteMethod = ChordServiceGrpc.getDeleteMethod) == null) {
+          ChordServiceGrpc.getDeleteMethod = getDeleteMethod = 
+              io.grpc.MethodDescriptor.<proto.Chord.DeleteRequest, proto.Chord.DeleteResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "ChordService", "Delete"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.DeleteRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.DeleteResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new ChordServiceMethodDescriptorSupplier("Delete"))
+                  .build();
+          }
+        }
+     }
+     return getDeleteMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -576,6 +608,13 @@ public final class ChordServiceGrpc {
       asyncUnimplementedUnaryCall(getGetMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void delete(proto.Chord.DeleteRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.DeleteResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getDeleteMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -669,6 +708,13 @@ public final class ChordServiceGrpc {
                 proto.Chord.GetRequest,
                 proto.Chord.GetResponse>(
                   this, METHODID_GET)))
+          .addMethod(
+            getDeleteMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                proto.Chord.DeleteRequest,
+                proto.Chord.DeleteResponse>(
+                  this, METHODID_DELETE)))
           .build();
     }
   }
@@ -809,6 +855,14 @@ public final class ChordServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void delete(proto.Chord.DeleteRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.DeleteResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getDeleteMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -933,6 +987,13 @@ public final class ChordServiceGrpc {
     public proto.Chord.GetResponse get(proto.Chord.GetRequest request) {
       return blockingUnaryCall(
           getChannel(), getGetMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public proto.Chord.DeleteResponse delete(proto.Chord.DeleteRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getDeleteMethod(), getCallOptions(), request);
     }
   }
 
@@ -1072,6 +1133,14 @@ public final class ChordServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<proto.Chord.DeleteResponse> delete(
+        proto.Chord.DeleteRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getDeleteMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_FIND_SUCCESSOR = 0;
@@ -1087,6 +1156,7 @@ public final class ChordServiceGrpc {
   private static final int METHODID_NOTIFY = 10;
   private static final int METHODID_PUT = 11;
   private static final int METHODID_GET = 12;
+  private static final int METHODID_DELETE = 13;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1156,6 +1226,10 @@ public final class ChordServiceGrpc {
         case METHODID_GET:
           serviceImpl.get((proto.Chord.GetRequest) request,
               (io.grpc.stub.StreamObserver<proto.Chord.GetResponse>) responseObserver);
+          break;
+        case METHODID_DELETE:
+          serviceImpl.delete((proto.Chord.DeleteRequest) request,
+              (io.grpc.stub.StreamObserver<proto.Chord.DeleteResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -1231,6 +1305,7 @@ public final class ChordServiceGrpc {
               .addMethod(getNotifyMethod())
               .addMethod(getPutMethod())
               .addMethod(getGetMethod())
+              .addMethod(getDeleteMethod())
               .build();
         }
       }

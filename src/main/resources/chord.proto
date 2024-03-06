@@ -143,6 +143,15 @@ message MoveKeysToSuccessorResponse {
   string status = 3;
 }
 
+message DeleteRequest {
+  string key = 1;
+  int32 id = 2;
+}
+message DeleteResponse {
+  string key = 1;
+  string status = 2;
+}
+
 service ChordService {
   // invoke findSuccessor procedure on targetNode
   rpc FindSuccessor(FindSuccessorRequest) returns (FindSuccessorResponse) {}
@@ -166,4 +175,5 @@ service ChordService {
 
   rpc Put(PutRequest) returns (PutResponse) {}
   rpc Get(GetRequest) returns (GetResponse) {}
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
 }
