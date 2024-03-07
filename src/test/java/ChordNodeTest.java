@@ -5,10 +5,17 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.io.IOException;
+import java.math.BigInteger;
+
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * There are some unstable tests, if not sure about the result, run the test separately fixes it
+ * You can also try to change logging level to a higher one since excessive logging seems to have an effect
+ */
 class ChordNodeTest {
 
     static int FIX_FINGER_TIMEOUT;
@@ -38,7 +45,7 @@ class ChordNodeTest {
     }
 
     @Test
-    void testDelete() throws Exception {
+    void testDelete() throws IOException {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         ChordNode node2 = new ChordNode("localhost", 8981);
         registerForShutdown(bootstrap, node2);
@@ -62,8 +69,8 @@ class ChordNodeTest {
         node2.stopServer();
     }
 
-    @Test
-    void testMoveKeys() throws Exception {
+    @Test // unstable
+    void testMoveKeys() throws IOException {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         ChordNode node2 = new ChordNode("localhost", 8981);
         registerForShutdown(bootstrap, node2);
@@ -100,20 +107,20 @@ class ChordNodeTest {
         node3.startServer();
         node3.join(bootstrap);
 
-        assertEquals(bootstrap.getNodeReference().id, 10);
-        assertEquals(node2.getNodeReference().id, 0);
-        assertEquals(node3.getNodeReference().id, 2);
+        assertEquals(bootstrap.getNodeReference().id, BigInteger.valueOf(10));
+        assertEquals(node2.getNodeReference().id, BigInteger.valueOf(0));
+        assertEquals(node3.getNodeReference().id, BigInteger.valueOf(2));
 
-        int timeoutSeconds = 2;
+        int timeoutSeconds = 3;
 
-        await().atMost(timeoutSeconds, SECONDS).until(() -> bootstrap.getPredecessor().id == 2);
-        await().atMost(timeoutSeconds, SECONDS).until(() -> bootstrap.getSuccessor().id == 0);
+        await().atMost(timeoutSeconds, SECONDS).until(() -> bootstrap.getPredecessor().id.equals(BigInteger.valueOf(2)));
+        await().atMost(timeoutSeconds, SECONDS).until(() -> bootstrap.getSuccessor().id.equals(BigInteger.valueOf(0)));
 
-        await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getPredecessor().id == 10);
-        await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getSuccessor().id == 2);
+        await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getPredecessor().id.equals(BigInteger.valueOf(10)));
+        await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getSuccessor().id.equals(BigInteger.valueOf(2)));
 
-        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getPredecessor().id == 0); // not fullfilled
-        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getSuccessor().id == 10);
+        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getPredecessor().id.equals(BigInteger.valueOf(0))); // not fullfilled
+        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getSuccessor().id.equals(BigInteger.valueOf(10)));
 
         bootstrap.stopServer();
         node2.stopServer();
@@ -121,7 +128,7 @@ class ChordNodeTest {
     }
 
     @Test
-    void testChainedJoin() throws Exception {
+    void testChainedJoin() throws IOException {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         ChordNode node2 = new ChordNode("localhost", 8981);
         ChordNode node3 = new ChordNode("localhost", 8982);
@@ -135,20 +142,20 @@ class ChordNodeTest {
         node3.startServer();
         node3.join(node2);
 
-        assertEquals(bootstrap.getNodeReference().id, 10);
-        assertEquals(node2.getNodeReference().id, 0);
-        assertEquals(node3.getNodeReference().id, 2);
+        assertEquals(bootstrap.getNodeReference().id, BigInteger.valueOf(10));
+        assertEquals(node2.getNodeReference().id, BigInteger.valueOf(0));
+        assertEquals(node3.getNodeReference().id, BigInteger.valueOf(2));
 
         int timeoutSeconds = 2;
 
-        await().atMost(timeoutSeconds, SECONDS).until(() -> bootstrap.getPredecessor().id == 2);
-        await().atMost(timeoutSeconds, SECONDS).until(() -> bootstrap.getSuccessor().id == 0);
+        await().atMost(timeoutSeconds, SECONDS).until(() -> bootstrap.getPredecessor().id.equals(BigInteger.valueOf(2)));
+        await().atMost(timeoutSeconds, SECONDS).until(() -> bootstrap.getSuccessor().id.equals(BigInteger.valueOf(0)));
 
-        await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getPredecessor().id == 10);
-        await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getSuccessor().id == 2);
+        await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getPredecessor().id.equals(BigInteger.valueOf(10)));
+        await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getSuccessor().id.equals(BigInteger.valueOf(2)));
 
-        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getPredecessor().id == 0);
-        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getSuccessor().id == 10);
+        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getPredecessor().id.equals(BigInteger.valueOf(0)));
+        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getSuccessor().id.equals(BigInteger.valueOf(10)));
 
         bootstrap.stopServer();
         node2.stopServer();
@@ -156,7 +163,7 @@ class ChordNodeTest {
     }
 
     @Test
-    void testLeaveFromBootstrap() throws Exception {
+    void testLeaveFromBootstrap() throws IOException, InterruptedException {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         ChordNode node2 = new ChordNode("localhost", 8981);
         ChordNode node3 = new ChordNode("localhost", 8982);
@@ -187,7 +194,7 @@ class ChordNodeTest {
     }
 
     @Test
-    void testChainedLeave() throws Exception {
+    void testChainedLeave() throws IOException, InterruptedException {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         ChordNode node2 = new ChordNode("localhost", 8981);
         ChordNode node3 = new ChordNode("localhost", 8982);

@@ -1,11 +1,13 @@
 package chord;
 
+import java.math.BigInteger;
+
 public class Finger {
-    public final int start;
-    public final int end;
+    public final BigInteger start;
+    public final BigInteger end;
     public NodeReference node; // successor(F[i].start)
 
-    public Finger(int start, int end, NodeReference node) {
+    public Finger(BigInteger start, BigInteger end, NodeReference node) {
         this.start = start;
         this.end = end;
         this.node = node;

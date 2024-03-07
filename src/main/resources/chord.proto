@@ -6,13 +6,13 @@ option java_package = "proto";
 message MoveKeysRequest {
   string senderIp = 1;
   int32 senderPort = 2;
-  int32 rangeStart = 3;
-  int32 rangeEnd = 4;
+  string rangeStart = 3;
+  string rangeEnd = 4;
 }
 
 message MoveKeysResponse {
   repeated string value = 1;
-  repeated int32 key = 2;
+  repeated string key = 2;
   string status = 3;
 }
 
@@ -50,7 +50,7 @@ message GetPredecessorResponse {
 message ClosestPrecedingFingerRequest {
   string senderIp = 1;
   int32 senderPort = 2;
-  int32 targetId = 3;
+  string targetId = 3;
 }
 message ClosestPrecedingFingerResponse {
   string requestorIp = 1;
@@ -62,7 +62,7 @@ message ClosestPrecedingFingerResponse {
 message FindSuccessorRequest {
   string senderIp = 1;
   int32 senderPort = 2;
-  int32 targetId = 3;
+  string targetId = 3;
 }
 message FindSuccessorResponse {
   string requestorIp = 1;
@@ -85,7 +85,7 @@ message JoinResponse {
 
 message PutRequest {
   string key = 1;
-  int32 id = 2;
+  string id = 2;
   string value = 3;
 }
 message PutResponse {
@@ -96,7 +96,7 @@ message PutResponse {
 
 message GetRequest {
   string key = 1;
-  int32 id = 2;
+  string id = 2;
 }
 message GetResponse {
   string key = 1;
@@ -107,7 +107,7 @@ message GetResponse {
 message Notification {
   string senderIp = 1;
   int32 senderPort = 2;
-  int32 id = 3;
+  string id = 3;
 }
 message NotificationResponse {}
 
@@ -135,7 +135,7 @@ message MoveKeysToSuccessorRequest {
   string senderIp = 1;
   int32 senderPort = 2;
   repeated string value = 3;
-  repeated int32 key = 4;
+  repeated string key = 4;
 }
 message MoveKeysToSuccessorResponse {
   string requestorIp = 1;
@@ -145,7 +145,7 @@ message MoveKeysToSuccessorResponse {
 
 message DeleteRequest {
   string key = 1;
-  int32 id = 2;
+  string id = 2;
 }
 message DeleteResponse {
   string key = 1;

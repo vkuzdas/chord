@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import proto.Chord;
 import proto.ChordServiceGrpc;
 
+import java.io.IOException;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,14 +32,14 @@ public class ChordNode {
 
     private final ArrayList<Finger> fingerTable = new ArrayList<>();
 
-    private final NavigableMap<Integer, String> localData = new TreeMap<>();
+    private final NavigableMap<BigInteger, String> localData = new TreeMap<>();
 
     private Timer stabilizationTimer;
 
     private TimerTask stabilizationTimerTask;
 
-    //    private static final int m = 160; // TODO: number of bits in id as well as max size of fingerTable
-    public static int m = 4; // 0-255 ids
+    @VisibleForTesting
+    public static int m = 4; // 0-2^m ids
 
     public static int STABILIZATION_INTERVAL = 500;
 
@@ -51,9 +53,9 @@ public class ChordNode {
         this.predecessor = node;
 
         for (int i = 1; i <= m; i++) {
-            int mod = (int)pow(2, m);
-            int start = (node.id + (int)pow(2, i-1)) % mod;
-            int end =   (node.id + (int)pow(2, i  )) % mod;
+            BigInteger mod = BigInteger.valueOf(2L).pow(m);
+            BigInteger start = node.id.add(BigInteger.valueOf(2L).pow(i-1)).mod(mod);
+            BigInteger end = node.id.add(BigInteger.valueOf(2L).pow(i)).mod(mod);
             fingerTable.add(new Finger(start, end, node));
         }
 
@@ -62,7 +64,7 @@ public class ChordNode {
                 .build();
     }
 
-    public void startServer() throws Exception {
+    public void startServer() throws IOException {
         server.start();
         logger.trace("Server started, listening on {}", node.port);
 //        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -122,7 +124,7 @@ public class ChordNode {
     }
 
     public void put(String key, String value) {
-        int id = calculateSHA1(key, m);
+        BigInteger id = calculateSHA1(key);
         if(inRange_OpenClose(id, predecessor.id, node.id)) {
             localData.put(id, value);
             logger.debug("<{},{}> saved on {}", id, value, node.id);
@@ -132,7 +134,7 @@ public class ChordNode {
             blockingStub = ChordServiceGrpc.newBlockingStub(channel);
             Chord.PutRequest request = Chord.PutRequest.newBuilder()
                     .setKey(key)
-                    .setId(calculateSHA1(key, m))
+                    .setId(calculateSHA1(key).toString())
                     .setValue(value)
                     .build();
             blockingStub.put(request);
@@ -141,7 +143,7 @@ public class ChordNode {
     }
 
     public String get(String key) {
-        int id = calculateSHA1(key, m);
+        BigInteger id = calculateSHA1(key);
         if(inRange_OpenClose(id, predecessor.id, node.id)) {
             String value = localData.get(id);
             logger.debug("n:{} returning <{},{}>", node.id, id, value);
@@ -151,7 +153,7 @@ public class ChordNode {
             ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
             blockingStub = ChordServiceGrpc.newBlockingStub(channel);
             Chord.GetRequest request = Chord.GetRequest.newBuilder()
-                    .setId(id)
+                    .setId(id.toString())
                     .build();
             Chord.GetResponse response = blockingStub.get(request);
             channel.shutdown();
@@ -160,7 +162,7 @@ public class ChordNode {
     }
 
     public void delete(String key) {
-        int id = calculateSHA1(key, m);
+        BigInteger id = calculateSHA1(key);
         NodeReference n_ = findSuccessor(id);
         if (inRange_OpenClose(id, predecessor.id, node.id)) {
             logger.debug("n:{} removed <{},{}>", node.id, id, localData.get(id));
@@ -169,7 +171,7 @@ public class ChordNode {
             ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
             blockingStub = ChordServiceGrpc.newBlockingStub(channel);
             Chord.DeleteRequest request = Chord.DeleteRequest.newBuilder()
-                    .setId(id)
+                    .setId(id.toString())
                     .build();
             blockingStub.delete(request);
             channel.shutdown();
@@ -266,7 +268,7 @@ public class ChordNode {
                 .setSenderIp(node.ip)
                 .setSenderPort(node.port);
         localData.forEach((k, v) -> {
-            request.addKey(k);
+            request.addKey(k.toString());
             request.addValue(v);
         });
         blockingStub.moveKeysToSuccessor(request.build());
@@ -331,7 +333,7 @@ public class ChordNode {
         Chord.Notification notification = Chord.Notification.newBuilder()
                 .setSenderIp(node.ip)
                 .setSenderPort(node.port)
-                .setId(node.id)
+                .setId(node.id.toString())
                 .build();
         blockingStub.notify(notification);
         channel.shutdown();
@@ -344,14 +346,14 @@ public class ChordNode {
         Chord.MoveKeysRequest request = Chord.MoveKeysRequest.newBuilder()
                 .setSenderIp(node.ip)
                 .setSenderPort(node.port)
-                .setRangeStart(predecessor.id)
-                .setRangeEnd(node.id)
+                .setRangeStart(predecessor.id.toString())
+                .setRangeEnd(node.id.toString())
                 .build();
         Chord.MoveKeysResponse response = blockingStub.moveKeys(request);
         int cnt = response.getValueCount();
         for (int i = 0; i < cnt; i++) {
             String value = response.getValue(i);
-            int key = response.getKey(i);
+            BigInteger key = new BigInteger(response.getKey(i));
             localData.put(key, value);
         }
         channel.shutdown();
@@ -363,12 +365,17 @@ public class ChordNode {
     private void updateOthers() {
         // update ith finger of p node
         for (int i = 0; i < m; i++) {
-            int id = node.id - (int)pow(2, i-1);
-            if (id < 0) { // wraparound
-                id = id + (int)pow(2, m);
+            BigInteger id;
+            if (i == 0) {
+                id = node.id.subtract(BigInteger.valueOf(0));
+            } else {
+                id = node.id.subtract(BigInteger.valueOf(2).pow(i-1));
+                if (id.compareTo(BigInteger.ZERO) < 0) { // wraparound
+                    id = id.add(BigInteger.valueOf(2).pow(m));
+                }
             }
             NodeReference p = findPredecessor(id);
-            logger.debug("[{}:{}]  pred of {} is {}:{}, i={}", node, node.id, id, p, calculateSHA1(p.getAddress(), m), i);
+            logger.debug("[{}:{}]  pred of {} is {}:{}, i={}", node, node.id, id, p, calculateSHA1(p.getAddress()), i);
             updateFingerTableOf_RPC(p, node, i);
         }
     }
@@ -389,7 +396,7 @@ public class ChordNode {
 
 
     private void initFingerTable(NodeReference n_) {
-        int targetId = fingerTable.get(0).start;
+        BigInteger targetId = fingerTable.get(0).start;
         NodeReference S = findSuccessor_RPC(n_, targetId);
         syncUpdateFingerTable(0, S);
 
@@ -423,12 +430,12 @@ public class ChordNode {
         return new NodeReference(response.getPredecessorIp(), response.getPredecessorPort());
     }
 
-    public NodeReference findSuccessor_RPC(NodeReference n_, int targetId) {
+    public NodeReference findSuccessor_RPC(NodeReference n_, BigInteger targetId) {
         ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
         Chord.FindSuccessorRequest request = Chord.FindSuccessorRequest.newBuilder()
                 .setSenderIp(this.node.ip)
                 .setSenderPort(this.node.port)
-                .setTargetId(targetId)
+                .setTargetId(targetId.toString())
                 .build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
 
@@ -439,10 +446,10 @@ public class ChordNode {
 
     /**
      * Successor of id is responsible for id (stores it locally) <br>
-     * It is found by moving forward around the ChordRing toward most immediately preceding node of id using {@link ChordNode#findPredecessor(int) findPredecessor} <br>
+     * It is found by moving forward around the ChordRing toward most immediately preceding node of id using {@link ChordNode#findPredecessor(BigInteger) findPredecessor} <br>
      * Once the most immediate predecessor of id is found, we just return this node successor, therefore finding id's sucessor <br>
      */
-    public NodeReference findSuccessor(int id) {
+    public NodeReference findSuccessor(BigInteger id) {
         NodeReference n_ = findPredecessor(id);
         return getSuccessor_RPC(n_);
     }
@@ -469,9 +476,9 @@ public class ChordNode {
     /**
      * Contacts series of nodes moving around the ChordRing towards id
      */
-    public NodeReference findPredecessor(int id) {
+    public NodeReference findPredecessor(BigInteger id) {
         // contacts series of nodes moving forward around the Chord towards id
-        if (id == node.id) {
+        if (id.equals(node.id)) {
             return this.predecessor;
         }
         NodeReference n_ = this.node;
@@ -492,7 +499,7 @@ public class ChordNode {
      * Either find closest preceding finger of id from this node's finger table
      * or prompt contact node to return it's closest preceding finger of id
      */
-    public NodeReference closestPrecedingFingerOf(NodeReference n_, int id) {
+    public NodeReference closestPrecedingFingerOf(NodeReference n_, BigInteger id) {
         // send request to node n_ with id
         if (n_.equals(node)) {
             for (int i = m-1; i >= 0; i--) {
@@ -510,10 +517,10 @@ public class ChordNode {
     /**
      * Prompt contact node to return closest preceding finger of id from it's finger table
      */
-    private NodeReference closestPrecedingFinger_RPC(NodeReference n_, int id) {
+    private NodeReference closestPrecedingFinger_RPC(NodeReference n_, BigInteger id) {
         Chord.ClosestPrecedingFingerRequest cpfr = Chord.ClosestPrecedingFingerRequest
                 .newBuilder()
-                .setTargetId(id)
+                .setTargetId(id.toString())
                 .setSenderIp(this.node.ip)
                 .setSenderPort(this.node.port)
                 .build();
@@ -538,7 +545,7 @@ public class ChordNode {
          */
         @Override
         public void findSuccessor(Chord.FindSuccessorRequest request, StreamObserver<Chord.FindSuccessorResponse> responseObserver) {
-            int targetId = request.getTargetId();
+            BigInteger targetId = new BigInteger(request.getTargetId());
             NodeReference n = ChordNode.this.findSuccessor(targetId);
 
             Chord.FindSuccessorResponse r = Chord.FindSuccessorResponse.newBuilder()
@@ -600,7 +607,7 @@ public class ChordNode {
          */
         @Override
         public void closestPrecedingFinger(Chord.ClosestPrecedingFingerRequest request, StreamObserver<Chord.ClosestPrecedingFingerResponse> responseObserver) {
-            int id = request.getTargetId();
+            BigInteger id = new BigInteger(request.getTargetId());
             for (int i = m-1; i >= 0; i--) {
                 NodeReference curr = fingerTable.get(i).node;
                 logger.debug("[{}]   {} e ({}, {})", node, curr.id, node.id, id);
@@ -630,30 +637,30 @@ public class ChordNode {
         @Override
         public void moveKeys(Chord.MoveKeysRequest request, StreamObserver<Chord.MoveKeysResponse> responseObserver) {
             Chord.MoveKeysResponse.Builder response = Chord.MoveKeysResponse.newBuilder();
-            int start = request.getRangeStart();
-            int end = request.getRangeEnd();
+            BigInteger start = new BigInteger(request.getRangeStart());
+            BigInteger end = new BigInteger(request.getRangeEnd());
             // range = (start, end]
             if (!localData.isEmpty()) {
-                if (start < end) {
-                    localData.subMap(start+1, end+1).forEach((k, v) -> {
-                        response.addKey(k);
+                if (start.compareTo(end) < 0) {
+                    localData.subMap(start.add(BigInteger.ONE), end.add(BigInteger.ONE)).forEach((k, v) -> {
+                        response.addKey(k.toString());
                         response.addValue(v);
                         localData.remove(k);
                     });
                 } else {
-                    localData.subMap(start+1, (int)pow(2, m)).forEach((k, v) -> {
-                        response.addKey(k);
+                    localData.subMap(start.add(BigInteger.ONE), BigInteger.valueOf(2).pow(m)).forEach((k, v) -> {
+                        response.addKey(k.toString());
                         response.addValue(v);
                         localData.remove(k);
                     });
-                    localData.subMap(0, end+1).forEach((k, v) -> {
-                        response.addKey(k);
+                    localData.subMap(BigInteger.ZERO, end.add(BigInteger.ONE)).forEach((k, v) -> {
+                        response.addKey(k.toString());
                         response.addValue(v);
                         localData.remove(k);
                     });
                 }
             }
-            logger.debug("{} moves {} keys to {}", node.id, response.getKeyCount(), calculateSHA1(request.getSenderIp()+":"+request.getSenderPort(), m));
+            logger.debug("{} moves {} keys to {}", node.id, response.getKeyCount(), calculateSHA1(request.getSenderIp()+":"+request.getSenderPort()));
             responseObserver.onNext(response.build());
             responseObserver.onCompleted();
         }
@@ -663,7 +670,7 @@ public class ChordNode {
          */
         @Override
         public void put(Chord.PutRequest request, StreamObserver<Chord.PutResponse> responseObserver) {
-            localData.put(request.getId(), request.getValue());
+            localData.put(new BigInteger(request.getId()), request.getValue());
             logger.debug("<{},{}> saved on {}", request.getId(), request.getValue(), node.id);
             responseObserver.onNext(Chord.PutResponse.newBuilder().build());
             responseObserver.onCompleted();
@@ -688,7 +695,7 @@ public class ChordNode {
          */
         @Override
         public void delete(Chord.DeleteRequest request, StreamObserver<Chord.DeleteResponse> responseObserver) {
-            int id = request.getId();
+            BigInteger id = new BigInteger(request.getId());
             logger.debug("n:{} removing <{},{}>", node.id, id, localData.get(id));
             localData.remove(id);
             responseObserver.onNext(Chord.DeleteResponse.newBuilder().build());
@@ -702,7 +709,8 @@ public class ChordNode {
         public void notify(Chord.Notification request, StreamObserver<Chord.NotificationResponse> responseObserver) {
             logger.debug("[{}:{}] existence of node [{}:{}:{}] was notified", node, node.id, request.getSenderIp(), request.getSenderPort(), request.getId());
             logger.debug("[{}:{}] will set P={}, if {} E ({}, {})", node, node.id, request.getId(), request.getId(), predecessor.id, node.id);
-            if (predecessor == node || inRange_OpenOpen(request.getId(), predecessor.id, node.id)) {
+            BigInteger id = new BigInteger(request.getId());
+            if (predecessor == node || inRange_OpenOpen(id, predecessor.id, node.id)) {
                 syncUpdatePredecessor(new NodeReference(request.getSenderIp(), request.getSenderPort()));
             }
             responseObserver.onNext(Chord.NotificationResponse.newBuilder().build());
@@ -748,7 +756,7 @@ public class ChordNode {
         @Override
         public void moveKeysToSuccessor(Chord.MoveKeysToSuccessorRequest request, StreamObserver<Chord.MoveKeysToSuccessorResponse> responseObserver) {
             for (int i = 0; i < request.getKeyCount(); i++) {
-                localData.put(request.getKey(i), request.getValue(i));
+                localData.put(new BigInteger(request.getKey(i)), request.getValue(i));
             }
             responseObserver.onNext(Chord.MoveKeysToSuccessorResponse.newBuilder().build());
             responseObserver.onCompleted();
@@ -782,6 +790,7 @@ public class ChordNode {
     public static void main(String[] args) throws Exception {
 
         // TODO: no node should be able to join without calling createRing first
+        ChordNode.m = 10;
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         bootstrap.startServer();
 

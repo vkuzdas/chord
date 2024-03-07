@@ -1,16 +1,18 @@
 package chord;
 
+import java.math.BigInteger;
+
 import static chord.Util.calculateSHA1;
 
 public class NodeReference {
     public final String ip;
     public final int port;
-    public int id;
+    public final BigInteger id;
 
     public NodeReference(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.id = calculateSHA1(this.getAddress(), ChordNode.m);
+        this.id = calculateSHA1(this.getAddress());
     }
 
     public String getAddress() {
