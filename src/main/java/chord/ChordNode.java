@@ -12,6 +12,7 @@ import proto.Chord;
 import proto.ChordServiceGrpc;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static chord.Util.*;
@@ -76,9 +77,19 @@ public class ChordNode {
 //        }));
     }
 
-    public void stopServer() throws InterruptedException {
+    public void stopServer() {
         if (server != null) {
             server.shutdownNow();
+        }
+    }
+
+    public void awaitStopServer()  {
+        if (server != null) {
+            try {
+                server.awaitTermination(2, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

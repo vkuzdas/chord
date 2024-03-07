@@ -1,6 +1,9 @@
 import chord.ChordNode;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
@@ -9,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ChordNodeTest {
 
     static int FIX_FINGER_TIMEOUT;
+    private ArrayList<ChordNode> toShutdown = new ArrayList<>();
 
     @BeforeAll
     static void setUp() {
@@ -17,12 +21,31 @@ class ChordNodeTest {
         FIX_FINGER_TIMEOUT = ChordNode.m * ChordNode.STABILIZATION_INTERVAL;
     }
 
+    @BeforeEach
+    void init(TestInfo testInfo) throws InterruptedException {
+        System.out.println(System.lineSeparator() + System.lineSeparator()
+                + "============== " + testInfo.getTestMethod().map(Method::getName).orElse(null)
+                + "() =============" + System.lineSeparator());
+    }
+
+    @AfterEach
+    void tearDown() {
+        toShutdown.forEach(ChordNode::awaitStopServer);
+    }
+
+    private void registerForShutdown(ChordNode ... nodes) {
+        Collections.addAll(toShutdown, nodes);
+    }
+
     @Test
-    void delete() throws Exception {
+    void testDelete() throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
-        bootstrap.startServer();
         ChordNode node2 = new ChordNode("localhost", 8981);
+        registerForShutdown(bootstrap, node2);
+
+        bootstrap.startServer();
         node2.startServer();
+
         node2.join(bootstrap);
 
         node2.put("icecream", "sweet");
@@ -40,8 +63,11 @@ class ChordNodeTest {
     }
 
     @Test
-    void moveKeys() throws Exception {
+    void testMoveKeys() throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
+        ChordNode node2 = new ChordNode("localhost", 8981);
+        registerForShutdown(bootstrap, node2);
+
         bootstrap.startServer();
 
         bootstrap.put("icecream", "sweet");
@@ -49,10 +75,8 @@ class ChordNodeTest {
 
         assertEquals(bootstrap.getDataSize(), 2);
 
-        ChordNode node2 = new ChordNode("localhost", 8981);
         node2.startServer();
         node2.join(bootstrap);
-
 
         assertEquals(bootstrap.getDataSize(), 1);
         assertEquals(node2.getDataSize(), 1);
@@ -62,15 +86,17 @@ class ChordNodeTest {
     }
 
     @Test
-    void threeJoinOnBootstrap() throws Exception {
+    void testThreeJoinOnBootstrap() throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
+        ChordNode node2 = new ChordNode("localhost", 8981);
+        ChordNode node3 = new ChordNode("localhost", 8982);
+        registerForShutdown(bootstrap, node2, node3);
+
         bootstrap.startServer();
 
-        ChordNode node2 = new ChordNode("localhost", 8981);
         node2.startServer();
         node2.join(bootstrap);
 
-        ChordNode node3 = new ChordNode("localhost", 8982);
         node3.startServer();
         node3.join(bootstrap);
 
@@ -86,7 +112,7 @@ class ChordNodeTest {
         await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getPredecessor().id == 10);
         await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getSuccessor().id == 2);
 
-        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getPredecessor().id == 0);
+        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getPredecessor().id == 0); // not fullfilled
         await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getSuccessor().id == 10);
 
         bootstrap.stopServer();
@@ -95,15 +121,17 @@ class ChordNodeTest {
     }
 
     @Test
-    void chainedJoin() throws Exception {
+    void testChainedJoin() throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
+        ChordNode node2 = new ChordNode("localhost", 8981);
+        ChordNode node3 = new ChordNode("localhost", 8982);
+        registerForShutdown(bootstrap, node2, node3);
+
         bootstrap.startServer();
 
-        ChordNode node2 = new ChordNode("localhost", 8981);
         node2.startServer();
         node2.join(bootstrap);
 
-        ChordNode node3 = new ChordNode("localhost", 8982);
         node3.startServer();
         node3.join(node2);
 
@@ -128,15 +156,17 @@ class ChordNodeTest {
     }
 
     @Test
-    void leaveFromBootstrap() throws Exception {
+    void testLeaveFromBootstrap() throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
+        ChordNode node2 = new ChordNode("localhost", 8981);
+        ChordNode node3 = new ChordNode("localhost", 8982);
+        registerForShutdown(bootstrap, node2, node3);
+
         bootstrap.startServer();
 
-        ChordNode node2 = new ChordNode("localhost", 8981);
         node2.startServer();
         node2.join(bootstrap);
 
-        ChordNode node3 = new ChordNode("localhost", 8982);
         node3.startServer();
         node3.join(bootstrap);
 
@@ -157,15 +187,17 @@ class ChordNodeTest {
     }
 
     @Test
-    void chainedLeave() throws Exception {
+    void testChainedLeave() throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
+        ChordNode node2 = new ChordNode("localhost", 8981);
+        ChordNode node3 = new ChordNode("localhost", 8982);
+        registerForShutdown(bootstrap, node2, node3);
+
         bootstrap.startServer();
 
-        ChordNode node2 = new ChordNode("localhost", 8981);
         node2.startServer();
         node2.join(bootstrap);
 
-        ChordNode node3 = new ChordNode("localhost", 8982);
         node3.startServer();
         node3.join(node2);
 
