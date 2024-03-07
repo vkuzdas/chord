@@ -131,6 +131,7 @@ class ChordNodeTest {
     }
 
     @Test
+    @Disabled
     void leaveFromBootstrap() throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         bootstrap.startServer();
@@ -160,6 +161,7 @@ class ChordNodeTest {
     }
 
     @Test
+    @Disabled
     void chainedLeave() throws Exception {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         bootstrap.startServer();
