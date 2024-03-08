@@ -67,16 +67,6 @@ public class ChordNode {
     private void startServer() throws IOException {
         server.start();
         logger.trace("Server started, listening on {}", node.port);
-//        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-//            logger.warn("*** shutting down gRPC server on {} since JVM is shutting down", this.node);
-//            try {
-//                stopServer();
-//            } catch (InterruptedException e) {
-//                logger.warn("*** server shut down interrupted");
-//                e.printStackTrace(System.err);
-//            }
-//            logger.warn("*** server shut down on {}", this.node);
-//        }));
     }
 
     public void stopServer() {
@@ -95,7 +85,22 @@ public class ChordNode {
         }
     }
 
-    private void blockUntilShutdown() throws InterruptedException {
+    /**
+     * To be used in bash run or main method run to keep the network running
+     * <p><b>Code example:</b>
+     * <pre>
+     * {@code
+     *         ChordNode bootstrap = new ChordNode("localhost", 9100);
+     *         bootstrap.createRing();
+     *         for (int i = 9101; i < 9110 ; i++) {
+     *             ChordNode n = new ChordNode("localhost", i);
+     *             n.join(bootstrap);
+     *         }
+     *         bootstrap.blockUntilShutdown();
+     * }
+     * </pre>
+     */
+    public void blockUntilShutdown() throws InterruptedException {
         if (server != null) {
             server.awaitTermination();
         }
@@ -105,6 +110,10 @@ public class ChordNode {
         return localData.size();
     }
 
+    /**
+     * Unified method update to Predecessor. GRPC call invoke new threads on the server side. <br>
+     * It is therefore important to lock the finger table before updating it.
+     */
     private void syncUpdatePredecessor(NodeReference newPredecessor) {
         lock.lock();
         try {
@@ -114,6 +123,10 @@ public class ChordNode {
         }
     }
 
+    /**
+     * Unified method to update finger table. GRPC call invoke new threads on the server side. <br>
+     * It is therefore important to lock the finger table before updating it.
+     */
     private void syncUpdateFingerTable(int index, NodeReference newFinger) {
         lock.lock();
         try {
@@ -123,6 +136,9 @@ public class ChordNode {
         }
     }
 
+    /**
+     * distributedHashTable.put()
+     */
     public void put(String key, String value) {
         BigInteger id = calculateSHA1(key);
         if(inRange_OpenClose(id, predecessor.id, node.id)) {
@@ -142,6 +158,9 @@ public class ChordNode {
         }
     }
 
+    /**
+     * distributedHashTable.get()
+     */
     public String get(String key) {
         BigInteger id = calculateSHA1(key);
         if(inRange_OpenClose(id, predecessor.id, node.id)) {
@@ -161,6 +180,9 @@ public class ChordNode {
         }
     }
 
+    /**
+     * distributedHashTable.delete()
+     */
     public void delete(String key) {
         BigInteger id = calculateSHA1(key);
         NodeReference n_ = findSuccessor(id);
@@ -178,12 +200,17 @@ public class ChordNode {
         }
     }
 
+    /**
+     * Create a new Chord ring
+     */
     public void createRing() throws IOException {
         startServer();
         startFixThread();
     }
 
-    // Called on X from client
+    /**
+     * Join an existing Chord ring
+     */
     public void join(ChordNode n_) throws IOException {
         startServer();
         initFingerTable(n_.node);
@@ -237,7 +264,6 @@ public class ChordNode {
      * Update S and P of your neighbors when leaving
      */
     private void updateNeighborsWhenLeaving_RPC() {
-        // TODO: should I notify them to stop stabilize for a while?, maybe stopping timer for a while
         // update S.P = this.node.P
         NodeReference successor = fingerTable.get(0).node;
         ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.getAddress()).usePlaintext().build();
@@ -319,11 +345,6 @@ public class ChordNode {
     private void stabilize() {
         // ask S for S.P, decide whether to set n.P = S.P instead
         NodeReference s = fingerTable.get(0).node;
-        // SHOULD NOT be skipped - what if a node reconnects again?
-//        if (s.equals(node)) {
-//            logger.debug("[{}:{}]  chord ring appears to be empty, skipping stabilize", node, node.id);
-//            return;
-//        }
         NodeReference s_p = getPredecessor_RPC(s);
         logger.debug("[{}:{}]  s_p {}:{} ?E ({}, {})", node, node.id, s_p, s_p.id, node.id, s.id);
         if (inRange_OpenOpen(s_p.id, node.id, s.id)) {
@@ -398,6 +419,9 @@ public class ChordNode {
     }
 
 
+    /**
+     * Joining node initializes its own FingerTable using the bootstrap node n_
+     */
     private void initFingerTable(NodeReference n_) {
         BigInteger targetId = fingerTable.get(0).start;
         NodeReference S = findSuccessor_RPC(n_, targetId);
@@ -418,7 +442,6 @@ public class ChordNode {
             }
         }
     }
-
 
     public NodeReference getPredecessor_RPC(NodeReference targetNode) {
         ManagedChannel channel = ManagedChannelBuilder.forTarget(targetNode.getAddress()).usePlaintext().build();
@@ -494,7 +517,6 @@ public class ChordNode {
             n_ = closestPrecedingFingerOf(n_, id);
             S = getSuccessor_RPC(n_);
         }
-//        logger.debug("findPredecessor: {} E [{}, {})", id, n_.id, S.id);
         return n_;
     }
 
@@ -791,56 +813,26 @@ public class ChordNode {
     }
 
     public static void main(String[] args) throws Exception {
-
+        ChordNode.STABILIZATION_INTERVAL = 500;
         ChordNode.m = 10;
 
-
-        ChordNode bootstrap = new ChordNode("localhost", 8980);
+        ChordNode bootstrap = new ChordNode("localhost", 9100);
         bootstrap.createRing();
 
         ArrayList<ChordNode> nodes = new ArrayList<>();
-        for (int i = 8981; i < 9010 ; i++) {
-            ChordNode n = new ChordNode("localhost", i);
-            nodes.add(n);
-            n.join(bootstrap);
+        for (int i = 9101; i < 9110 ; i++) { // depends on your machine how many threads you can run
+            int finalI = i;
+            new Thread(() -> {
+                try {
+                    ChordNode n = new ChordNode("localhost", finalI);
+                    nodes.add(n);
+                    n.join(bootstrap);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
 
-
-// TODO: simple command UI
-
-
-
-
-
-
-
-
-
-
-
-
-//        ChordNode bootstrap = new ChordNode("localhost", 8980);
-////        bootstrap.createRing();
-//
-//        Thread.sleep(5000); // let the network stabilize
-//
-//
-//        ChordNode node2 = new ChordNode("localhost", 8981);
-//        node2.join(bootstrap);
-//
-//        Thread.sleep(5000); // let the network stabilize
-//
-//        ChordNode node3 = new ChordNode("localhost", 8982);
-//        node3.join(bootstrap);
-//
-//        Thread.sleep(5000); // let the network stabilize
-//
-//        bootstrap.leave();
-//
-//        Thread.sleep(5000); // let the network stabilize
-//
-//        node2.leave();
-//        Thread.sleep(5000); // let the network stabilize
-//        node3.leave();
+        bootstrap.blockUntilShutdown();
     }
 }
