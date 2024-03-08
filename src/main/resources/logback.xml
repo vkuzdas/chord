@@ -8,11 +8,10 @@
     <logger name="io.grpc" level="OFF" />
 
     <root level="INFO">
-    <!--    TRACE = FingerTable print-->
-    <!--    DEBUG = mainChord operations print-->
-    <!--    INFO = TODO-->
-    <!--    WARN = TODO-->
-    <!--    ERROR = TODO-->
+    <!--    TRACE = everything else -->
+    <!--    DEBUG = main Chord operations -->
+    <!--    INFO = put(), get(), delete() -->
+    <!--    WARN = GRPC server start/stop-->
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

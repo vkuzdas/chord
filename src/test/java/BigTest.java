@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 public class BigTest {
     static int FIX_FINGER_TIMEOUT;
     private final ArrayList<ChordNode> toShutdown = new ArrayList<>();
@@ -33,30 +36,109 @@ public class BigTest {
     }
 
     @Test
-    void testBigLoad() throws IOException, InterruptedException {
+    void testBig_put_get() throws IOException, InterruptedException {
         ChordNode.STABILIZATION_INTERVAL = 500;
-        ChordNode.m = 10;
+        ChordNode.m = 50; // size of id has significant impact on speed of RPC calls
 
-        ChordNode bootstrap = new ChordNode("localhost", 9000);
+        ChordNode bootstrap = new ChordNode("localhost", 9100);
         bootstrap.createRing();
 
         ArrayList<ChordNode> nodes = new ArrayList<>();
-        for (int i = 9001; i < 9010 ; i++) {
+        nodes.add(bootstrap);
+        // start nodes
+        for (int i = 9101; i < 9110 ; i++) { // depends on your machine how many nodes it can run
             ChordNode n = new ChordNode("localhost", i);
             nodes.add(n);
             n.join(bootstrap);
         }
 
-        bootstrap.blockUntilShutdown();
+        ArrayList<String> inserted = new ArrayList<>();
+        Random rand = new Random();
+        int node;
+        // put to random node
+        for (int i = 0; i < 500; i++) {
+            node = rand.nextInt(nodes.size());
+            nodes.get(node).put("key"+i, "value"+i);
+            inserted.add("value"+i);
+        }
+
+        // two nodes leave
+        node = rand.nextInt(nodes.size());
+        nodes.get(node).leave();
+        nodes.remove(node);
+
+        node = rand.nextInt(nodes.size());
+        nodes.get(node).leave();
+        nodes.remove(node);
+
+        Thread.sleep(5000);
+        System.out.println("Chord stabilized after 5s");
 
 
-//        ArrayList<String> keys = new ArrayList<>();
-//        Random rand = new Random();
-//        for (int i = 0; i < 100; i++) {
-//            int randomNumber = rand.nextInt(101) + 9000; // [9000, 9100)
-//            nodes.get(randomNumber).put("key" + i, "value" + i);
-//        }
+        ArrayList<String> fetched = new ArrayList<>();
+        // get
+        for (int i = 0; i < 500; i++) {
+            node = rand.nextInt(nodes.size());
+            String v = nodes.get(node).get("key"+i);
+            fetched.add(v);
+        }
 
+        assertEquals(inserted, fetched);
+    }
+
+    @Test
+    void testBig_put_delete() throws IOException, InterruptedException {
+        ChordNode.STABILIZATION_INTERVAL = 500;
+        ChordNode.m = 50; // size of id has significant impact on speed of RPC calls
+
+        ChordNode bootstrap = new ChordNode("localhost", 9100);
+        bootstrap.createRing();
+
+        ArrayList<ChordNode> nodes = new ArrayList<>();
+        nodes.add(bootstrap);
+        // start nodes
+        for (int i = 9101; i < 9110 ; i++) { // depends on your machine how many nodes it can run
+            ChordNode n = new ChordNode("localhost", i);
+            nodes.add(n);
+            n.join(bootstrap);
+        }
+
+        ArrayList<String> inserted = new ArrayList<>();
+        Random rand = new Random();
+        int node;
+        // put to random node
+        for (int i = 0; i < 500; i++) {
+            node = rand.nextInt(nodes.size());
+            nodes.get(node).put("key"+i, "value"+i);
+            inserted.add("value"+i);
+        }
+
+        // two nodes leave
+        node = rand.nextInt(nodes.size());
+        nodes.get(node).leave();
+        nodes.remove(node);
+
+        node = rand.nextInt(nodes.size());
+        nodes.get(node).leave();
+        nodes.remove(node);
+
+        Thread.sleep(5000);
+        System.out.println("Chord stabilized after 5s");
+
+
+        ArrayList<String> deleted = new ArrayList<>();
+        // delete half of the keys
+        for (int i = 0; i < 500; i++) {
+            node = rand.nextInt(nodes.size());
+            nodes.get(node).delete("key"+i);
+            deleted.add("key"+i);
+        }
+
+        for(String key : deleted) {
+            node = rand.nextInt(nodes.size());
+            String v = nodes.get(node).get(key);
+            assertNull(v);
+        }
 
     }
 

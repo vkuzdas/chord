@@ -34,12 +34,12 @@ public class ChordNode {
 
     private final NavigableMap<BigInteger, String> localData = new TreeMap<>();
 
-    private Timer stabilizationTimer = new Timer();
+    private final Timer stabilizationTimer = new Timer();
 
     private TimerTask stabilizationTimerTask;
 
     @VisibleForTesting
-    public static int m = 4; // 0-2^m ids
+    public static int m = 4; // [0-2^m) ids
 
     public static int STABILIZATION_INTERVAL = 2000;
 
@@ -66,12 +66,13 @@ public class ChordNode {
 
     private void startServer() throws IOException {
         server.start();
-        logger.trace("Server started, listening on {}", node.port);
+        logger.warn("Server started, listening on {}", node.port);
     }
 
     public void stopServer() {
         if (server != null) {
             server.shutdownNow();
+            logger.warn("Server stopped, listening on {}", node.port);
         }
     }
 
@@ -143,7 +144,7 @@ public class ChordNode {
         BigInteger id = calculateSHA1(key);
         if(inRange_OpenClose(id, predecessor.id, node.id)) {
             localData.put(id, value);
-            logger.debug("<{},{}> saved on {}", id, value, node.id);
+            logger.info("<{},{}> saved on Node {}", id, value, node.id);
         } else {
             NodeReference n_ = findSuccessor(id);
             ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
@@ -165,7 +166,7 @@ public class ChordNode {
         BigInteger id = calculateSHA1(key);
         if(inRange_OpenClose(id, predecessor.id, node.id)) {
             String value = localData.get(id);
-            logger.debug("n:{} returning <{},{}>", node.id, id, value);
+            logger.info("Node {} returning <{},{}>", node.id, id, value);
             return value;
         } else {
             NodeReference n_ = findSuccessor(id);
@@ -176,6 +177,9 @@ public class ChordNode {
                     .build();
             Chord.GetResponse response = blockingStub.get(request);
             channel.shutdown();
+            if (response.getValue().isEmpty()) {
+                return null;
+            }
             return response.getValue();
         }
     }
@@ -187,7 +191,7 @@ public class ChordNode {
         BigInteger id = calculateSHA1(key);
         NodeReference n_ = findSuccessor(id);
         if (inRange_OpenClose(id, predecessor.id, node.id)) {
-            logger.debug("n:{} removed <{},{}>", node.id, id, localData.get(id));
+            logger.info("Node {} removed <{},{}>", node.id, id, localData.get(id));
             localData.remove(id);
         } else {
             ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
@@ -206,6 +210,7 @@ public class ChordNode {
     public void createRing() throws IOException {
         startServer();
         startFixThread();
+        logger.debug("Node [{}] created a new ChordRing with id range [0, {})", node, BigInteger.valueOf(2).pow(m));
     }
 
     /**
@@ -217,6 +222,7 @@ public class ChordNode {
         updateOthers();
         moveKeys_RPC(); //from the range (predecessor,n] from successor
         startFixThread();
+        logger.debug("Node [{}] joined the network", node);
     }
 
     /**
@@ -257,7 +263,7 @@ public class ChordNode {
         if(!localData.isEmpty())
             moveKeysToSuccessor_RPC();
 
-        logger.debug("Node [{}:{}] left the network", node, node.id);
+        logger.debug("Node [{}] left the network", node);
     }
 
     /**
@@ -304,8 +310,8 @@ public class ChordNode {
     }
 
     private void printStatus() {
-        logger.debug("[{}:{}] P={}, S={}", node, node.id, predecessor, fingerTable.get(0).node);
-        logger.trace("[{}:{}]  ==== FT ====", node, node.id);
+        logger.trace("[{}] P={}, S={}", node, predecessor, fingerTable.get(0).node);
+        logger.trace("[{}]  ==== FT ====", node);
         for (int i = 0; i < fingerTable.size(); i++) {
             Finger finger = fingerTable.get(i);
             logger.trace("Index: {}, [{},{}), Succ: [{}:{}]", i, finger.start, finger.end, finger.node, finger.node.id);
@@ -314,7 +320,7 @@ public class ChordNode {
     }
 
     private void startFixThread() {
-        logger.warn("[{}]  started FIX", node);
+        logger.trace("[{}]  started FIX", node);
         // periodic stabilization
         stabilizationTimerTask = new TimerTask() {
             @Override
@@ -346,12 +352,12 @@ public class ChordNode {
         // ask S for S.P, decide whether to set n.P = S.P instead
         NodeReference s = fingerTable.get(0).node;
         NodeReference s_p = getPredecessor_RPC(s);
-        logger.debug("[{}:{}]  s_p {}:{} ?E ({}, {})", node, node.id, s_p, s_p.id, node.id, s.id);
+        logger.debug("[{}]  s_p {} ?∈  ({}, {})", node, s_p, node.id, s.id);
         if (inRange_OpenOpen(s_p.id, node.id, s.id)) {
             syncUpdateFingerTable(0, s_p);
         }
         // notify n.S of n's existence
-        logger.debug("[{}:{}] existence notified to [{}:{}]", node, node.id, s, s.id);
+        logger.debug("[{}] existence notified to [{}:{}]", node, s, s.id);
         ManagedChannel channel = ManagedChannelBuilder.forTarget(s.getAddress()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.Notification notification = Chord.Notification.newBuilder()
@@ -399,7 +405,7 @@ public class ChordNode {
                 }
             }
             NodeReference p = findPredecessor(id);
-            logger.debug("[{}:{}]  pred of {} is {}:{}, i={}", node, node.id, id, p, calculateSHA1(p.getAddress()), i);
+            logger.trace("[{}]  pred of {} is {}:{}, i={}", node, id, p, calculateSHA1(p.getAddress()), i);
             updateFingerTableOf_RPC(p, node, i);
         }
     }
@@ -429,6 +435,7 @@ public class ChordNode {
 
         syncUpdatePredecessor(getPredecessor_RPC(S));
 
+        logger.debug("Node [{}] initialized finger table. P={}, S={}", node, fingerTable.get(0).node, predecessor);
         updateNeighborsJoining_RPC();
 
         for (int i = 0; i < m-1; i++) {
@@ -513,7 +520,7 @@ public class ChordNode {
             return n_;
         }
         while (!inRange_OpenClose(id, n_.id, S.id)) {
-            logger.debug("[{}:{}] findPredecessor: {} !E [{}, {})", node, node.id, id, n_.id, S.id);
+            logger.trace("[{}] findPredecessor: {} !E [{}, {})", node, id, n_.id, S.id);
             n_ = closestPrecedingFingerOf(n_, id);
             S = getSuccessor_RPC(n_);
         }
@@ -550,12 +557,12 @@ public class ChordNode {
                 .setSenderPort(this.node.port)
                 .build();
         ManagedChannel channel = ManagedChannelBuilder.forTarget(n_.getAddress()).usePlaintext().build();
-        logger.debug("[{}] asking node [{}] for closestPrecedingFinger of id={}", node, n_, id);
+        logger.trace("[{}] asking node [{}] for closestPrecedingFinger of id={}", node, n_, id);
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.ClosestPrecedingFingerResponse response = blockingStub.closestPrecedingFinger(cpfr);
         channel.shutdown();
         NodeReference cpf = new NodeReference(response.getClosestPrecedingFingerIp(), response.getClosestPrecedingFingerPort());
-        logger.debug("[{}] got {}", node, cpf);
+        logger.trace("[{}] got {}", node, cpf);
         return cpf;
     }
 
@@ -635,13 +642,13 @@ public class ChordNode {
             BigInteger id = new BigInteger(request.getTargetId());
             for (int i = m-1; i >= 0; i--) {
                 NodeReference curr = fingerTable.get(i).node;
-                logger.debug("[{}]   {} e ({}, {})", node, curr.id, node.id, id);
+                logger.trace("[{}]   {} e ({}, {})", node, curr.id, node.id, id);
                 if (inRange_OpenOpen(curr.id, node.id, id)) {
                     Chord.ClosestPrecedingFingerResponse r = Chord.ClosestPrecedingFingerResponse.newBuilder()
                             .setClosestPrecedingFingerIp(curr.ip)
                             .setClosestPrecedingFingerPort(curr.port)
                             .build();
-                    logger.debug("[{}] responding with cpf of [{}] ", node, curr);
+                    logger.trace("[{}] responding with cpf of [{}] ", node, curr);
                     responseObserver.onNext(r);
                     responseObserver.onCompleted();
                     return;
@@ -651,7 +658,7 @@ public class ChordNode {
                     .setClosestPrecedingFingerIp(node.ip)
                     .setClosestPrecedingFingerPort(node.port)
                     .build();
-            logger.debug("[{}] responding with cpf of [{}] ", node, node);
+            logger.trace("[{}] responding with cpf of [{}] ", node, node);
             responseObserver.onNext(r);
             responseObserver.onCompleted();
         }
@@ -685,7 +692,7 @@ public class ChordNode {
                     });
                 }
             }
-            logger.debug("{} moves {} keys to {}", node.id, response.getKeyCount(), calculateSHA1(request.getSenderIp()+":"+request.getSenderPort()));
+            logger.trace("{} moves {} keys to {}", node.id, response.getKeyCount(), calculateSHA1(request.getSenderIp()+":"+request.getSenderPort()));
             responseObserver.onNext(response.build());
             responseObserver.onCompleted();
         }
@@ -696,7 +703,7 @@ public class ChordNode {
         @Override
         public void put(Chord.PutRequest request, StreamObserver<Chord.PutResponse> responseObserver) {
             localData.put(new BigInteger(request.getId()), request.getValue());
-            logger.debug("<{},{}> saved on {}", request.getId(), request.getValue(), node.id);
+            logger.trace("<{},{}> saved on {}", request.getId(), request.getValue(), node.id);
             responseObserver.onNext(Chord.PutResponse.newBuilder().build());
             responseObserver.onCompleted();
         }
@@ -706,8 +713,12 @@ public class ChordNode {
          */
         @Override
         public void get(Chord.GetRequest request, StreamObserver<Chord.GetResponse> responseObserver) {
-            String value = localData.get(request.getId());
-            logger.debug("n:{} returning <{},{}>", node.id, request.getId(), value);
+            BigInteger id = new BigInteger(request.getId());
+            String value = localData.get(id);
+            logger.trace("n:{} returning <{},{}>", node.id, request.getId(), value);
+            if (value == null) {
+                value = "";
+            }
             Chord.GetResponse response = Chord.GetResponse.newBuilder()
                     .setValue(value)
                     .build();
@@ -721,7 +732,7 @@ public class ChordNode {
         @Override
         public void delete(Chord.DeleteRequest request, StreamObserver<Chord.DeleteResponse> responseObserver) {
             BigInteger id = new BigInteger(request.getId());
-            logger.debug("n:{} removing <{},{}>", node.id, id, localData.get(id));
+            logger.trace("n:{} removing <{},{}>", node.id, id, localData.get(id));
             localData.remove(id);
             responseObserver.onNext(Chord.DeleteResponse.newBuilder().build());
             responseObserver.onCompleted();
@@ -732,8 +743,8 @@ public class ChordNode {
          */
         @Override
         public void notify(Chord.Notification request, StreamObserver<Chord.NotificationResponse> responseObserver) {
-            logger.debug("[{}:{}] existence of node [{}:{}:{}] was notified", node, node.id, request.getSenderIp(), request.getSenderPort(), request.getId());
-            logger.debug("[{}:{}] will set P={}, if {} E ({}, {})", node, node.id, request.getId(), request.getId(), predecessor.id, node.id);
+            logger.trace("[{}] existence of node [{}:{}:{}] was notified", node, request.getSenderIp(), request.getSenderPort(), request.getId());
+            logger.trace("[{}] will set P={}, if {} E ({}, {})", node, request.getId(), request.getId(), predecessor.id, node.id);
             BigInteger id = new BigInteger(request.getId());
             if (predecessor == node || inRange_OpenOpen(id, predecessor.id, node.id)) {
                 syncUpdatePredecessor(new NodeReference(request.getSenderIp(), request.getSenderPort()));
@@ -749,7 +760,7 @@ public class ChordNode {
         @Override
         public void updatePredecessor(Chord.UpdatePredecessorRequest request, StreamObserver<Chord.UpdatePredecessorResponse> responseObserver) {
             NodeReference oldSucc = fingerTable.get(0).node;
-            logger.debug("[{}:{}]  will set S={} (prev_s={})", node, node.id, request.getNewPort(), oldSucc);
+            logger.trace("[{}]  will set S={} (prev_s={})", node, request.getNewPort(), oldSucc);
 
             // update Successor
             syncUpdateFingerTable(0, new NodeReference(request.getNewIp(), request.getNewPort()));
@@ -814,25 +825,53 @@ public class ChordNode {
 
     public static void main(String[] args) throws Exception {
         ChordNode.STABILIZATION_INTERVAL = 500;
-        ChordNode.m = 10;
+        ChordNode.m = 50;
 
         ChordNode bootstrap = new ChordNode("localhost", 9100);
         bootstrap.createRing();
 
         ArrayList<ChordNode> nodes = new ArrayList<>();
+        nodes.add(bootstrap);
+        // start nodes
         for (int i = 9101; i < 9110 ; i++) { // depends on your machine how many threads you can run
-            int finalI = i;
-            new Thread(() -> {
-                try {
-                    ChordNode n = new ChordNode("localhost", finalI);
-                    nodes.add(n);
-                    n.join(bootstrap);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            ChordNode n = new ChordNode("localhost", i);
+            nodes.add(n);
+            n.join(bootstrap);
         }
 
+        ArrayList<String> inserted = new ArrayList<>();
+        Random rand = new Random();
+        int node;
+        // put to random node
+        for (int i = 0; i < 500; i++) {
+            node = rand.nextInt(nodes.size());
+            nodes.get(node).put("key"+i, "value"+i);
+            inserted.add("value"+i);
+        }
+
+        // two nodes leave
+        node = rand.nextInt(nodes.size());
+        nodes.get(node).leave();
+        nodes.remove(node);
+
+        node = rand.nextInt(nodes.size());
+        nodes.get(node).leave();
+        nodes.remove(node);
+
+        Thread.sleep(5000);
+        System.out.println("Chord stabilized after 5s");
+
+
+        ArrayList<String> fetched = new ArrayList<>();
+        // get
+        for (int i = 0; i < 500; i++) {
+            node = rand.nextInt(nodes.size());
+            String v = nodes.get(node).get("key"+i);
+            fetched.add(v);
+        }
+
+        System.out.println("Inserted: " + inserted.size());
+        System.out.println("Fetched: " + fetched.size());
         bootstrap.blockUntilShutdown();
     }
 }
