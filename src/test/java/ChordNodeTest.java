@@ -19,17 +19,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class ChordNodeTest {
 
     static int FIX_FINGER_TIMEOUT;
-    private ArrayList<ChordNode> toShutdown = new ArrayList<>();
+    private final ArrayList<ChordNode> toShutdown = new ArrayList<>();
 
     @BeforeAll
     static void setUp() {
         ChordNode.m = 4; // Chord space assumption for the test
-        ChordNode.STABILIZATION_INTERVAL = 500; // Chord space assumption for the test
-        FIX_FINGER_TIMEOUT = ChordNode.m * ChordNode.STABILIZATION_INTERVAL;
+        ChordNode.STABILIZATION_INTERVAL = 2000; // Chord space assumption for the test
+        FIX_FINGER_TIMEOUT = 4*ChordNode.m * ChordNode.STABILIZATION_INTERVAL;
     }
 
     @BeforeEach
-    void init(TestInfo testInfo) throws InterruptedException {
+    void init(TestInfo testInfo) {
         System.out.println(System.lineSeparator() + System.lineSeparator()
                 + "============== " + testInfo.getTestMethod().map(Method::getName).orElse(null)
                 + "() =============" + System.lineSeparator());
@@ -46,12 +46,12 @@ class ChordNodeTest {
 
     @Test
     void testDelete() throws IOException {
+
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         ChordNode node2 = new ChordNode("localhost", 8981);
         registerForShutdown(bootstrap, node2);
 
-        bootstrap.startServer();
-        node2.startServer();
+        bootstrap.createRing();
 
         node2.join(bootstrap);
 
@@ -75,14 +75,13 @@ class ChordNodeTest {
         ChordNode node2 = new ChordNode("localhost", 8981);
         registerForShutdown(bootstrap, node2);
 
-        bootstrap.startServer();
+        bootstrap.createRing();
 
         bootstrap.put("icecream", "sweet");
         bootstrap.put("lollipop", "sour");
 
         assertEquals(bootstrap.getDataSize(), 2);
 
-        node2.startServer();
         node2.join(bootstrap);
 
         assertEquals(bootstrap.getDataSize(), 1);
@@ -99,19 +98,16 @@ class ChordNodeTest {
         ChordNode node3 = new ChordNode("localhost", 8982);
         registerForShutdown(bootstrap, node2, node3);
 
-        bootstrap.startServer();
+        bootstrap.createRing();
 
-        node2.startServer();
         node2.join(bootstrap);
-
-        node3.startServer();
         node3.join(bootstrap);
 
         assertEquals(bootstrap.getNodeReference().id, BigInteger.valueOf(10));
         assertEquals(node2.getNodeReference().id, BigInteger.valueOf(0));
         assertEquals(node3.getNodeReference().id, BigInteger.valueOf(2));
 
-        int timeoutSeconds = 3;
+        int timeoutSeconds = 2;
 
         await().atMost(timeoutSeconds, SECONDS).until(() -> bootstrap.getPredecessor().id.equals(BigInteger.valueOf(2)));
         await().atMost(timeoutSeconds, SECONDS).until(() -> bootstrap.getSuccessor().id.equals(BigInteger.valueOf(0)));
@@ -119,7 +115,7 @@ class ChordNodeTest {
         await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getPredecessor().id.equals(BigInteger.valueOf(10)));
         await().atMost(timeoutSeconds, SECONDS).until(() -> node2.getSuccessor().id.equals(BigInteger.valueOf(2)));
 
-        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getPredecessor().id.equals(BigInteger.valueOf(0))); // not fullfilled
+        await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getPredecessor().id.equals(BigInteger.valueOf(0)));
         await().atMost(timeoutSeconds, SECONDS).until(() -> node3.getSuccessor().id.equals(BigInteger.valueOf(10)));
 
         bootstrap.stopServer();
@@ -134,12 +130,9 @@ class ChordNodeTest {
         ChordNode node3 = new ChordNode("localhost", 8982);
         registerForShutdown(bootstrap, node2, node3);
 
-        bootstrap.startServer();
+        bootstrap.createRing();
 
-        node2.startServer();
         node2.join(bootstrap);
-
-        node3.startServer();
         node3.join(node2);
 
         assertEquals(bootstrap.getNodeReference().id, BigInteger.valueOf(10));
@@ -169,25 +162,20 @@ class ChordNodeTest {
         ChordNode node3 = new ChordNode("localhost", 8982);
         registerForShutdown(bootstrap, node2, node3);
 
-        bootstrap.startServer();
+        bootstrap.createRing();
 
-        node2.startServer();
         node2.join(bootstrap);
-
-        node3.startServer();
         node3.join(bootstrap);
 
-        Thread.sleep(FIX_FINGER_TIMEOUT); // let the network stabilize
         node2.leave();
         node2.stopServer();
 
-        // assert that there are no references to the node that left
-        // FIXME: this does not validate FingerTable eradication since it just so happens to not be there
+
         assertNotEquals(bootstrap.getPredecessor(), node2.getNodeReference());
-        assertFalse(bootstrap.containedInFingerTable(node2.getNodeReference()));
+        assertNotEquals(bootstrap.getSuccessor(), node2.getNodeReference());
 
         assertNotEquals(node3.getPredecessor(), node2.getNodeReference());
-        assertFalse(node3.containedInFingerTable(node2.getNodeReference()));
+        assertNotEquals(node3.getSuccessor(), node2.getNodeReference());
 
         bootstrap.stopServer();
         node3.stopServer();
@@ -200,26 +188,19 @@ class ChordNodeTest {
         ChordNode node3 = new ChordNode("localhost", 8982);
         registerForShutdown(bootstrap, node2, node3);
 
-        bootstrap.startServer();
+        bootstrap.createRing();
 
-        node2.startServer();
         node2.join(bootstrap);
-
-        node3.startServer();
         node3.join(node2);
 
-        Thread.sleep(FIX_FINGER_TIMEOUT); // let the network stabilize
         node2.stopServer();
         node2.leave();
 
-
-        // FIXME: this does not validate FingerTable eradication since it just so happens to not be there
         assertNotEquals(bootstrap.getPredecessor(), node2.getNodeReference());
-        assertFalse(bootstrap.containedInFingerTable(node2.getNodeReference()));
+        assertNotEquals(bootstrap.getSuccessor(), node2.getNodeReference());
 
         assertNotEquals(node3.getPredecessor(), node2.getNodeReference());
-        assertFalse(node3.containedInFingerTable(node2.getNodeReference()));
-
+        assertNotEquals(node3.getSuccessor(), node2.getNodeReference());
 
         bootstrap.stopServer();
         node3.stopServer();

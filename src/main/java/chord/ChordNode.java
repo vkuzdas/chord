@@ -34,14 +34,14 @@ public class ChordNode {
 
     private final NavigableMap<BigInteger, String> localData = new TreeMap<>();
 
-    private Timer stabilizationTimer;
+    private Timer stabilizationTimer = new Timer();
 
     private TimerTask stabilizationTimerTask;
 
     @VisibleForTesting
     public static int m = 4; // 0-2^m ids
 
-    public static int STABILIZATION_INTERVAL = 500;
+    public static int STABILIZATION_INTERVAL = 2000;
 
     private final Server server;
 
@@ -64,7 +64,7 @@ public class ChordNode {
                 .build();
     }
 
-    public void startServer() throws IOException {
+    private void startServer() throws IOException {
         server.start();
         logger.trace("Server started, listening on {}", node.port);
 //        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -178,12 +178,14 @@ public class ChordNode {
         }
     }
 
-    public void createRing() {
+    public void createRing() throws IOException {
+        startServer();
         startFixThread();
     }
 
     // Called on X from client
-    public void join(ChordNode n_) {
+    public void join(ChordNode n_) throws IOException {
+        startServer();
         initFingerTable(n_.node);
         updateOthers();
         moveKeys_RPC(); //from the range (predecessor,n] from successor
@@ -288,11 +290,10 @@ public class ChordNode {
     private void startFixThread() {
         logger.warn("[{}]  started FIX", node);
         // periodic stabilization
-        stabilizationTimer = new Timer();
         stabilizationTimerTask = new TimerTask() {
             @Override
             public void run() {
-                printStatus();
+//                printStatus();
                 fix_fingers();
                 stabilize();
                 printStatus();
@@ -303,6 +304,7 @@ public class ChordNode {
 
     private void stopFixThread() {
         if (stabilizationTimer != null) {
+            stabilizationTimer.cancel();
             stabilizationTimer.cancel();
             stabilizationTimer.purge();
             stabilizationTimerTask.cancel();
@@ -317,10 +319,11 @@ public class ChordNode {
     private void stabilize() {
         // ask S for S.P, decide whether to set n.P = S.P instead
         NodeReference s = fingerTable.get(0).node;
-        if (s.equals(node)) {
-            logger.debug("[{}:{}]  chord ring appears to be empty", node, node.id);
-            return;
-        }
+        // SHOULD NOT be skipped - what if a node reconnects again?
+//        if (s.equals(node)) {
+//            logger.debug("[{}:{}]  chord ring appears to be empty, skipping stabilize", node, node.id);
+//            return;
+//        }
         NodeReference s_p = getPredecessor_RPC(s);
         logger.debug("[{}:{}]  s_p {}:{} ?E ({}, {})", node, node.id, s_p, s_p.id, node.id, s.id);
         if (inRange_OpenOpen(s_p.id, node.id, s.id)) {
@@ -789,21 +792,55 @@ public class ChordNode {
 
     public static void main(String[] args) throws Exception {
 
-        // TODO: no node should be able to join without calling createRing first
         ChordNode.m = 10;
+
+
         ChordNode bootstrap = new ChordNode("localhost", 8980);
-        bootstrap.startServer();
+        bootstrap.createRing();
 
-        ChordNode node2 = new ChordNode("localhost", 8981);
-        node2.startServer();
-        node2.join(bootstrap);
+        ArrayList<ChordNode> nodes = new ArrayList<>();
+        for (int i = 8981; i < 9010 ; i++) {
+            ChordNode n = new ChordNode("localhost", i);
+            nodes.add(n);
+            n.join(bootstrap);
+        }
 
-        ChordNode node3 = new ChordNode("localhost", 8982);
-        node3.startServer();
-        node3.join(bootstrap);
 
-        Thread.sleep(5000); // let the network stabilize
-        bootstrap.leave();
-        Thread.sleep(5000); // let the network stabilize
+// TODO: simple command UI
+
+
+
+
+
+
+
+
+
+
+
+
+//        ChordNode bootstrap = new ChordNode("localhost", 8980);
+////        bootstrap.createRing();
+//
+//        Thread.sleep(5000); // let the network stabilize
+//
+//
+//        ChordNode node2 = new ChordNode("localhost", 8981);
+//        node2.join(bootstrap);
+//
+//        Thread.sleep(5000); // let the network stabilize
+//
+//        ChordNode node3 = new ChordNode("localhost", 8982);
+//        node3.join(bootstrap);
+//
+//        Thread.sleep(5000); // let the network stabilize
+//
+//        bootstrap.leave();
+//
+//        Thread.sleep(5000); // let the network stabilize
+//
+//        node2.leave();
+//        Thread.sleep(5000); // let the network stabilize
+//        node3.leave();
     }
 }
