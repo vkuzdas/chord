@@ -914,7 +914,6 @@ public class ChordNode {
             // update Successor
             syncUpdateFingerTable(0, new NodeReference(request.getNewIp(), request.getNewPort()));
 
-            // TODO: remove from fingertable
             responseObserver.onNext(Chord.UpdatePredecessorResponse.newBuilder().build());
             responseObserver.onCompleted();
         }
@@ -926,9 +925,6 @@ public class ChordNode {
         @Override
         public void updateSuccessor(Chord.UpdateSuccessorRequest request, StreamObserver<Chord.UpdateSuccessorRequest> responseObserver) {
             syncUpdatePredecessor(new NodeReference(request.getNewIp(), request.getNewPort()));
-
-            // TODO: remove from fingertable??
-
             responseObserver.onNext(Chord.UpdateSuccessorRequest.newBuilder().build());
             responseObserver.onCompleted();
         }
