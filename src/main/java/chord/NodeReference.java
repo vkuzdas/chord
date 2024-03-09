@@ -4,6 +4,9 @@ import java.math.BigInteger;
 
 import static chord.Util.calculateSHA1;
 
+/**
+ * Reference holder for a single node in the Chord network.
+ */
 public class NodeReference {
     public final String ip;
     public final int port;

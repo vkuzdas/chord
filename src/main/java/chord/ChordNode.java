@@ -56,7 +56,7 @@ public class ChordNode {
         }
 
         server = ServerBuilder.forPort(port)
-                .addService(new ChordNode.ChordServiceImpl())
+                .addService(new ChordNodeServer())
                 .build();
     }
 
@@ -679,7 +679,7 @@ public class ChordNode {
 
 
     /** Procedures served to other nodes */
-    private class ChordServiceImpl extends ChordServiceGrpc.ChordServiceImplBase {
+    private class ChordNodeServer extends ChordServiceGrpc.ChordServiceImplBase {
 
         /**
          * Designed as blocking call chain to prevent further stabilizing calls from initial node
