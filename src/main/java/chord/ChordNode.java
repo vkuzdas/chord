@@ -1,10 +1,7 @@
 package chord;
 
 import com.google.common.annotations.VisibleForTesting;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
+import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static chord.Util.*;
-import static java.lang.Math.pow;
 
 public class ChordNode {
 
@@ -74,6 +70,12 @@ public class ChordNode {
             server.shutdownNow();
             logger.warn("Server stopped, listening on {}", node.port);
         }
+    }
+
+    @VisibleForTesting
+    public void simulateFail() {
+        stopServer();
+        stopFixThread();
     }
 
     public void awaitStopServer()  {
@@ -325,9 +327,9 @@ public class ChordNode {
         stabilizationTimerTask = new TimerTask() {
             @Override
             public void run() {
-//                printStatus();
-                fix_fingers();
+                printStatus();
                 stabilize();
+                fix_fingers();
                 printStatus();
             }
         };
@@ -350,15 +352,41 @@ public class ChordNode {
 
     private void stabilize() {
         // ask S for S.P, decide whether to set n.P = S.P instead
-        NodeReference s = fingerTable.get(0).node;
-        NodeReference s_p = getPredecessor_RPC(s);
-        logger.debug("[{}]  s_p {} ?∈  ({}, {})", node, s_p, node.id, s.id);
-        if (inRange_OpenOpen(s_p.id, node.id, s.id)) {
+        NodeReference S = fingerTable.get(0).node;
+        NodeReference s_p;
+
+        try {
+            s_p = stabilize_RPC(S);
+        }
+        catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.UNAVAILABLE) {
+                logger.error("[{}]  My Successor ({}) is offline. Will delete it and try to find new Successor to restore ChordRing.", node, S);
+                deleteFromFingerTable(S);
+                if (S.equals(predecessor)) {
+                    // all nodes left or failed, this.node is last node online
+                    syncUpdatePredecessor(this.node);
+                    for (int i = 0; i < m; i++) {
+                        syncUpdateFingerTable(0, this.node);
+                    }
+                    return;
+                }
+                // else walk around ring backwards until you find node which predecessor is offline
+                NodeReference newSuccessor = findOfflinePredecessor_RPC(predecessor, S);
+                logger.trace("[{}]  newSuccessor: {}", node, newSuccessor);
+                syncUpdateFingerTable(0, newSuccessor);
+                logger.trace("[{}]  checking S: {}", node, fingerTable.get(0).node);
+                return;
+            }
+            return;
+        }
+
+        logger.debug("[{}]  s_p {} ?∈  ({}, {})", node, s_p, node.id, S.id);
+        if (inRange_OpenOpen(s_p.id, node.id, S.id)) {
             syncUpdateFingerTable(0, s_p);
         }
         // notify n.S of n's existence
-        logger.debug("[{}] existence notified to [{}:{}]", node, s, s.id);
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(s.getAddress()).usePlaintext().build();
+        logger.debug("[{}] existence notified to [{}:{}]", node, S, S.id);
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(S.getAddress()).usePlaintext().build();
         blockingStub = ChordServiceGrpc.newBlockingStub(channel);
         Chord.Notification notification = Chord.Notification.newBuilder()
                 .setSenderIp(node.ip)
@@ -367,6 +395,75 @@ public class ChordNode {
                 .build();
         blockingStub.notify(notification);
         channel.shutdown();
+    }
+
+    /**
+     * Called with each step of {@link ChordNode#findOfflinePredecessor_RPC(NodeReference, NodeReference)} <br>
+     * Replace current node with next succeeding node or this.node
+     */
+    private void deleteFromFingerTable(NodeReference offlineNode) {
+        // start from 1 since 0, the successor will be updated on findOfflinePredecessor_RPC() return
+        NodeReference successorOfOffline = null;
+        for (int i = 1; i < m; i++) {
+            if (fingerTable.get(i).node.equals(offlineNode)) {
+                syncUpdateFingerTable(i, this.node);
+            }
+        }
+    }
+
+    /**
+     * Sends a request to the predecessor of this node, checking if its predecessor is offline.
+     * <ul>
+     *   <li>If the predecessor is offline, the predecessor is updated to the node that initiated the call, and the successor of the initiating node is set to this node.</li>
+     *   <li>If the predecessor is online, the message is propagated forward.</li>
+     * </ul>
+     * Nodes encountered during this process should update their finger tables to prevent an inconsistent network state where the failed node is still preserved.
+     */
+    private NodeReference findOfflinePredecessor_RPC(NodeReference predecessor, NodeReference s) {
+        // Nodes along the way should make updates to their fingerTable to prevent
+        // inconsistent netowrk state in which the failed node is still preserved
+        Chord.FindOfflinePredecessorRequest request = Chord.FindOfflinePredecessorRequest.newBuilder()
+                .setInitialNodeIp(node.ip)
+                .setInitialNodePort(node.port)
+                .setOfflineNodeIp(s.ip)
+                .setOfflineNodePort(s.port)
+                .build();
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(predecessor.getAddress()).usePlaintext().build();
+        blockingStub = ChordServiceGrpc.newBlockingStub(channel);
+        logger.trace("[{}]  asking [{}] for offlinePredecessor of [{}]", node, predecessor, s);
+        Chord.FindOfflinePredecessorResponse response = blockingStub.findOfflinePredecessor(request);
+        channel.shutdown();
+
+        return new NodeReference(response.getNewInitialNodeSuccessorIp(), response.getNewInitialNodeSuccessorPort());
+    }
+
+
+    /**
+     *
+     * @param targetNode
+     * @return
+     */
+    public NodeReference stabilize_RPC(NodeReference successor) {
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.getAddress()).usePlaintext().build();
+        Chord.GetPredecessorRequest.Builder request = Chord.GetPredecessorRequest.newBuilder()
+                .setRequestorIp(this.node.ip)
+                .setRequestorPort(this.node.port);
+
+        // when Successor node fails involuntarily, this is the first place on which it will be visible
+        // current node will try to contact other nodes to try and restore the ring
+
+        blockingStub = ChordServiceGrpc.newBlockingStub(channel);
+        Chord.GetPredecessorResponse response;
+        try {
+            response = blockingStub.getPredecessor(request.build());
+            channel.shutdown();
+            return new NodeReference(response.getPredecessorIp(), response.getPredecessorPort());
+        }
+        catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.UNAVAILABLE)
+                throw e;
+        }
+        return null;
     }
 
     private void moveKeys_RPC() {
@@ -456,11 +553,23 @@ public class ChordNode {
                 .setRequestorIp(this.node.ip)
                 .setRequestorPort(this.node.port)
                 .build();
-        blockingStub = ChordServiceGrpc.newBlockingStub(channel);
 
-        Chord.GetPredecessorResponse response = blockingStub.getPredecessor(request);
-        channel.shutdown();
-        return new NodeReference(response.getPredecessorIp(), response.getPredecessorPort());
+        // when node fails involuntarily, this is the first place on which it will be visible
+        // current node will try to contact other nodes to try and restore the ring
+
+        blockingStub = ChordServiceGrpc.newBlockingStub(channel);
+        Chord.GetPredecessorResponse response;
+        try {
+            response = blockingStub.getPredecessor(request);
+            channel.shutdown();
+            return new NodeReference(response.getPredecessorIp(), response.getPredecessorPort());
+
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.UNAVAILABLE)
+                logger.error("[{}]  My Successor ({}) seems to be offline. {} ", node, targetNode);
+            return targetNode;
+        }
+
     }
 
     public NodeReference findSuccessor_RPC(NodeReference n_, BigInteger targetId) {
@@ -571,6 +680,46 @@ public class ChordNode {
 
     /** Procedures served to other nodes */
     private class ChordServiceImpl extends ChordServiceGrpc.ChordServiceImplBase {
+
+        /**
+         * Designed as blocking call chain to prevent further stabilizing calls from initial node
+         */
+        @Override
+        public void findOfflinePredecessor(Chord.FindOfflinePredecessorRequest request, StreamObserver<Chord.FindOfflinePredecessorResponse> responseObserver) {
+
+            NodeReference offlineNode = new NodeReference(request.getOfflineNodeIp(), request.getOfflineNodePort());
+            deleteFromFingerTable(offlineNode);
+
+            // if this.node.P is the offline node, then we found the node that broke the ring
+            // Ring will be repaired by updating neighbours of the offline node
+            if (predecessor.equals(offlineNode)) {
+                // this.node.P = initialNode
+                NodeReference initialNode = new NodeReference(request.getInitialNodeIp(), request.getInitialNodePort());
+                syncUpdatePredecessor(initialNode);
+
+                // initialNode.S = this.node
+                Chord.FindOfflinePredecessorResponse.Builder resp = Chord.FindOfflinePredecessorResponse.newBuilder()
+                        .setInitialNodeIp(initialNode.ip)
+                        .setInitialNodePort(initialNode.port)
+                        .setNewInitialNodeSuccessorIp(node.ip)
+                        .setNewInitialNodeSuccessorPort(node.port);
+
+                logger.trace("[{}]  found offlinePredecessor. P={} -> {}, sending back myself as new init.S", node, offlineNode, initialNode);
+                responseObserver.onNext(resp.build());
+                responseObserver.onCompleted();
+            }
+            else {
+                // propagate the same message forward
+                ManagedChannel channel = ManagedChannelBuilder.forTarget(predecessor.getAddress()).usePlaintext().build();
+                blockingStub = ChordServiceGrpc.newBlockingStub(channel);
+                Chord.FindOfflinePredecessorResponse response = blockingStub.findOfflinePredecessor(request);
+                channel.shutdown();
+
+                logger.trace("[{}]  forwarding offlinePredecessor to [{}]", node, predecessor);
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+            }
+         }
 
         /**
          * Requestor wants this.node to find successor of targetId
@@ -824,54 +973,27 @@ public class ChordNode {
     }
 
     public static void main(String[] args) throws Exception {
-        ChordNode.STABILIZATION_INTERVAL = 500;
-        ChordNode.m = 50;
+        ChordNode.STABILIZATION_INTERVAL = 2000;
+        ChordNode.m = 4;
 
-        ChordNode bootstrap = new ChordNode("localhost", 9100);
+        ChordNode bootstrap = new ChordNode("localhost", 9000);
         bootstrap.createRing();
 
-        ArrayList<ChordNode> nodes = new ArrayList<>();
-        nodes.add(bootstrap);
-        // start nodes
-        for (int i = 9101; i < 9110 ; i++) { // depends on your machine how many threads you can run
-            ChordNode n = new ChordNode("localhost", i);
-            nodes.add(n);
-            n.join(bootstrap);
-        }
+        ChordNode n1 = new ChordNode("localhost", 9003);
+        n1.join(bootstrap);
 
-        ArrayList<String> inserted = new ArrayList<>();
-        Random rand = new Random();
-        int node;
-        // put to random node
-        for (int i = 0; i < 500; i++) {
-            node = rand.nextInt(nodes.size());
-            nodes.get(node).put("key"+i, "value"+i);
-            inserted.add("value"+i);
-        }
+        ChordNode n2 = new ChordNode("localhost", 9004);
+        n2.join(bootstrap);
 
-        // two nodes leave
-        node = rand.nextInt(nodes.size());
-        nodes.get(node).leave();
-        nodes.remove(node);
+        ChordNode n3 = new ChordNode("localhost", 9005);
+        n3.join(bootstrap);
 
-        node = rand.nextInt(nodes.size());
-        nodes.get(node).leave();
-        nodes.remove(node);
 
         Thread.sleep(5000);
-        System.out.println("Chord stabilized after 5s");
+
+        n1.simulateFail();
 
 
-        ArrayList<String> fetched = new ArrayList<>();
-        // get
-        for (int i = 0; i < 500; i++) {
-            node = rand.nextInt(nodes.size());
-            String v = nodes.get(node).get("key"+i);
-            fetched.add(v);
-        }
-
-        System.out.println("Inserted: " + inserted.size());
-        System.out.println("Fetched: " + fetched.size());
         bootstrap.blockUntilShutdown();
     }
 }

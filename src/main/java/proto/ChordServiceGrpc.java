@@ -475,6 +475,38 @@ public final class ChordServiceGrpc {
      return getDeleteMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<proto.Chord.FindOfflinePredecessorRequest,
+      proto.Chord.FindOfflinePredecessorResponse> getFindOfflinePredecessorMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "FindOfflinePredecessor",
+      requestType = proto.Chord.FindOfflinePredecessorRequest.class,
+      responseType = proto.Chord.FindOfflinePredecessorResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<proto.Chord.FindOfflinePredecessorRequest,
+      proto.Chord.FindOfflinePredecessorResponse> getFindOfflinePredecessorMethod() {
+    io.grpc.MethodDescriptor<proto.Chord.FindOfflinePredecessorRequest, proto.Chord.FindOfflinePredecessorResponse> getFindOfflinePredecessorMethod;
+    if ((getFindOfflinePredecessorMethod = ChordServiceGrpc.getFindOfflinePredecessorMethod) == null) {
+      synchronized (ChordServiceGrpc.class) {
+        if ((getFindOfflinePredecessorMethod = ChordServiceGrpc.getFindOfflinePredecessorMethod) == null) {
+          ChordServiceGrpc.getFindOfflinePredecessorMethod = getFindOfflinePredecessorMethod = 
+              io.grpc.MethodDescriptor.<proto.Chord.FindOfflinePredecessorRequest, proto.Chord.FindOfflinePredecessorResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "ChordService", "FindOfflinePredecessor"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.FindOfflinePredecessorRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Chord.FindOfflinePredecessorResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new ChordServiceMethodDescriptorSupplier("FindOfflinePredecessor"))
+                  .build();
+          }
+        }
+     }
+     return getFindOfflinePredecessorMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -615,6 +647,13 @@ public final class ChordServiceGrpc {
       asyncUnimplementedUnaryCall(getDeleteMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void findOfflinePredecessor(proto.Chord.FindOfflinePredecessorRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.FindOfflinePredecessorResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getFindOfflinePredecessorMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -715,6 +754,13 @@ public final class ChordServiceGrpc {
                 proto.Chord.DeleteRequest,
                 proto.Chord.DeleteResponse>(
                   this, METHODID_DELETE)))
+          .addMethod(
+            getFindOfflinePredecessorMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                proto.Chord.FindOfflinePredecessorRequest,
+                proto.Chord.FindOfflinePredecessorResponse>(
+                  this, METHODID_FIND_OFFLINE_PREDECESSOR)))
           .build();
     }
   }
@@ -863,6 +909,14 @@ public final class ChordServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(getDeleteMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void findOfflinePredecessor(proto.Chord.FindOfflinePredecessorRequest request,
+        io.grpc.stub.StreamObserver<proto.Chord.FindOfflinePredecessorResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getFindOfflinePredecessorMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -994,6 +1048,13 @@ public final class ChordServiceGrpc {
     public proto.Chord.DeleteResponse delete(proto.Chord.DeleteRequest request) {
       return blockingUnaryCall(
           getChannel(), getDeleteMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public proto.Chord.FindOfflinePredecessorResponse findOfflinePredecessor(proto.Chord.FindOfflinePredecessorRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getFindOfflinePredecessorMethod(), getCallOptions(), request);
     }
   }
 
@@ -1141,6 +1202,14 @@ public final class ChordServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(getDeleteMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<proto.Chord.FindOfflinePredecessorResponse> findOfflinePredecessor(
+        proto.Chord.FindOfflinePredecessorRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getFindOfflinePredecessorMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_FIND_SUCCESSOR = 0;
@@ -1157,6 +1226,7 @@ public final class ChordServiceGrpc {
   private static final int METHODID_PUT = 11;
   private static final int METHODID_GET = 12;
   private static final int METHODID_DELETE = 13;
+  private static final int METHODID_FIND_OFFLINE_PREDECESSOR = 14;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1230,6 +1300,10 @@ public final class ChordServiceGrpc {
         case METHODID_DELETE:
           serviceImpl.delete((proto.Chord.DeleteRequest) request,
               (io.grpc.stub.StreamObserver<proto.Chord.DeleteResponse>) responseObserver);
+          break;
+        case METHODID_FIND_OFFLINE_PREDECESSOR:
+          serviceImpl.findOfflinePredecessor((proto.Chord.FindOfflinePredecessorRequest) request,
+              (io.grpc.stub.StreamObserver<proto.Chord.FindOfflinePredecessorResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -1306,6 +1380,7 @@ public final class ChordServiceGrpc {
               .addMethod(getPutMethod())
               .addMethod(getGetMethod())
               .addMethod(getDeleteMethod())
+              .addMethod(getFindOfflinePredecessorMethod())
               .build();
         }
       }

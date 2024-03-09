@@ -45,6 +45,34 @@ class ChordNodeTest {
     }
 
     @Test
+    void testNodeFail() throws IOException, InterruptedException {
+        ChordNode.STABILIZATION_INTERVAL = 500;
+        ChordNode.m = 4;
+
+        ChordNode bootstrap = new ChordNode("localhost", 9000);
+        ChordNode n1 = new ChordNode("localhost", 9003);
+        ChordNode n2 = new ChordNode("localhost", 9004);
+        ChordNode n3 = new ChordNode("localhost", 9005);
+        registerForShutdown(bootstrap, n1, n2, n3);
+
+        bootstrap.createRing();
+
+        n1.join(bootstrap);
+        n2.join(bootstrap);
+        n3.join(bootstrap);
+
+        Thread.sleep(4L * ChordNode.STABILIZATION_INTERVAL); // let network stabilize
+
+        n1.simulateFail();
+
+        Thread.sleep(4L * ChordNode.STABILIZATION_INTERVAL); // let network stabilize again
+
+        assertFalse(bootstrap.containedInFingerTable(n1.getNodeReference()));
+        assertFalse(n2.containedInFingerTable(n1.getNodeReference()));
+        assertFalse(n3.containedInFingerTable(n1.getNodeReference()));
+    }
+
+    @Test
     void testDelete() throws IOException {
 
         ChordNode bootstrap = new ChordNode("localhost", 8980);

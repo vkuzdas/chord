@@ -152,6 +152,20 @@ message DeleteResponse {
   string status = 2;
 }
 
+message FindOfflinePredecessorRequest {
+  string initialNodeIp = 1;
+  int32 initialNodePort = 2;
+  string offlineNodeIp = 3;
+  int32 offlineNodePort = 4;
+}
+
+message FindOfflinePredecessorResponse {
+  string initialNodeIp = 1;
+  int32 initialNodePort = 2;
+  string newInitialNodeSuccessorIp = 3;
+  int32 newInitialNodeSuccessorPort = 4;
+}
+
 service ChordService {
   // invoke findSuccessor procedure on targetNode
   rpc FindSuccessor(FindSuccessorRequest) returns (FindSuccessorResponse) {}
@@ -176,4 +190,6 @@ service ChordService {
   rpc Put(PutRequest) returns (PutResponse) {}
   rpc Get(GetRequest) returns (GetResponse) {}
   rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+
+  rpc FindOfflinePredecessor(FindOfflinePredecessorRequest) returns (FindOfflinePredecessorResponse) {}
 }
