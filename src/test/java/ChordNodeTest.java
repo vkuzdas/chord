@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * There are some unstable tests, if not sure about the result, run the test separately fixes it
- * You can also try to change logging level to a higher one since excessive logging seems to have an effect
  */
 class ChordNodeTest {
 
