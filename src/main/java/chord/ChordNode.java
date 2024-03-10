@@ -356,7 +356,7 @@ public class ChordNode {
         NodeReference s_p;
 
         try {
-            s_p = stabilize_RPC(S);
+            s_p = getSuccessorsPredecessor_RPC(S);
         }
         catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.UNAVAILABLE) {
@@ -443,7 +443,7 @@ public class ChordNode {
      * @param targetNode
      * @return
      */
-    public NodeReference stabilize_RPC(NodeReference successor) {
+    public NodeReference getSuccessorsPredecessor_RPC(NodeReference successor) {
         ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.getAddress()).usePlaintext().build();
         Chord.GetPredecessorRequest.Builder request = Chord.GetPredecessorRequest.newBuilder()
                 .setRequestorIp(this.node.ip)
