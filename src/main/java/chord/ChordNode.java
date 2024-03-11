@@ -60,10 +60,6 @@ public class ChordNode {
                 .build();
     }
 
-    private void startServer() throws IOException {
-        server.start();
-        logger.warn("Server started, listening on {}", node.port);
-    }
 
     public void stopServer() {
         if (server != null) {
@@ -210,7 +206,8 @@ public class ChordNode {
      * Create a new Chord ring
      */
     public void createRing() throws IOException {
-        startServer();
+        server.start();
+        logger.warn("Server started, listening on {}", node.port);
         startFixThread();
         logger.debug("Node [{}] created a new ChordRing with id range [0, {})", node, BigInteger.valueOf(2).pow(m));
     }
@@ -219,7 +216,8 @@ public class ChordNode {
      * Join an existing Chord ring
      */
     public void join(ChordNode n_) throws IOException {
-        startServer();
+        server.start();
+        logger.warn("Server started, listening on {}", node.port);
         initFingerTable(n_.node);
         updateOthers();
         moveKeys_RPC(); //from the range (predecessor,n] from successor
