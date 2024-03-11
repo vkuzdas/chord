@@ -841,7 +841,7 @@ public class ChordNode {
                     });
                 }
             }
-            logger.trace("{} moves {} keys to {}", node.id, response.getKeyCount(), calculateSHA1(request.getSenderIp()+":"+request.getSenderPort()));
+            logger.debug("{} moves {} keys to {}", node.id, response.getKeyCount(), calculateSHA1(request.getSenderIp()+":"+request.getSenderPort()));
             responseObserver.onNext(response.build());
             responseObserver.onCompleted();
         }
