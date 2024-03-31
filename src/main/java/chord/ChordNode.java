@@ -11,7 +11,6 @@ import proto.ChordServiceGrpc;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static chord.Util.*;
@@ -74,15 +73,17 @@ public class ChordNode {
         stopFixThread();
     }
 
-    public void awaitStopServer()  {
-        if (server != null) {
-            try {
-                server.awaitTermination(2, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    public void shutdownChordNode()  {
+        stopFixThread();
+        stopServer();
     }
+
+//    public void stopServer() {
+//        if (server != null) {
+//            server.shutdownNow();
+//            logger.warn("Server stopped, listening on {}", self.port);
+//        }
+//    }
 
     /**
      * To be used in bash run or main method run to keep the network running
@@ -819,11 +820,13 @@ public class ChordNode {
             BigInteger start = new BigInteger(request.getRangeStart());
             BigInteger end = new BigInteger(request.getRangeEnd());
             // range = (start, end]
+            // TODO: lock!
             if (!localData.isEmpty()) {
                 if (start.compareTo(end) < 0) {
                     localData.subMap(start.add(BigInteger.ONE), end.add(BigInteger.ONE)).forEach((k, v) -> {
                         response.addKey(k.toString());
                         response.addValue(v);
+                        // TODO: ConcurrentModificationException?
                         localData.remove(k);
                     });
                 } else {

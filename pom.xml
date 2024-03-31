@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>chord</artifactId>
+    <artifactId>pastry</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -85,10 +85,14 @@
             <version>5.9.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.1</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
-
-
 
     <build>
         <defaultGoal>clean generate-sources compile install</defaultGoal>
@@ -139,7 +143,26 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <!-- Show test logs in github CI-->
+                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.9.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
         </plugins>
     </build>
+
 
 </project>
