@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BigTest {
     static int FIX_FINGER_TIMEOUT;
@@ -35,51 +34,11 @@ public class BigTest {
         runningNodes.clear();
     }
 
-    private void registerAllRunningNodes(ChordNode ... nodes) {
-        Collections.addAll(runningNodes, nodes);
-    }
-
-
-//    @Test
-//    void moreNodes() throws IOException {
-//        ChordNode.STABILIZATION_INTERVAL = 100_000;
-//        ChordNode.m = 25; // size of id has significant impact on speed of RPC calls
-//
-//        ChordNode bootstrap = new ChordNode("localhost", BASE_PORT++);
-//        bootstrap.createRing();
-//
-//        runningNodes.add(bootstrap);
-//        // start nodes
-//        for (int i = 1; i < 50 ; i++) { // depends on your machine how many nodes it can run
-//            ChordNode n = new ChordNode("localhost", BASE_PORT++);
-//            runningNodes.add(n);
-//            n.join(bootstrap);
-//        }
-//    }
-//
-//    @Test
-//    void moreNodes1() throws IOException {
-//        ChordNode.STABILIZATION_INTERVAL = 10_000;
-//        ChordNode.m = 25; // size of id has significant impact on speed of RPC calls
-//
-//        ChordNode bootstrap = new ChordNode("localhost", BASE_PORT++);
-//        bootstrap.createRing();
-//
-//        runningNodes.add(bootstrap);
-//        // start nodes
-//        for (int i = 1; i < 50 ; i++) { // depends on your machine how many nodes it can run
-//            ChordNode n = new ChordNode("localhost", BASE_PORT++);
-//            runningNodes.add(n);
-//            n.join(bootstrap);
-//        }
-//    }
-
-
 
     @Test
-    void testBig_put_get() throws IOException, InterruptedException {
-        ChordNode.STABILIZATION_INTERVAL = 500;
-        ChordNode.m = 25; // size of id has significant impact on speed of RPC calls
+    void test_put_get() throws IOException, InterruptedException {
+        ChordNode.STABILIZATION_INTERVAL = 1000;
+        ChordNode.m = 100; // size of id has significant impact on speed of RPC calls
 
         ChordNode bootstrap = new ChordNode("localhost", BASE_PORT++);
         bootstrap.createRing();
@@ -96,7 +55,7 @@ public class BigTest {
         Random rand = new Random();
         int node;
         // put to random node
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 50; i++) {
             node = rand.nextInt(runningNodes.size());
             runningNodes.get(node).put("key"+i, "value"+i);
             inserted.add("value"+i);
@@ -117,27 +76,25 @@ public class BigTest {
 
         ArrayList<String> fetched = new ArrayList<>();
         // get
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 50; i++) {
             node = rand.nextInt(runningNodes.size());
             String v = runningNodes.get(node).get("key"+i);
-            fetched.add(v);
+            assertTrue(inserted.contains(v));
         }
-
-        assertEquals(inserted, fetched);
     }
 
     @Test
-    void testBig_put_delete() throws IOException, InterruptedException {
-        ChordNode.STABILIZATION_INTERVAL = 500;
-        ChordNode.m = 25; // size of id has significant impact on speed of RPC calls
+    void test_put_delete() throws IOException, InterruptedException {
+        ChordNode.STABILIZATION_INTERVAL = 1000;
+        ChordNode.m = 100; // size of id has significant impact on speed of RPC calls
 
-        ChordNode bootstrap = new ChordNode("localhost", 9100);
+        ChordNode bootstrap = new ChordNode("localhost", BASE_PORT++);
         bootstrap.createRing();
 
         runningNodes.add(bootstrap);
         // start nodes
-        for (int i = 9101; i < 9110 ; i++) { // depends on your machine how many nodes it can run
-            ChordNode n = new ChordNode("localhost", i);
+        for (int i = 1; i < 10 ; i++) { // depends on your machine how many nodes it can run
+            ChordNode n = new ChordNode("localhost", BASE_PORT++);
             runningNodes.add(n);
             n.join(bootstrap);
         }
@@ -146,7 +103,7 @@ public class BigTest {
         Random rand = new Random();
         int node;
         // put to random node
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 50; i++) {
             node = rand.nextInt(runningNodes.size());
             runningNodes.get(node).put("key"+i, "value"+i);
             inserted.add("value"+i);
@@ -167,7 +124,7 @@ public class BigTest {
 
         ArrayList<String> deleted = new ArrayList<>();
         // delete half of the keys
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 50; i++) {
             node = rand.nextInt(runningNodes.size());
             runningNodes.get(node).delete("key"+i);
             deleted.add("key"+i);

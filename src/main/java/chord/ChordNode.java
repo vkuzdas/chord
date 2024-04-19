@@ -78,12 +78,6 @@ public class ChordNode {
         stopServer();
     }
 
-//    public void stopServer() {
-//        if (server != null) {
-//            server.shutdownNow();
-//            logger.warn("Server stopped, listening on {}", self.port);
-//        }
-//    }
 
     /**
      * To be used in bash run or main method run to keep the network running
@@ -337,7 +331,6 @@ public class ChordNode {
 
     private void stopFixThread() {
         if (stabilizationTimer != null) {
-            stabilizationTimer.cancel();
             stabilizationTimer.cancel();
             stabilizationTimer.purge();
             stabilizationTimerTask.cancel();
