@@ -218,6 +218,7 @@ public class ChordNode {
         moveKeys_RPC(); //from the range (predecessor,n] from successor
         startFixThread();
         logger.debug("Node [{}] joined the network", node);
+        printStatus();
     }
 
     /**
@@ -309,7 +310,7 @@ public class ChordNode {
         logger.trace("[{}]  ==== FT ====", node);
         for (int i = 0; i < fingerTable.size(); i++) {
             Finger finger = fingerTable.get(i);
-            logger.trace("Index: {}, [{},{}), Succ: [{}:{}]", i, finger.start, finger.end, finger.node, finger.node.id);
+            logger.trace("Index: {}, [{},{}), Succ: [{}]", i, finger.start, finger.end, finger.node);
         }
         logger.trace("=====================");
     }
@@ -326,13 +327,15 @@ public class ChordNode {
                 printStatus();
             }
         };
-        stabilizationTimer.schedule(stabilizationTimerTask,1000, STABILIZATION_INTERVAL);
+        stabilizationTimer.schedule(stabilizationTimerTask,STABILIZATION_INTERVAL, STABILIZATION_INTERVAL);
     }
 
     private void stopFixThread() {
         if (stabilizationTimer != null) {
             stabilizationTimer.cancel();
             stabilizationTimer.purge();
+        }
+        if (stabilizationTimerTask != null) {
             stabilizationTimerTask.cancel();
         }
     }
@@ -430,11 +433,6 @@ public class ChordNode {
     }
 
 
-    /**
-     *
-     * @param targetNode
-     * @return
-     */
     public NodeReference getSuccessorsPredecessor_RPC(NodeReference successor) {
         ManagedChannel channel = ManagedChannelBuilder.forTarget(successor.getAddress()).usePlaintext().build();
         Chord.GetPredecessorRequest.Builder request = Chord.GetPredecessorRequest.newBuilder()
@@ -494,7 +492,7 @@ public class ChordNode {
                 }
             }
             NodeReference p = findPredecessor(id);
-            logger.trace("[{}]  pred of {} is {}:{}, i={}", node, id, p, calculateSHA1(p.getAddress()), i);
+            logger.trace("[{}]  pred of {} is {}, i={}", node, p, calculateSHA1(p.getAddress()), i);
             updateFingerTableOf_RPC(p, node, i);
         }
     }
@@ -621,10 +619,11 @@ public class ChordNode {
             return n_;
         }
         while (!inRange_OpenClose(id, n_.id, S.id)) {
-            logger.trace("[{}] findPredecessor: {} !E [{}, {})", node, id, n_.id, S.id);
+            logger.trace("[{}] findPredecessor: {} !∈ [{}, {})", node, id, n_.id, S.id);
             n_ = closestPrecedingFingerOf(n_, id);
             S = getSuccessor_RPC(n_);
         }
+        logger.trace("[{}] findPredecessor: {} ∈ [{}, {})", node, id, n_.id, S.id);
         return n_;
     }
 
@@ -665,6 +664,18 @@ public class ChordNode {
         NodeReference cpf = new NodeReference(response.getClosestPrecedingFingerIp(), response.getClosestPrecedingFingerPort());
         logger.trace("[{}] got {}", node, cpf);
         return cpf;
+    }
+
+    /**
+     * Just a wrapper to avoid retyping annoying reentrant lock block
+     */
+    private void lockWrapper(Runnable action) {
+        lock.lock();
+        try {
+            action.run();
+        } finally {
+            lock.unlock();
+        }
     }
 
 
@@ -783,7 +794,7 @@ public class ChordNode {
             BigInteger id = new BigInteger(request.getTargetId());
             for (int i = m-1; i >= 0; i--) {
                 NodeReference curr = fingerTable.get(i).node;
-                logger.trace("[{}]   {} e ({}, {})", node, curr.id, node.id, id);
+                logger.trace("[{}]   {} ∈ ({}, {})", node, curr.id, node.id, id);
                 if (inRange_OpenOpen(curr.id, node.id, id)) {
                     Chord.ClosestPrecedingFingerResponse r = Chord.ClosestPrecedingFingerResponse.newBuilder()
                             .setClosestPrecedingFingerIp(curr.ip)
@@ -813,28 +824,33 @@ public class ChordNode {
             BigInteger start = new BigInteger(request.getRangeStart());
             BigInteger end = new BigInteger(request.getRangeEnd());
             // range = (start, end]
-            // TODO: lock!
-            if (!localData.isEmpty()) {
-                if (start.compareTo(end) < 0) {
-                    localData.subMap(start.add(BigInteger.ONE), end.add(BigInteger.ONE)).forEach((k, v) -> {
-                        response.addKey(k.toString());
-                        response.addValue(v);
-                        // TODO: ConcurrentModificationException?
-                        localData.remove(k);
-                    });
-                } else {
-                    localData.subMap(start.add(BigInteger.ONE), BigInteger.valueOf(2).pow(m)).forEach((k, v) -> {
-                        response.addKey(k.toString());
-                        response.addValue(v);
-                        localData.remove(k);
-                    });
-                    localData.subMap(BigInteger.ZERO, end.add(BigInteger.ONE)).forEach((k, v) -> {
-                        response.addKey(k.toString());
-                        response.addValue(v);
-                        localData.remove(k);
-                    });
+
+            lockWrapper(() -> {
+                if (!localData.isEmpty()) {
+                    ArrayList<BigInteger> toRemove = new ArrayList<>();
+                    if (start.compareTo(end) < 0) {
+                        localData.subMap(start.add(BigInteger.ONE), end.add(BigInteger.ONE)).forEach((k, v) -> {
+                            response.addKey(k.toString());
+                            response.addValue(v);
+                            // TODO: ConcurrentModificationException?
+                            toRemove.add(k);
+                        });
+                    } else {
+                        localData.subMap(start.add(BigInteger.ONE), BigInteger.valueOf(2).pow(m)).forEach((k, v) -> {
+                            response.addKey(k.toString());
+                            response.addValue(v);
+                            toRemove.add(k);
+                        });
+                        localData.subMap(BigInteger.ZERO, end.add(BigInteger.ONE)).forEach((k, v) -> {
+                            response.addKey(k.toString());
+                            response.addValue(v);
+                            toRemove.add(k);
+                        });
+                    }
+                    toRemove.forEach(localData::remove);
                 }
-            }
+            });
+
             logger.debug("{} moves {} keys to {}", node.id, response.getKeyCount(), calculateSHA1(request.getSenderIp()+":"+request.getSenderPort()));
             responseObserver.onNext(response.build());
             responseObserver.onCompleted();

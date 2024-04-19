@@ -24,7 +24,7 @@ public class NodeReference {
 
     @Override
     public String toString() {
-        return ip + ":" + port + ":" + id;
+        return /*ip + ":" +*/ port + ":" + id;
     }
 
     @Override
