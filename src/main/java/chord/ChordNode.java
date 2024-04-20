@@ -482,6 +482,11 @@ public class ChordNode {
     private void updateOthers() {
         // update ith finger of p node
         for (int i = 0; i < m; i++) {
+            try {
+                Thread.sleep(75);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             BigInteger id;
             if (i == 0) {
                 id = node.id.subtract(BigInteger.valueOf(0));

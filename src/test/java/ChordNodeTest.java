@@ -96,7 +96,7 @@ class ChordNodeTest {
         node2.stopServer();
     }
 
-    @Test // unstable
+    @Test
     void testMoveKeys() throws IOException {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         ChordNode node2 = new ChordNode("localhost", 8981);
@@ -209,7 +209,7 @@ class ChordNodeTest {
     }
 
     @Test
-    void testChainedLeave() throws IOException, InterruptedException {
+    void testChainedLeave() throws IOException {
         ChordNode bootstrap = new ChordNode("localhost", 8980);
         ChordNode node2 = new ChordNode("localhost", 8981);
         ChordNode node3 = new ChordNode("localhost", 8982);

@@ -84,6 +84,24 @@ public class BigTest {
     }
 
     @Test
+    void test_m160_n60() throws IOException {
+        BASE_PORT = 11_000;
+        ChordNode.STABILIZATION_INTERVAL = 5000;
+        ChordNode.m = 160; // size of id has significant impact on speed of RPC calls
+
+        ChordNode bootstrap = new ChordNode("localhost", BASE_PORT++);
+        bootstrap.createRing();
+
+        runningNodes.add(bootstrap);
+        // start nodes
+        for (int i = 0; i < 60; i++) {
+            ChordNode n = new ChordNode("localhost", BASE_PORT++);
+            runningNodes.add(n);
+            n.join(bootstrap);
+        }
+    }
+
+    @Test
     void test_put_delete() throws IOException, InterruptedException {
         ChordNode.STABILIZATION_INTERVAL = 1000;
         ChordNode.m = 100; // size of id has significant impact on speed of RPC calls
