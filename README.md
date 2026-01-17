@@ -1,37 +1,92 @@
-# chord
+# 🎵 Chord DHT
 
-This is a Java project that uses Maven for dependency management. The project is a gRPC server application that implements a distributed hash table using the Chord protocol.
+A Java implementation of the [Chord](https://en.wikipedia.org/wiki/Chord_(peer-to-peer)) distributed hash table protocol with gRPC-based node communication.
+
+[![Java CI](https://github.com/vkuzdas/chord/actions/workflows/java_ci.yml/badge.svg)](https://github.com/vkuzdas/chord/actions/workflows/java_ci.yml)
+
+## Overview
+
+Chord is a foundational peer-to-peer lookup protocol that maps keys to nodes using consistent hashing. Each node maintains a **finger table** for $O(\log N)$ lookups and uses **stabilization** to handle dynamic membership.
+
+This implementation supports:
+- **DHT Operations** — `put`, `get`, `delete` with automatic key routing
+- **Finger Table** — Efficient $O(\log N)$ lookup via $m$-bit finger entries
+- **Stabilization** — Periodic successor/predecessor repair
+- **Key Migration** — Automatic data transfer on join/leave
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                      ChordNode                          │
+├─────────────────────────────────────────────────────────┤
+│  Finger Table (m entries)                               │
+│  ├── finger[i].start = (n + 2^(i-1)) mod 2^m           │
+│  └── finger[i].node  = successor(finger[i].start)      │
+├─────────────────────────────────────────────────────────┤
+│  Predecessor pointer                                    │
+├─────────────────────────────────────────────────────────┤
+│  Local Data (keys in range (predecessor, self])         │
+├─────────────────────────────────────────────────────────┤
+│  gRPC Server (ChordServiceGrpc)                         │
+│  ├── FindSuccessor / ClosestPrecedingFinger            │
+│  ├── Notify / GetPredecessor                           │
+│  └── MoveKeys (data migration)                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+## Project Structure
+
+```
+src/
+├── main/java/chord/
+│   ├── ChordNode.java      # Core node logic & gRPC server
+│   ├── Finger.java         # Finger table entry
+│   ├── NodeReference.java  # Node identity (ip, port, id)
+│   └── Util.java           # Hashing & ID utilities
+└── test/java/
+    ├── ChordNodeTest.java  # Unit tests
+    └── BigTest.java        # Large-scale network tests
+```
+
+## Tech Stack
+
+| Component | Technology |
+|-----------|------------|
+| Language | Java 17 |
+| Build | Maven |
+| RPC | gRPC + Protocol Buffers |
+| Logging | SLF4J + Logback |
+| Testing | JUnit 5 |
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+```bash
+# Build & test
+mvn clean install
 
-### Prerequisites
+# Run a bootstrap node
+java -cp target/classes chord.ChordNode
+```
 
-- Java 8 or higher
-- Maven
-- IntelliJ IDEA 2023.2.2 or any other IDE that supports Java and Maven
+## Configuration
 
-### Installing
+```java
+// ID space: m-bit identifiers (2^m nodes max)
+ChordNode.m = 8;  // 256 possible IDs
 
-1. Clone the repository to your local machine.
-2. Open the project in your IDE.
-3. Run `mvn clean install` to download the dependencies and build the project.
+// Stabilization interval (ms)
+ChordNode.STABILIZATION_INTERVAL = 2000;
+```
 
-## Running the Application
+## Key Operations
 
-The main class of the application is `ChordNode.java`. You can run this class directly from your IDE.
+| Operation | Complexity | Description |
+|-----------|------------|-------------|
+| `lookup(key)` | $O(\log N)$ | Find successor node for key |
+| `put(key, value)` | $O(\log N)$ | Store at responsible node |
+| `get(key)` | $O(\log N)$ | Retrieve from responsible node |
 
-## Built With
+## References
 
-- [Java](https://www.java.com) - The programming language used
-- [Maven](https://maven.apache.org/) - Dependency Management
-- [gRPC](https://grpc.io/) - A high-performance, open-source universal RPC framework
-- [Protocol Buffers](https://developers.google.com/protocol-buffers) - Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data
-- [Logback](http://logback.qos.ch/) - The logging framework
-
-## Authors
-
-- [VKuzdas](https://github.com/vkuzdas)
-- [peter.macejko@fel.cvut.cz](peter.macejko@fel.cvut.cz)
-
+- [Chord: A Scalable Peer-to-peer Lookup Service for Internet Applications](https://pdos.csail.mit.edu/papers/chord:sigcomm01/chord_sigcomm.pdf) — Stoica et al., SIGCOMM 2001
